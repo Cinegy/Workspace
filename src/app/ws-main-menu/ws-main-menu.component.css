@@ -1,0 +1,6 @@
+md-toolbar {
+  /* margin-bottom: 10px; */
+}
+.ws-menu-fill-remaining-space {
+    flex: 1 1 auto;
+  }

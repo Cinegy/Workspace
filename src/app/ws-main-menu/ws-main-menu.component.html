@@ -1,0 +1,14 @@
+<md-toolbar color="primary">
+  <span>Cinegy Workspace v11</span>
+  <span class="ws-menu-fill-remaining-space"></span>
+  <button md-button [mdMenuTriggerFor]="menu">
+    <i class="fa fa-user-circle-o"></i> 	&nbsp; 
+    Not connected
+  </button>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item>
+      <i class="fa fa-sign-out"></i> 	&nbsp;
+      Logout
+    </button>
+  </md-menu>
+</md-toolbar>
