@@ -3,10 +3,11 @@
   <span class="ws-menu-fill-remaining-space"></span>
   <button md-button [mdMenuTriggerFor]="menu">
     <i class="fa fa-user-circle-o"></i> 	&nbsp; 
-    Not connected
+    <span *ngIf="!appState.connected">Not connected</span>
+    <span *ngIf="appState.connected">{{appState.selectedMam.username}}</span>
   </button>
   <md-menu #menu="mdMenu">
-    <button md-menu-item>
+    <button md-menu-item [disabled]="!appState.connected" (click)="logout()">
       <i class="fa fa-sign-out"></i> 	&nbsp;
       Logout
     </button>

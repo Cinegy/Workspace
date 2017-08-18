@@ -1,0 +1,10 @@
+<div fxLayout="column" fxFlex>
+    <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
+    <div fxLayout fxFlex>
+        <div fxLayout fxFlex="20">
+            <router-outlet name="routeLeftContainer"></router-outlet>
+        </div>
+        <!-- <router-outlet name="routeMainContainer"></router-outlet> -->
+        <!-- <router-outlet name="routeRightContainer"></router-outlet> -->
+    </div>
+</div>

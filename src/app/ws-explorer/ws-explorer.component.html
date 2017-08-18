@@ -1,0 +1,15 @@
+<md-card fxFlex>
+  <md-card-header>
+    <md-card-title *ngIf="selectedNode">{{selectedNode.name}}</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <div *ngIf="loading"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+    <md-list dense *ngIf="childNodes">
+      <md-list-item *ngFor="let child of childNodes" (click)="selectNode(child)">
+        <i md-list-icon class="fa fa-folder"></i>
+        <h4 md-line>{{child.name}}</h4>
+        <p md-line> {{child.modified | date}} </p>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
