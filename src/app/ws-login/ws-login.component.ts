@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { WsAppStateService } from './../ws-app-state.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsLoginService } from './ws-login.service';
@@ -12,7 +11,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./ws-login.component.css']
 })
 export class WsLoginComponent implements OnInit, OnDestroy {
-  public subscribers: any[];
+  private subscribers: any[];
   public mamList: WsMamConnection[];
   public selectedMam: WsMamConnection;
   public isConnectionSpinnerHidden = true;
@@ -25,8 +24,7 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   constructor(
     private appState: WsAppStateService,
     private configService: WsConfigurationService,
-    private loginService: WsLoginService,
-    private router: Router) {
+    private loginService: WsLoginService) {
     this.subscribers = [];
 
     this.configService.getConfig()
@@ -40,7 +38,9 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscribeLogin();
+    const subscriber = this.loginService.loginSubject
+      .subscribe(response => this.loginResponse(response));
+    this.subscribers.push(subscriber);
   }
 
   ngOnDestroy() {
@@ -51,7 +51,7 @@ export class WsLoginComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     this.errorMsg = [];
-    this.appState.connected = false;
+    this.appState.setConnectionState(false, null);
     this.isConnectionSpinnerHidden = false;
     this.selectedMam.username = this.username;
     this.selectedMam.password = this.password;
@@ -59,26 +59,18 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.loginService.login(this.selectedMam);
   }
 
-  private subscribeLogin() {
-    const subscriber = this.loginService.loginSubject
-      .subscribe(
-      (result) => {
-        this.isConnectionSpinnerHidden = true;
+  private loginResponse(response: any) {
+    this.isConnectionSpinnerHidden = true;
 
-        if (result instanceof WsMamError) {
-          const error: WsMamError = result;
-          this.appState.connected = false;
-          console.log(`Error: ${error.msg}`);
-          this.errorMsg.push({ severity: 'error', detail: error.msg });
-        } else {
-          this.appState.connected = true;
-          this.appState.selectedMam = this.selectedMam;
-          this.appState.setAuthHeader(result.access_token, result.token_type, result.expires_in);
-          console.log(`${this.selectedMam.username} logged in`);
-          this.router.navigate(['/main', { outlets: { 'routeLeftContainer': ['explorer'] } }]);
-        }
-      });
-      this.subscribers.push(subscriber);
+    if (response instanceof WsMamError) {
+      const error: WsMamError = response;
+      this.appState.setConnectionState(false, null);
+      console.log(`Error: ${error.msg}`);
+      this.errorMsg.push({ severity: 'error', detail: error.msg });
+    } else {
+      this.appState.setAuthHeader(response.access_token, response.token_type, response.expires_in);
+      this.appState.setConnectionState(true, this.selectedMam);
+      console.log(`${this.selectedMam.username} logged in`);
+    }
   }
-
 }

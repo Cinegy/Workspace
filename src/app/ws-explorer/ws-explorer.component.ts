@@ -1,3 +1,4 @@
+import { WsAppStateService } from './../ws-app-state.service';
 import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsExplorerService } from './ws-explorer.service';
@@ -15,6 +16,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public childNodes: any[];
 
   constructor(
+    public appState: WsAppStateService,
     private explorerService: WsExplorerService,
     private breadcrumbService: WsMainBreadcrumbsService) {
     this.subscribers = [];

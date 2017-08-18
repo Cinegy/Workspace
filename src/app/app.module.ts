@@ -1,3 +1,4 @@
+import { WsAppManagementService } from './ws-app-management.service';
 import { WsAuthGuardService } from './ws-login/ws-auth-guard.service';
 import { WsExplorerModule } from './ws-explorer/ws-explorer.module';
 import { WsExplorerComponent } from './ws-explorer/ws-explorer.component';
@@ -15,6 +16,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { WsNodeImageComponent } from './ws-node-image/ws-node-image.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: WsLoginComponent },
@@ -35,6 +37,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent
+    // WsNodeImageComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -51,7 +54,8 @@ const appRoutes: Routes = [
     WsExplorerModule
   ],
   providers: [
-    WsAppStateService
+    WsAppStateService,
+    WsAppManagementService
   ],
   bootstrap: [AppComponent]
 })

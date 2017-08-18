@@ -1,14 +1,21 @@
 <md-card fxFlex>
   <md-card-header>
+    <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+      [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="32" [imageHeight]="32">
+    </app-ws-node-image>
     <md-card-title *ngIf="selectedNode">{{selectedNode.name}}</md-card-title>
+    <md-card-subtitle *ngIf="selectedNode">{{selectedNode.modified | date}}</md-card-subtitle>
   </md-card-header>
   <md-card-content>
     <div *ngIf="loading"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+    <md-divider></md-divider>
     <md-list dense *ngIf="childNodes">
       <md-list-item *ngFor="let child of childNodes" (click)="selectNode(child)">
-        <i md-list-icon class="fa fa-folder"></i>
+        <app-ws-node-image *ngIf="appState.nodeIcons[child.type] && appState.nodeIcons[child.type].large" md-list-icon [imageData]="appState.nodeIcons[child.type].large"
+          [imageWidth]="32" [imageHeight]="32">
+        </app-ws-node-image>
         <h4 md-line>{{child.name}}</h4>
-        <p md-line> {{child.modified | date}} </p>
+        <p md-line>{{child.modified | date}}</p>
       </md-list-item>
     </md-list>
   </md-card-content>

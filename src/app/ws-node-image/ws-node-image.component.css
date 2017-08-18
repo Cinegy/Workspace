@@ -1,0 +1,5 @@
+.image-filter {
+    -webkit-filter: grayscale(100%) brightness(100%) contrast(100%);
+    filter: grayscale(100%) brightness(100%) contrast(100%);
+  }
+  

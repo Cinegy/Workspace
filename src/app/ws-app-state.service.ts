@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs/Subject';
+import { Router } from '@angular/router';
 import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
 import { Injectable } from '@angular/core';
 
@@ -5,39 +7,34 @@ import { Injectable } from '@angular/core';
 export class WsAppStateService {
   private _connected: boolean;
   private _selectedMam: WsMamConnection;
+
+  public loggedInSubject: Subject<any> = new Subject<any>();
   public authHeader: string;
+  public nodeTypes: {[type: string]: any } = {};
+  public nodeIcons: {[subType: string]: any } = {};
 
   constructor() {
-    this.connected = false;
+    this._connected = false;
   }
 
   public get connected(): boolean {
     return this._connected;
   }
 
-  public set connected(value: boolean) {
-    if (value === undefined) {
-      throw  new Error('Please supply Connected value');
-    }
-
-    this._connected = value;
-
-    if (this._connected === false) {
-      this.authHeader = null;
-      this._selectedMam = null;
-    }
-  }
-
   public get selectedMam(): WsMamConnection {
     return this._selectedMam;
   }
 
-  public set selectedMam(value: WsMamConnection) {
-    if (value === undefined) {
-      throw  new Error('Please supply Mam Connection info');
-    }
+  public setConnectionState(connected: boolean, selectedMam: WsMamConnection) {
+    this._connected = connected;
+    this._selectedMam = selectedMam;
 
-    this._selectedMam = value;
+    if (this._connected === false) {
+      this.authHeader = null;
+      this._selectedMam = null;
+    } else {
+      this.loggedInSubject.next(true);
+    }
   }
 
   public setAuthHeader(token: string, tokenType: string, tokenExpiration) {

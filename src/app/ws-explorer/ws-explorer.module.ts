@@ -1,3 +1,4 @@
+import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
 import { WsExplorerService } from './ws-explorer.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,7 +18,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PanelModule,
     MdListModule
   ],
-  declarations: [WsExplorerComponent],
+  declarations: [WsExplorerComponent, WsNodeImageComponent],
   providers: [WsExplorerService],
   exports: [WsExplorerComponent]
 })

@@ -37,7 +37,7 @@ export class WsLoginService extends WsBaseMamService {
   }
 
   public logout() {
-    this.appState.connected = false;
+    this.appState.setConnectionState(false, null);
     console.log(`${this.connectionInfo.username} logged out`);
   }
 

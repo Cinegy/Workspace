@@ -11,20 +11,21 @@ export class WsExplorerService extends WsBaseMamService {
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public getNodeSubject: Subject<any> = new Subject<any>();
 
-  constructor(protected httpClient: HttpClient,
+  constructor(
+    protected httpClient: HttpClient,
     protected appState: WsAppStateService) {
     super(httpClient, appState);
-    }
+  }
 
-    public getRoot() {
-      this.get(`${this.appState.selectedMam.mamEndpoint}/node/root`, this.getRootSubject);
-    }
+  public getRoot() {
+    this.get(`${this.appState.selectedMam.mamEndpoint}/node/root`, this.getRootSubject);
+  }
 
-    public getChildren(url: string) {
-      this.get(`${url}&filter.requestType=notDeleted`, this.getChildrenSubject);
-    }
+  public getChildren(url: string) {
+    this.get(`${url}&linksScope=self&filter.requestType=notDeleted`, this.getChildrenSubject);
+  }
 
-    public getNode(id: string) {
-      this.get(`${this.appState.selectedMam.mamEndpoint}/node?id=${id}&linksScope=children`, this.getNodeSubject);
-    }
+  public getNode(id: string) {
+    this.get(`${this.appState.selectedMam.mamEndpoint}/node?id=${id}&linksScope=children`, this.getNodeSubject);
+  }
 }
