@@ -34,8 +34,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscribers.push(subscriber);
 
     subscriber = this.management.getIconsSubject
-    .subscribe(icons => this.getIconsResponse(icons));
-  this.subscribers.push(subscriber);
+      .subscribe(icons => this.getIconsResponse(icons));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.management.getDescriptorsSubject
+      .subscribe(response => this.getDescriptorsResponse(response));
+    this.subscribers.push(subscriber);
   }
 
   ngOnDestroy() {
@@ -46,18 +50,42 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private loginResponse(response: any) {
     this.management.initialize();
-    this.router.navigate(['/main', { outlets: { 'routeLeftContainer': ['explorer'] } }]);
+    this.router.navigate(['/main']);
+      // { outlets: {
+      //   'routeLeftContainer': ['explorer'],
+      //   'routeCenterContainer': ['bins']
+      // }}]);
   }
 
   private getNodeTypesResponse(nodeTypes: any) {
+    if (nodeTypes instanceof WsMamError) {
+      console.log(`Error: ${nodeTypes.msg}`);
+      return;
+    }
+
     nodeTypes.forEach(nodeType => {
       this.appState.nodeTypes[nodeType.type] = nodeType;
+      // this.management.getDescriptors(nodeType.type);
     });
   }
 
   private getIconsResponse(icons: any) {
+    if (icons instanceof WsMamError) {
+      console.log(`Error: ${icons.msg}`);
+      return;
+    }
+
     icons.forEach(icon => {
       this.appState.nodeIcons[icon.type] = icon;
     });
+  }
+
+  private getDescriptorsResponse(response: any) {
+    if (response instanceof WsMamError) {
+      // console.log(`Error for ${response.extMsg}: ${response.msg}`);
+      return;
+    }
+
+    this.appState.descriptors[response.extra] = response.payload;
   }
 }

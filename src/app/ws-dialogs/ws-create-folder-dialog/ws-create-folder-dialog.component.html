@@ -1,0 +1,12 @@
+<h3 md-dialog-title>
+  <app-ws-node-image md-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
+  Create {{data.name}}</h3>
+<div md-dialog-content  fxLayout fxLayoutAlign="center" class="mat-typography">
+  <md-input-container>
+    <input mdInput required placeholder="New {{data.name}}" [(ngModel)]="result" name="result">
+  </md-input-container>
+</div>
+<div md-dialog-actions fxLayout fxLayoutAlign="center">
+  <button md-button [md-dialog-close]="result"><i class="fa fa-check"></i> Create</button>
+  <button md-button [md-dialog-close]="null"><i class="fa fa-close"></i> Close</button>
+</div>

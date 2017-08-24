@@ -1,0 +1,14 @@
+<md-card fxFlex>
+  <md-card-content>
+    <h3 *ngIf="selectedNode">
+      <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+        [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
+      </app-ws-node-image>
+      {{selectedNode.name}}
+    </h3>
+    <md-divider></md-divider>
+    <p>
+      ws-metadata works!
+    </p>
+  </md-card-content>
+</md-card>

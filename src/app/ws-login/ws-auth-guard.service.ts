@@ -15,7 +15,7 @@ export class WsAuthGuardService implements CanActivate {
       console.log('Authentication was successfull.');
       return true;
     } else {
-      console.log('Authentication was not successfull. Redirecting to login page');
+      console.log('Authentication failed. Redirecting to login page');
       this.router.navigate(['/login']);
       return false;
     }

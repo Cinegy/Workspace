@@ -11,7 +11,7 @@ export class WsNodeImageComponent implements OnInit {
   @Input() imageWidth = 16;
   @Input() imageHeight = 16;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }

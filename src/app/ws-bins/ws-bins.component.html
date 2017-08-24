@@ -1,0 +1,17 @@
+<md-card fxFlex>
+  <md-card-content>
+    <md-tab-group fxFlex>
+      <md-tab>
+        <ng-template md-tab-label>
+          <span *ngIf="selectedNode">
+            <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+              [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
+            </app-ws-node-image>
+            {{selectedNode.name}}
+          </span>
+        </ng-template>
+        <h1 *ngIf="selectedNode">{{selectedNode.name}}</h1>        
+      </md-tab>
+    </md-tab-group>
+  </md-card-content>
+</md-card>

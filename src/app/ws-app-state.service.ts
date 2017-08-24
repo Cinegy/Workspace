@@ -1,3 +1,5 @@
+import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
 import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
@@ -7,11 +9,14 @@ import { Injectable } from '@angular/core';
 export class WsAppStateService {
   private _connected: boolean;
   private _selectedMam: WsMamConnection;
-
+ 
   public loggedInSubject: Subject<any> = new Subject<any>();
+  public selectedNodeSubject: Subject<any> = new Subject<any>();
+  public openNodeSubject: Subject<any> = new Subject<any>();
   public authHeader: string;
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};
+  public descriptors: {[type: string]: any } = {};
 
   constructor() {
     this._connected = false;
@@ -39,5 +44,13 @@ export class WsAppStateService {
 
   public setAuthHeader(token: string, tokenType: string, tokenExpiration) {
     this.authHeader = `${tokenType} ${token}`;
+  }
+
+  public selectedNode(node: any) {
+    this.selectedNodeSubject.next(node);
+  }
+
+  public openNode(node: any) {
+    this.openNodeSubject.next(node);
   }
 }

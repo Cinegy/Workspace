@@ -21,17 +21,25 @@ export class WsBaseMamService {
       .append('Authorization', this.token);
   }
 
-  protected get(url: string, subject: Subject<any>) {
+  protected get(url: string, subject: Subject<any>, extraSubjectData?: any) {
     this.httpClient
       .get(url, { headers: this.headers })
       .subscribe(
       data => {
         if (subject) {
-          subject.next(data);
+          if (extraSubjectData) {
+            subject.next({extra: extraSubjectData, payload: data});
+          } else {
+            subject.next(data);
+          }
         }
       },
       (err: HttpErrorResponse) => {
-        this.handleError(err, subject);
+        if (extraSubjectData) {
+          this.handleError(err, subject, extraSubjectData);
+        } else {
+          this.handleError(err, subject);
+        }
       });
   }
 
@@ -78,7 +86,7 @@ export class WsBaseMamService {
       });
   }
 
-  private handleError(err: HttpErrorResponse, subject: Subject<any>) {
+  private handleError(err: HttpErrorResponse, subject: Subject<any>, extraSubjectData?: any) {
     const mamError = new WsMamError();
 
     if (!err.error || !err.error.error) {
@@ -99,8 +107,11 @@ export class WsBaseMamService {
       console.log(mamError.msg);
     }
 
-    // subject.error(mamError);
+    if (extraSubjectData) {
+      mamError.extMsg = extraSubjectData;
+    } 
     subject.next(mamError);
+
   }
 
 }

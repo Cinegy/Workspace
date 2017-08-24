@@ -1,16 +1,15 @@
 <md-card fxFlex>
-  <md-card-header>
-    <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
-      [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="32" [imageHeight]="32">
-    </app-ws-node-image>
-    <md-card-title *ngIf="selectedNode">{{selectedNode.name}}</md-card-title>
-    <md-card-subtitle *ngIf="selectedNode">{{selectedNode.modified | date}}</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <div *ngIf="loading"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+  <md-card-content #explorerNodes>
+    <h3 *ngIf="selectedNode" (contextmenu)="contextMenuOpen(selectedNode, false)" class="ws-explorer-header">
+      <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+        [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
+      </app-ws-node-image>
+      {{selectedNode.name}}
+    </h3>
     <md-divider></md-divider>
+    <div *ngIf="loading"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
     <md-list dense *ngIf="childNodes">
-      <md-list-item *ngFor="let child of childNodes" (click)="selectNode(child)">
+      <md-list-item *ngFor="let child of childNodes" (click)="selectNode(child)" (dblclick)="openNode(child)" (contextmenu)="contextMenuOpen(child, true)">
         <app-ws-node-image *ngIf="appState.nodeIcons[child.type] && appState.nodeIcons[child.type].large" md-list-icon [imageData]="appState.nodeIcons[child.type].large"
           [imageWidth]="32" [imageHeight]="32">
         </app-ws-node-image>
@@ -20,3 +19,5 @@
     </md-list>
   </md-card-content>
 </md-card>
+
+<p-contextMenu [target]="explorerNodes" [model]="contextMenuItems"></p-contextMenu>
