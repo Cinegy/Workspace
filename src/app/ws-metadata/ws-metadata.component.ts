@@ -17,14 +17,9 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     public management: WsAppManagementService) {
     this.subscribers = [];
 
-    let subscriber = this.appState.selectNodeSubject
+    const subscriber = this.appState.selectNodeSubject
       .subscribe(response => this.selectedNodeResponse(response));
     this.subscribers.push(subscriber);
-
-    subscriber = this.management.getDescriptorsSubject
-      .subscribe(response => this.getDescriptorsResponse(response));
-    this.subscribers.push(subscriber);
-
   }
 
   ngOnInit() {
@@ -42,20 +37,6 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     }
 
     this.selectedNode = response;
-    const descriptors = this.appState.descriptors[this.selectedNode.type];
-
-    if (descriptors == null) {
-      this.management.getDescriptors(this.selectedNode.type);
-    }
-  }
-
-  private getDescriptorsResponse(response: any) {
-    if (response instanceof WsMamError) {
-      this.appState.descriptors[response.extMsg] = 0;
-      return;
-    }
-
-    this.appState.descriptors[response.extra] = response.payload;
   }
 
 }

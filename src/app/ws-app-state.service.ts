@@ -14,6 +14,8 @@ export class WsAppStateService {
   public selectNodeSubject: Subject<any> = new Subject<any>();
   public openNodeSubject: Subject<any> = new Subject<any>();
   public updateNodeSubject: Subject<any> = new Subject<any>();
+  public deleteNodeSubject: Subject<any> = new Subject<any>();
+
   public authHeader: string;
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};
@@ -58,5 +60,9 @@ export class WsAppStateService {
 
   public updateNode(node: any) {
     this.updateNodeSubject.next(node);
+  }
+
+  public deleteNode(node: any) {
+    this.deleteNodeSubject.next(node);
   }
 }

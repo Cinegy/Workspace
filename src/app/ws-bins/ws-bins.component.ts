@@ -28,6 +28,14 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.openNodeResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.appState.deleteNodeSubject
+      .subscribe(response => this.nodeDeletedResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.appState.updateNodeSubject
+      .subscribe(response => this.nodeUpdatedResponse(response));
+    this.subscribers.push(subscriber);
+
     subscriber = this.binService.getRollSubject
       .subscribe(response => this.getParentResponse(response));
     this.subscribers.push(subscriber);
@@ -75,7 +83,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (response instanceof WsMamError) {
       return;
     }
-  
+
     switch (response.type) {
       case 'roll':
         this.binService.getRoll(response.id);
@@ -119,5 +127,31 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     this.tabs.push(bin);
     this.selectedIndex = this.tabs.length - 1;
+  }
+
+  private nodeDeletedResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+    // tslint:disable-next-line:prefer-const
+    for (let tab of this.tabs) {
+      if (tab.parent.id === response.id) {
+        this.closeTab(tab);
+        return;
+      }
+    }
+  }
+
+  private nodeUpdatedResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+    // tslint:disable-next-line:prefer-const
+    for (let i = 0; i < this.tabs.length; i++) {
+      if (this.tabs[i].parent.id === response.id) {
+        this.tabs[i].parent = response;
+        return;
+      }
+    }
   }
 }

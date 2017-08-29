@@ -1,3 +1,5 @@
+import { WsCreateBinDialogComponent } from './../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
+import { WsCreateClipbinDialogComponent } from './../ws-dialogs/ws-create-clipbin-dialog/ws-create-clipbin-dialog.component';
 import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
@@ -53,6 +55,14 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.subscribers.push(subscriber);
 
     subscriber = this.explorerService.createNodeSubject
+      .subscribe(response => this.createNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.explorerService.createDocumentBinSubject
+      .subscribe(response => this.createNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.explorerService.createClipBinSubject
       .subscribe(response => this.createNodeResponse(response));
     this.subscribers.push(subscriber);
 
@@ -131,6 +141,36 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
       console.log(`Create Node`);
       this.explorerService.createNode(this.menuNode.id, this.menuNodeType.type, result);
+    });
+  }
+
+  private openNewDocumentBinDialog() {
+    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
+      width: '400px',
+      data: this.menuNodeType
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Create Document Bin`);
+      this.explorerService.createDocumentBin(this.menuNode.id, result);
+    });
+  }
+
+  private openNewClipBinDialog() {
+    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
+      width: '400px',
+      data: this.menuNodeType
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Create Clip Bin`);
+      this.explorerService.createClipBin(this.menuNode.id, result);
     });
   }
 
@@ -236,6 +276,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (index > -1) {
       this.childNodes.splice(index, 1);
+      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+        this.appState.deleteNode(this.menuNode);
+      }
     }
   }
 
@@ -250,6 +293,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (index > -1) {
       this.childNodes[index] = response;
+      this.childNodes.splice(index, 1);
+      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+        this.appState.updateNode(this.menuNode);
+      }
     }
   }
 
@@ -291,6 +338,12 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
               switch (this.menuNodeType.typeGroup) {
                 case 'folderGeneric':
                   this.openNewFolderDialog();
+                  break;
+                case 'documentBin':
+                  this.openNewDocumentBinDialog();
+                  break;
+                case 'clipBin':
+                  this.openNewClipBinDialog();
                   break;
                 default:
                   this.openInfoDialog('Not Implemented');

@@ -1,3 +1,4 @@
+import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
 import { Subject } from 'rxjs/Subject';
 import { WsAppStateService } from './ws-app-state.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -17,6 +18,11 @@ export class WsAppManagementService extends WsBaseMamService {
   }
 
   public initialize() {
+    this.getDescriptorsSubject
+      .subscribe(response => this.getDescriptorsResponse(response));
+    this.appState.selectNodeSubject
+      .subscribe(response => this.selectedNodeResponse(response));
+
     this.token = this.appState.authHeader;
     this.headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -28,5 +34,27 @@ export class WsAppManagementService extends WsBaseMamService {
 
   public getDescriptors(type: any) {
     this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=${type}`, this.getDescriptorsSubject, type);
+  }
+
+  private selectedNodeResponse(response: any) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    const descriptors = this.appState.descriptors[response.type];
+
+    if (descriptors == null) {
+      this.getDescriptors(response.type);
+    }
+  }
+
+  private getDescriptorsResponse(response: any) {
+    if (response instanceof WsMamError) {
+      this.appState.descriptors[response.extMsg] = [];
+      return;
+    }
+
+    console.log(`Getting descriptors for ${response.extra}`);
+    this.appState.descriptors[response.extra] = response.payload;
   }
 }

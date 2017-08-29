@@ -9,6 +9,7 @@ import { WsInfoDialogComponent } from './ws-info-dialog/ws-info-dialog.component
 import { WsDeleteDialogComponent } from './ws-delete-dialog/ws-delete-dialog.component';
 import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.component';
 import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.component';
+import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin-dialog.component';
 
 @NgModule({
   imports: [
@@ -27,18 +28,21 @@ import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.compon
     WsInfoDialogComponent,
     WsDeleteDialogComponent,
     WsRenameDialogComponent,
-    WsErrorDialogComponent],
+    WsErrorDialogComponent,
+    WsCreateBinDialogComponent],
   exports: [
     WsCreateFolderDialogComponent,
     WsInfoDialogComponent,
     WsDeleteDialogComponent,
     WsRenameDialogComponent,
-    WsErrorDialogComponent],
+    WsErrorDialogComponent,
+    WsCreateBinDialogComponent],
   entryComponents: [
     WsCreateFolderDialogComponent,
     WsInfoDialogComponent,
     WsDeleteDialogComponent,
     WsRenameDialogComponent,
-    WsErrorDialogComponent]
+    WsErrorDialogComponent,
+    WsCreateBinDialogComponent]
 })
 export class WsDialogsModule { }

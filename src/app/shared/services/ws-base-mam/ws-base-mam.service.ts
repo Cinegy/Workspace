@@ -109,8 +109,11 @@ export class WsBaseMamService {
 
     if (extraSubjectData) {
       mamError.extMsg = extraSubjectData;
-    } 
-    subject.next(mamError);
+    }
+
+    if (subject) {
+      subject.next(mamError);
+    }
 
   }
 
