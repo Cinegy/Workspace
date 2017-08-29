@@ -1,17 +1,28 @@
-<md-card fxFlex>
-  <md-card-content>
-    <md-tab-group fxFlex>
-      <md-tab>
-        <ng-template md-tab-label>
-          <span *ngIf="selectedNode">
-            <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
-              [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
-            </app-ws-node-image>
-            {{selectedNode.name}}
-          </span>
-        </ng-template>
-        <h1 *ngIf="selectedNode">{{selectedNode.name}}</h1>        
-      </md-tab>
-    </md-tab-group>
-  </md-card-content>
-</md-card>
+<md-card fxFlex style="overflow-y: auto;">
+    <md-card-content>
+      <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+      <md-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
+        <md-tab *ngFor="let tab of tabs">
+          <ng-template md-tab-label>
+            <section layout="row">
+              <app-ws-node-image md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16" [imageHeight]="16">
+              </app-ws-node-image>
+              <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length <= 10">{{tab.parent.name}}</span>
+              <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length > 10">{{tab.parent.name.substring(0, 10)}}...</span>
+              &nbsp;&nbsp; <i class="fa fa-times" (click)="closeTab(tab)"></i>
+            </section>
+          </ng-template>
+          <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
+            <ng-template [ngIf]="tab.children">
+              <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0" (click)="selectItem(child)">
+                <i md-card-image class="fa fa-play-circle-o fa-4x" style="text-align: center;"></i>
+                <md-card-content>
+                  <div class="ws-card-item-name">{{child.name}}</div>
+                </md-card-content>
+              </md-card>
+            </ng-template>
+          </div>
+        </md-tab>
+      </md-tab-group>
+    </md-card-content>
+  </md-card>

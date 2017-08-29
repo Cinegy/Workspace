@@ -1,0 +1,17 @@
+.ws-card-item {
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 150px;
+    max-height: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.ws-card-item-name {
+    font-size: x-small;
+    text-align: center;
+}
+.ws-tab {
+    overflow-y: auto;
+
+}

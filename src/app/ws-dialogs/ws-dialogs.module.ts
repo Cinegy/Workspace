@@ -8,6 +8,7 @@ import { WsCreateFolderDialogComponent } from './ws-create-folder-dialog/ws-crea
 import { WsInfoDialogComponent } from './ws-info-dialog/ws-info-dialog.component';
 import { WsDeleteDialogComponent } from './ws-delete-dialog/ws-delete-dialog.component';
 import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.component';
+import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.component';
 
 @NgModule({
   imports: [
@@ -21,8 +22,23 @@ import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.com
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [WsCreateFolderDialogComponent, WsInfoDialogComponent, WsDeleteDialogComponent, WsRenameDialogComponent],
-  exports: [WsCreateFolderDialogComponent, WsInfoDialogComponent, WsDeleteDialogComponent, WsRenameDialogComponent],
-  entryComponents: [WsCreateFolderDialogComponent, WsInfoDialogComponent, WsDeleteDialogComponent, WsRenameDialogComponent]
+  declarations: [
+    WsCreateFolderDialogComponent,
+    WsInfoDialogComponent,
+    WsDeleteDialogComponent,
+    WsRenameDialogComponent,
+    WsErrorDialogComponent],
+  exports: [
+    WsCreateFolderDialogComponent,
+    WsInfoDialogComponent,
+    WsDeleteDialogComponent,
+    WsRenameDialogComponent,
+    WsErrorDialogComponent],
+  entryComponents: [
+    WsCreateFolderDialogComponent,
+    WsInfoDialogComponent,
+    WsDeleteDialogComponent,
+    WsRenameDialogComponent,
+    WsErrorDialogComponent]
 })
 export class WsDialogsModule { }

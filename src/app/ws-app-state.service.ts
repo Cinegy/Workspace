@@ -11,8 +11,9 @@ export class WsAppStateService {
   private _selectedMam: WsMamConnection;
  
   public loggedInSubject: Subject<any> = new Subject<any>();
-  public selectedNodeSubject: Subject<any> = new Subject<any>();
+  public selectNodeSubject: Subject<any> = new Subject<any>();
   public openNodeSubject: Subject<any> = new Subject<any>();
+  public updateNodeSubject: Subject<any> = new Subject<any>();
   public authHeader: string;
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};
@@ -46,11 +47,16 @@ export class WsAppStateService {
     this.authHeader = `${tokenType} ${token}`;
   }
 
-  public selectedNode(node: any) {
-    this.selectedNodeSubject.next(node);
+  public selectNode(node: any) {
+    this.selectNodeSubject.next(node);
   }
 
   public openNode(node: any) {
+    this.selectNodeSubject.next(node);
     this.openNodeSubject.next(node);
+  }
+
+  public updateNode(node: any) {
+    this.updateNodeSubject.next(node);
   }
 }

@@ -1,3 +1,4 @@
+import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
 import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
@@ -22,6 +23,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public loading = true;
   public selectedNode: any;
   public childNodes: any[];
+  public childCount = 0;
   public contextMenuItems: MenuItem[];
   public childOpenedMenu: boolean;
   public displayNewDialog = false;
@@ -86,12 +88,12 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.selectedNode = node;
       this.breadcrumbService.add(node);
       this.childNodes = [];
-      this.appState.selectedNode(this.selectedNode);
       this.explorerService.getNode(this.selectedNode.id);
     } else {
       this.loading = false;
-      this.appState.selectedNode(node);
     }
+
+    this.appState.selectNode(node);
   }
 
   public openNode(node: any) {
@@ -99,7 +101,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.appState.selectedNode(node);
     this.appState.openNode(node);
     console.log(`Opening Node: ${node.name}`);
   }
@@ -107,6 +108,13 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private openInfoDialog(msg: string) {
     const dialogRef = this.dialog.open(WsInfoDialogComponent, {
       width: '300px',
+      data: msg
+    });
+  }
+
+  private openErrorDialog(msg: string) {
+    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
+      width: '600px',
       data: msg
     });
   }
@@ -136,7 +144,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      console.log(`Create Node`);
+      console.log(`Rename Node`);
       this.explorerService.renameNode(this.menuNode.id, result);
     });
   }
@@ -161,11 +169,12 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
     this.selectedNode = response;
-    this.appState.selectedNode(this.selectedNode);
+    this.appState.selectNode(this.selectedNode);
     this.breadcrumbService.add(this.selectedNode);
     console.log(`Get Root: ${this.selectedNode.name}`);
     this.loading = true;
@@ -177,6 +186,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -191,16 +201,19 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
     this.childNodes = response.items;
+    this.childCount = response.totalCount;
     console.log(`Get Children: ${this.childNodes.length}`);
   }
 
   private createNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -215,6 +228,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private deleteNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -228,6 +242,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private renameNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -297,16 +312,18 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       }
     }
 
-    menuItem = {
-      label: 'Rename',
-      icon: 'fa-pencil',
-      command: (event) => {
-        this.menuNode = selectedNode;
-        this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
-        this.renameNodeDialog();
-      }
-    };
-    this.contextMenuItems.push(menuItem);
+    if (this.childOpenedMenu && selectedNodeType.canDelete) {
+      menuItem = {
+        label: 'Rename',
+        icon: 'fa-pencil',
+        command: (event) => {
+          this.menuNode = selectedNode;
+          this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
+          this.renameNodeDialog();
+        }
+      };
+      this.contextMenuItems.push(menuItem);
+    }
 
     if (this.childOpenedMenu && selectedNodeType.canDelete) {
       menuItem = {

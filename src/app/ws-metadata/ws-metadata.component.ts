@@ -17,7 +17,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     public management: WsAppManagementService) {
     this.subscribers = [];
 
-    let subscriber = this.appState.selectedNodeSubject
+    let subscriber = this.appState.selectNodeSubject
       .subscribe(response => this.selectedNodeResponse(response));
     this.subscribers.push(subscriber);
 
