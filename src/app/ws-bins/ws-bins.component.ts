@@ -75,7 +75,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.appState.selectNode(this.tabs[this.selectedIndex].parent);
   }
 
-  private selectItem(item: BinNode) {
+  private selectItem(item: any) {
     this.appState.selectNode(item);
   }
 
@@ -137,7 +137,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     for (let tab of this.tabs) {
       if (tab.parent.id === response.id) {
         this.closeTab(tab);
-        return;
       }
     }
   }
@@ -150,7 +149,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.tabs.length; i++) {
       if (this.tabs[i].parent.id === response.id) {
         this.tabs[i].parent = response;
-        return;
       }
     }
   }

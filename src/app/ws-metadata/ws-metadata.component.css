@@ -1,0 +1,10 @@
+md-select, md-option {
+    font-size: smaller;
+}
+.ws-metadata-name {
+    width: 40%;
+    margin-left: 10px;
+}
+.ws-metadata-value {
+    width: 50%;
+}

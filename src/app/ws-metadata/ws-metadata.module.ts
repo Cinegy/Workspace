@@ -1,6 +1,9 @@
+import { FormsModule } from '@angular/forms';
+import { WsMetadataService } from './ws-metadata.service';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
-import { MdCardModule, MdButtonModule, MdInputModule, MdTooltipModule, MdListModule } from '@angular/material';
+// tslint:disable-next-line:max-line-length
+import { MdCardModule, MdButtonModule, MdInputModule, MdTooltipModule, MdListModule, MdTableModule, MdTabsModule, MdSelectModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -10,14 +13,21 @@ import { WsMetadataComponent } from './ws-metadata.component';
   imports: [
     CommonModule,
     FlexLayoutModule,
+    FormsModule,
+    WsNodeImageModule,
     MdCardModule,
     MdButtonModule,
     MdTooltipModule,
     MdInputModule,
     MdListModule,
-    WsNodeImageModule
+    MdTableModule,
+    MdTabsModule,
+    MdListModule,
+    MdTooltipModule,
+    MdSelectModule
   ],
   declarations: [WsMetadataComponent],
-  exports: [WsMetadataComponent]
+  exports: [WsMetadataComponent],
+  providers: [WsMetadataService]
 })
 export class WsMetadataModule { }

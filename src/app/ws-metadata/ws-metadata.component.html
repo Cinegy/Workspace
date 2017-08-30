@@ -1,4 +1,4 @@
-<md-card fxFlex>
+<md-card fxFlex style="overflow-y: auto;">
   <md-card-content>
     <h3 *ngIf="selectedNode">
       <app-ws-node-image md-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
@@ -7,8 +7,53 @@
       {{selectedNode.name}}
     </h3>
     <md-divider></md-divider>
-    <p>
-      ws-metadata works!
-    </p>
+    <div>
+      <md-tab-group>
+        <md-tab *ngFor="let group of descriptorGroups">
+          <ng-template md-tab-label>
+            <section layout="row">
+              <span>{{group[0].group.name}}</span>
+            </section>
+          </ng-template>
+          <md-list dense fxFlex style="overflow: hidden;">
+            <md-list-item *ngFor="let item of group">
+              <span class="ws-metadata-icon"><i *ngIf="item.isReadOnly" class="fa fa-lock"></i></span>
+              <span class="ws-metadata-icon"><i *ngIf="!item.isReadOnly" class="fa fa-pencil"></i></span>
+              <span class="ws-metadata-name" mdTooltip="{{item.description}}" mdTooltipPosition="below">[{{item.type}}] {{item.name}}</span>
+              <span class="ws-metadata-value">
+                <span [ngSwitch]="item.type">
+                    <md-input-container  *ngSwitchCase="'string'" fxFlex fxFlexFill>
+                      <input mdInput value="{{item.value.name}}" type="text" [readonly]="item.isReadOnly">
+                    </md-input-container>
+                    <md-input-container  *ngSwitchCase="'text'" fxFlex fxFlexFill>
+                      <textarea  mdInput [readonly]="item.isReadOnly">{{item.value.name}}</textarea>
+                    </md-input-container>
+                    <md-input-container  *ngSwitchCase="'date'" fxFlex fxFlexFill>
+                      <input mdInput value="{{item.value.name}}" [readonly]="item.isReadOnly">
+                    </md-input-container>
+                    <span *ngSwitchCase="'preset'">
+                      <span *ngIf="!item.isReadOnly">
+                        <md-select [(ngModel)]="item.value.value" fxFlex fxFlexFill>
+                          <md-option *ngFor="let presetValue of item.possibleValues" [value]="presetValue.value">
+                            {{ presetValue.name }}
+                          </md-option>
+                        </md-select>
+                      </span>
+                      <span *ngIf="item.isReadOnly">
+                          <md-input-container fxFlex fxFlexFill>
+                            <input mdInput value="{{item.value.name}}" readonly>
+                          </md-input-container>
+                      </span>
+                    </span>
+                    <md-input-container  *ngSwitchDefault fxFlex fxFlexFill>
+                      <input mdInput value="{{item.value.name}}" [readonly]="item.isReadOnly">
+                    </md-input-container>
+                </span>
+              </span>
+            </md-list-item>
+          </md-list>
+        </md-tab>
+      </md-tab-group>
+    </div>
   </md-card-content>
 </md-card>

@@ -27,11 +27,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MdListModule,
     MdSelectModule,
     MdDialogModule,
-    WsDialogsModule,
     ContextMenuModule,
     FormsModule,
     ReactiveFormsModule,
-    WsNodeImageModule
+    WsNodeImageModule,
+    WsDialogsModule,
   ],
   declarations: [WsExplorerComponent],
   providers: [WsExplorerService],

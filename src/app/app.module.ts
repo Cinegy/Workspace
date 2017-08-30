@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { WsPlayerComponent } from './ws-player/ws-player.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: WsLoginComponent },

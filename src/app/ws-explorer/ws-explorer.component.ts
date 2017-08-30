@@ -1,5 +1,4 @@
 import { WsCreateBinDialogComponent } from './../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
-import { WsCreateClipbinDialogComponent } from './../ws-dialogs/ws-create-clipbin-dialog/ws-create-clipbin-dialog.component';
 import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
@@ -293,9 +292,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (index > -1) {
       this.childNodes[index] = response;
-      this.childNodes.splice(index, 1);
+
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
-        this.appState.updateNode(this.menuNode);
+        this.appState.updateNode(response);
       }
     }
   }

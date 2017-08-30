@@ -1,6 +1,5 @@
 import { NewBinParams } from './../ws-dialogs/ws-create-bin-dialog/new-bin-params';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { NewClipBin } from './../ws-dialogs/ws-create-clipbin-dialog/new-clipbin';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { WsAppStateService } from './../ws-app-state.service';

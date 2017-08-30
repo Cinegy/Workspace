@@ -1,13 +1,14 @@
 <div fxLayout="column" fxFlex>
     <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
     <div fxLayout fxFlex>
-        <div fxLayout fxFlex="20">
+        <div fxLayout="column"  fxFlex="20">
             <app-ws-explorer fxFlex></app-ws-explorer>
         </div>
-        <div fxLayout fxFlex="50">
+        <div fxLayout="column" fxFlex="50">
             <app-ws-bins fxFlex></app-ws-bins>
         </div>
-        <div fxLayout fxFlex="30">
+        <div fxLayout="column" fxFlex="30">
+            <app-ws-player fxFlex></app-ws-player>
             <app-ws-metadata fxFlex></app-ws-metadata>
         </div>
     </div>

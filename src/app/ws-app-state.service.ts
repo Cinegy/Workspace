@@ -54,7 +54,7 @@ export class WsAppStateService {
   }
 
   public openNode(node: any) {
-    this.selectNodeSubject.next(node);
+    // this.selectNodeSubject.next(node);
     this.openNodeSubject.next(node);
   }
 

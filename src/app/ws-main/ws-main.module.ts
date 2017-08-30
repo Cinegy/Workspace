@@ -1,3 +1,4 @@
+import { WsPlayerModule } from './../ws-player/ws-player.module';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsBinsModule } from './../ws-bins/ws-bins.module';
 import { WsMetadataModule } from './../ws-metadata/ws-metadata.module';
@@ -21,7 +22,8 @@ import { MdCardModule } from '@angular/material';
     PanelModule,
     WsExplorerModule,
     WsBinsModule,
-    WsMetadataModule
+    WsMetadataModule,
+    WsPlayerModule
   ],
   declarations: [WsMainComponent],
   providers: [WsMainBreadcrumbsService]
