@@ -4,7 +4,7 @@
       <md-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
         <md-tab *ngFor="let tab of tabs">
           <ng-template md-tab-label>
-            <section layout="row">
+            <section>
               <app-ws-node-image md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16" [imageHeight]="16">
               </app-ws-node-image>
               <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length <= 10">{{tab.parent.name}}</span>

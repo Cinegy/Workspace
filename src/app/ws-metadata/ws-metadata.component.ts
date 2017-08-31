@@ -1,3 +1,4 @@
+import { SaveMetadataRequest } from './save-metadata-request';
 import { WsMetadataService } from './ws-metadata.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppManagementService } from './../ws-app-management.service';
@@ -14,6 +15,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   public descriptorGroups: any[];
   public descriptors: any[];
   public selectedNode: any;
+  public loading = false;
 
   constructor(
     public appState: WsAppStateService,
@@ -40,6 +42,10 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     subscriber = this.metadataService.getMetadataSubject
       .subscribe(response => this.getMetadataResponse(response));
     this.subscribers.push(subscriber);
+
+    subscriber = this.metadataService.setMetadataSubject
+      .subscribe(response => this.setMetadataResponse(response));
+    this.subscribers.push(subscriber);
   }
 
   ngOnInit() {
@@ -51,11 +57,21 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     });
   }
 
+  public saveMetadata(item) {
+    const metadata = new SaveMetadataRequest();
+
+    metadata.descriptorId = item.id;
+    metadata.value = item.value.value;
+
+    this.metadataService.setMetadata(this.selectedNode.id, metadata);
+  }
+
   private selectedNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       return;
     }
 
+    this.loading = true;
     this.selectedNode = response;
     this.descriptorGroups = [];
     this.descriptors = this.appState.descriptors[this.selectedNode.type];
@@ -68,6 +84,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private getDescriptorsResponse(response) {
+    this.loading = false;
     if (response instanceof WsMamError) {
       return;
     }
@@ -77,6 +94,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private getMetadataResponse(response) {
+    this.loading = false;
     if (response instanceof WsMamError) {
       return;
     }
@@ -110,11 +128,17 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.selectedNode = response;
   }
 
+  private setMetadataResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+  }
+
   private sortDescriptors(descriptors, metadata) {
     const tmpGroups = {};
 
     for (const descriptor of descriptors) {
-      descriptor.value = {name: null, value: null};
+      descriptor.value = { name: null, value: null };
       const group = tmpGroups[descriptor.group.id];
 
       for (let i = 0; i < metadata.length; i++) {

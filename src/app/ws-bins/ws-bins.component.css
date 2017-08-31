@@ -6,6 +6,7 @@
     overflow: hidden;
     cursor: pointer;
     margin-top: 10px;
+    margin-bottom: 5px;
 }
 .ws-card-item-name {
     font-size: x-small;

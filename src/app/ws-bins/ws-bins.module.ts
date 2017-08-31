@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsBinsComponent } from './ws-bins.component';
 import { WsClipBinComponent } from './ws-clip-bin/ws-clip-bin.component';
-import {TabViewModule} from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -18,8 +17,7 @@ import {TabViewModule} from 'primeng/primeng';
     MdTooltipModule,
     MdInputModule,
     MdListModule,
-    MdTabsModule,
-    TabViewModule
+    MdTabsModule
   ],
   declarations: [WsBinsComponent, WsClipBinComponent],
   exports: [WsBinsComponent],

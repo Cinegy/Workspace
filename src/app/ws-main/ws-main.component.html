@@ -1,13 +1,9 @@
 <div fxLayout="column" fxFlex>
     <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
-    <div fxLayout fxFlex>
-        <div fxLayout="column"  fxFlex="20">
-            <app-ws-explorer fxFlex></app-ws-explorer>
-        </div>
-        <div fxLayout="column" fxFlex="50">
-            <app-ws-bins fxFlex></app-ws-bins>
-        </div>
-        <div fxLayout="column" fxFlex="30">
+    <div fxLayout fxFlex style="overflow: hidden;">
+        <app-ws-explorer fxLayout="column" fxFlex="20%"></app-ws-explorer>
+        <app-ws-bins fxLayout="column" fxFlex style="width: 300px;"></app-ws-bins>
+        <div fxLayout="column" fxFlex="30%" style="width: 150px;">
             <app-ws-player fxFlex></app-ws-player>
             <app-ws-metadata fxFlex></app-ws-metadata>
         </div>
