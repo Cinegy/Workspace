@@ -78,8 +78,10 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
     if (this.descriptors === undefined) {
       this.metadataService.getDescriptors(this.selectedNode.type);
+    } else if (this.selectedNode.metadata) {
+      this.metadataService.getMetadata(this.selectedNode);
     } else {
-      this.metadataService.getMetadata(this.selectedNode.id);
+      this.loading = false;
     }
   }
 
@@ -90,7 +92,11 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     }
 
     this.descriptors = response;
-    this.metadataService.getMetadata(this.selectedNode.id);
+
+    if (this.selectedNode.metadata) {
+      this.metadataService.getMetadata(this.selectedNode);
+    }
+    // this.metadataService.getMetadata(this.selectedNode.id);
   }
 
   private getMetadataResponse(response) {

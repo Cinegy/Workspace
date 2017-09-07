@@ -34,15 +34,18 @@ export class WsExplorerService extends WsBaseMamService {
   }
 
   public getRoot() {
+    // tslint:disable-next-line:max-line-length
     this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.getRootSubject);
   }
 
   public getChildren(url: string) {
-    this.get(`${url}&linksScope=self&filter.requestType=notDeleted`, this.getChildrenSubject);
+    // tslint:disable-next-line:max-line-length
+    this.get(`${url}&linksScope=self&filter.requestType=notDeleted&linksScope=children&linksScope=metadata`, this.getChildrenSubject);
   }
 
   public getNode(id: string) {
-    this.get(`${this.appState.selectedMam.mamEndpoint}node?id=${id}&linksScope=children`, this.getNodeSubject);
+    // tslint:disable-next-line:max-line-length
+    this.get(`${this.appState.selectedMam.mamEndpoint}node?id=${id}&linksScope=children&linksScope=metadata`, this.getNodeSubject);
   }
 
   public createNode(parentId: string, nodeType: string, name: string) {

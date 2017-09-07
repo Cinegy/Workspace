@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class WsAppManagementService extends WsBaseMamService {
+  public getTvFormatsSubject: Subject<any> = new Subject<any>();
   public getNodeTypesSubject: Subject<any> = new Subject<any>();
   public getIconsSubject: Subject<any> = new Subject<any>();
   public getDescriptorsSubject: Subject<any> = new Subject<any>();
@@ -18,22 +19,25 @@ export class WsAppManagementService extends WsBaseMamService {
   }
 
   public initialize() {
-    this.getDescriptorsSubject
-      .subscribe(response => this.getDescriptorsResponse(response));
     this.appState.selectNodeSubject
       .subscribe(response => this.selectedNodeResponse(response));
 
-    this.token = this.appState.authHeader;
-    this.headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', this.token);
+    this.getTvFormatsSubject
+      .subscribe(response => this.getTvFormatsResponse(response));
 
-      this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
-      this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
-  }
+    this.getNodeTypesSubject
+      .subscribe(nodeTypes => this.getNodeTypesResponse(nodeTypes));
 
-  public getDescriptors(type: any) {
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=${type}`, this.getDescriptorsSubject, type);
+    this.getIconsSubject
+      .subscribe(icons => this.getIconsResponse(icons));
+
+    this.getDescriptorsSubject
+      .subscribe(response => this.getDescriptorsResponse(response));
+
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list`, this.getDescriptorsSubject);
   }
 
   private selectedNodeResponse(response: any) {
@@ -42,19 +46,51 @@ export class WsAppManagementService extends WsBaseMamService {
     }
 
     const descriptors = this.appState.descriptors[response.type];
+  }
 
-    if (descriptors == null) {
-      this.getDescriptors(response.type);
+  private getTvFormatsResponse(response: any) {
+    if (response instanceof WsMamError) {
+      return;
     }
+
+    response.forEach(tvFormat => {
+      this.appState.tvFormats[tvFormat.id] = tvFormat;
+    });
+  }
+
+  private getNodeTypesResponse(nodeTypes: any) {
+    if (nodeTypes instanceof WsMamError) {
+      console.log(`Error: ${nodeTypes.msg}`);
+      return;
+    }
+
+    nodeTypes.forEach(nodeType => {
+      this.appState.nodeTypes[nodeType.type] = nodeType;
+    });
+  }
+
+  private getIconsResponse(icons: any) {
+    if (icons instanceof WsMamError) {
+      console.log(`Error: ${icons.msg}`);
+      return;
+    }
+
+    icons.forEach(icon => {
+      this.appState.nodeIcons[icon.type] = icon;
+    });
   }
 
   private getDescriptorsResponse(response: any) {
     if (response instanceof WsMamError) {
-      this.appState.descriptors[response.extMsg] = [];
       return;
     }
 
-    console.log(`Getting descriptors for ${response.extra}`);
-    this.appState.descriptors[response.extra] = response.payload;
+    response.forEach(item => {
+      if (this.appState.descriptors[item.group.name] === undefined || this.appState.descriptors[item.group.name] === null) {
+        this.appState.descriptors[item.group.name] = [{ item }];
+      } else {
+        this.appState.descriptors[item.group.name].push(item);
+      }
+    });
   }
 }

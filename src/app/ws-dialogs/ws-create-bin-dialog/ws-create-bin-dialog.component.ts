@@ -29,11 +29,13 @@ export class WsCreateBinDialogComponent implements OnInit, OnDestroy {
 
     const descriptors = this.appState.descriptors[this.data.type];
 
-    if (descriptors === undefined) {
-      this.management.getDescriptors(this.data.type);
-    } else {
-      this.setMediaGroupDescriptors(descriptors);
-    }
+    // if (descriptors === undefined) {
+    //   this.management.getDescriptors(this.data.type);
+    // } else {
+    //   this.setMediaGroupDescriptors(descriptors);
+    // }
+
+    this.setMediaGroupDescriptors(descriptors);
   }
 
   ngOnDestroy() {

@@ -1,3 +1,4 @@
+import { WsBaseMamInterceptor } from './../shared/services/ws-base-mam/ws-base-mam-interceptor';
 import { WsDialogsModule } from './../ws-dialogs/ws-dialogs.module';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
@@ -15,6 +16,7 @@ import {
   MenuItem
 } from 'primeng/primeng';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -34,7 +36,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     WsDialogsModule,
   ],
   declarations: [WsExplorerComponent],
-  providers: [WsExplorerService],
+  providers: [WsExplorerService,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: WsBaseMamInterceptor,
+    multi: true
+  }],
   exports: [WsExplorerComponent]
 })
 export class WsExplorerModule { }

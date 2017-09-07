@@ -24,7 +24,9 @@
         "../node_modules/primeng/resources/themes/cruze/theme.css",
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/screenfull/dist/screenfull.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

@@ -1,3 +1,5 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { WsBaseMamInterceptor } from './shared/services/ws-base-mam/ws-base-mam-interceptor';
 import 'hammerjs';
 import { WsAppManagementService } from './ws-app-management.service';
 import { WsAuthGuardService } from './ws-login/ws-auth-guard.service';
@@ -47,7 +49,12 @@ const appRoutes: Routes = [
   ],
   providers: [
     WsAppStateService,
-    WsAppManagementService
+    WsAppManagementService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: WsBaseMamInterceptor,
+      multi: true
+    }
   ],
   exports: [],
   bootstrap: [AppComponent]

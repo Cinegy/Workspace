@@ -1,16 +1,20 @@
 [
     {
-        "name": "MAM 1",
-        "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
+        "name": "MAM Simon",
+        "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
         "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
         "dbName": "mamSimon",
-        "dbServer": ".\\sqlexpress"
+        "dbServer": ".\\sqlexpress",
+        "thumbnailServer": "http://localhost:8000/image.svc/",
+        "mediaServer": "http://localhost/cinemedia/"
     },
     {
-        "name": "MAM 2",
+        "name": "MAM 11.1",
         "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
         "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
-        "dbName": "mamSimon",
-        "dbServer": ".\\sqlexpress"
+        "dbName": "mam_11_1",
+        "dbServer": ".\\sqlexpress",
+        "thumbnailServer": "http://localhost:8000/image.svc/",
+        "mediaServer": "http://localhost/cinemedia/"
     }
 ]

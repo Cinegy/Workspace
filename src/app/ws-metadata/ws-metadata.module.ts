@@ -1,3 +1,5 @@
+import { WsBaseMamInterceptor } from './../shared/services/ws-base-mam/ws-base-mam-interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { WsMetadataService } from './ws-metadata.service';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
@@ -29,6 +31,11 @@ import { WsMetadataComponent } from './ws-metadata.component';
   ],
   declarations: [WsMetadataComponent],
   exports: [WsMetadataComponent],
-  providers: [WsMetadataService]
+  providers: [WsMetadataService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: WsBaseMamInterceptor,
+      multi: true
+    }]
 })
 export class WsMetadataModule { }

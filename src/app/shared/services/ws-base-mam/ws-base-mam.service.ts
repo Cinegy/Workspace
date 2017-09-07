@@ -8,22 +8,14 @@ import { WsMamError } from './ws-mam-error';
 
 @Injectable()
 export class WsBaseMamService {
-  protected headers: HttpHeaders;
-  protected token: string;
-
   constructor(
     protected httpClient: HttpClient,
-    protected appState: WsAppStateService) {
-    this.token = this.appState.authHeader;
-
-    this.headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', this.token);
-  }
+    protected appState: WsAppStateService) {}
 
   protected get(url: string, subject: Subject<any>, extraSubjectData?: any) {
+
     this.httpClient
-      .get(url, { headers: this.headers })
+      .get(url)
       .subscribe(
       data => {
         if (subject) {
@@ -45,7 +37,7 @@ export class WsBaseMamService {
 
   protected post(url: string, payload: any, subject: Subject<any>) {
     this.httpClient
-      .post(url, payload, { headers: this.headers })
+      .post(url, payload)
       .subscribe(
       data => {
         if (subject) {
@@ -60,7 +52,7 @@ export class WsBaseMamService {
 
   protected put(url: string, payload: any, subject: Subject<any>) {
     this.httpClient
-      .put(url, payload, { headers: this.headers })
+      .put(url, payload)
       .subscribe(
       data => {
         if (subject) {
@@ -74,7 +66,7 @@ export class WsBaseMamService {
 
   protected delete(url: string, subject: Subject<any>) {
     this.httpClient
-      .delete(url, { headers: this.headers })
+      .delete(url)
       .subscribe(
       data => {
         if (subject) {

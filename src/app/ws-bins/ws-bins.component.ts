@@ -1,3 +1,8 @@
+import { ClipboardItem, ClipboardAction } from './clipboard-item';
+import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
+import { MdDialog } from '@angular/material';
+import { MenuItem } from 'primeng/primeng';
+import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { BinNode } from './bin-node';
 import { WsBinsService } from './ws-bins.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
@@ -11,18 +16,24 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./ws-bins.component.css']
 })
 export class WsBinsComponent implements OnInit, OnDestroy {
+  private videoHelper = new WsVideoTools();
+  private internalClipboardItem: ClipboardItem = null;
   public subscribers: any[];
   public lastOpenedNode: any;
+  public deletedNode = null;
   public tabs: BinNode[];
+  public contextMenuItems: MenuItem[];
   public selectedIndex = 0;
   public loading = false;
 
   constructor(
     public appState: WsAppStateService,
     public management: WsAppManagementService,
-    private binService: WsBinsService) {
+    private binService: WsBinsService,
+    public dialog: MdDialog) {
     this.subscribers = [];
     this.tabs = [];
+    this.contextMenuItems = [];
 
     let subscriber = this.appState.openNodeSubject
       .subscribe(response => this.openNodeResponse(response));
@@ -48,6 +59,30 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.getChildrenResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.binService.startSearchSubject
+      .subscribe(response => this.startSearchResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.binService.searchSubject
+      .subscribe(response => this.getSearchResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.binService.deleteNodeSubject
+      .subscribe(response => this.deleteBinItemResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.binService.copyClipSubject
+      .subscribe(response => this.pasteClipResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.binService.linkMasterclipSubject
+      .subscribe(response => this.pasteClipResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.binService.cutClipSubject
+      .subscribe(response => this.cutClipResponse(response));
+    this.subscribers.push(subscriber);
+
   }
 
   ngOnInit() {
@@ -71,14 +106,30 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (this.selectedIndex === -1) {
       return;
     }
+  }
 
-    this.appState.selectNode(this.tabs[this.selectedIndex].parent);
+  public playClip(node: any) {
+    if (node === null) {
+      return;
+    }
+
+    this.appState.playClip(node);
+    console.log(`Play Clip: ${node.name}`);
   }
 
   private selectItem(item: any) {
     this.appState.selectNode(item);
   }
 
+  private getThumbnail(node: any) {
+    if (node.type === 'image') {
+      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam);
+    } else {
+      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam, this.appState.tvFormats[node.tvFormat]);
+    }
+  }
+
+  /* *** Service Response *** */
   private openNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       return;
@@ -115,6 +166,29 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
   private getChildrenResponse(response: any) {
     this.loading = false;
+
+    if (response instanceof WsMamError) {
+      this.lastOpenedNode = null;
+      return;
+    }
+
+    const bin = new BinNode();
+    bin.parent = this.lastOpenedNode;
+    bin.children = response.items;
+    bin.childCount = response.totalCount;
+
+    this.tabs.push(bin);
+    this.selectedIndex = this.tabs.length - 1;
+  }
+
+  private startSearchResponse(keywords: string) {
+    this.loading = true;
+    this.lastOpenedNode = { name: keywords, type: 'searchBin' };
+  }
+
+  private getSearchResponse(response: any) {
+    this.loading = false;
+
     if (response instanceof WsMamError) {
       this.lastOpenedNode = null;
       return;
@@ -133,8 +207,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (response instanceof WsMamError) {
       return;
     }
-    // tslint:disable-next-line:prefer-const
-    for (let tab of this.tabs) {
+
+    for (const tab of this.tabs) {
       if (tab.parent.id === response.id) {
         this.closeTab(tab);
       }
@@ -145,11 +219,163 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (response instanceof WsMamError) {
       return;
     }
-    // tslint:disable-next-line:prefer-const
+
     for (let i = 0; i < this.tabs.length; i++) {
       if (this.tabs[i].parent.id === response.id) {
         this.tabs[i].parent = response;
       }
     }
   }
+
+  private deleteBinItemResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    if (this.deletedNode === null) {
+      return;
+    }
+
+    const index = this.tabs[this.selectedIndex].children.indexOf(this.deletedNode);
+
+    if (index > -1) {
+      this.tabs[this.selectedIndex].children.splice(index, 1);
+      this.tabs[this.selectedIndex].childCount = this.tabs[this.selectedIndex].children.length;
+      this.deletedNode = null;
+    }
+
+  }
+
+  private pasteClipResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    this.tabs[this.selectedIndex].children.push(response);
+    this.tabs[this.selectedIndex].childCount = this.tabs[this.selectedIndex].children.length;
+  }
+
+  private cutClipResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    for (let i = 0; i < this.tabs.length; i++) {
+      if (this.tabs[i].parent.id === this.internalClipboardItem.bin.parent.id) {
+        const index = this.tabs[i].children.indexOf(this.internalClipboardItem.item);
+
+        if (index > -1) {
+          this.tabs[i].children.splice(index, 1);
+          this.tabs[i].childCount = this.tabs[i].children.length;
+        }
+
+        this.internalClipboardItem = null;
+        return;
+      }
+    }
+  }
+
+  /* *** Dialogs *** */
+  private openDeleteNodeDialog(selectedNode: any) {
+    const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
+      width: '400px',
+      data: selectedNode.name
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      console.log(`Delete Node`);
+      this.deletedNode = selectedNode;
+      this.binService.deleteNode(selectedNode.id);
+    });
+  }
+  /* *** Context Menu *** */
+
+  private contextMenuOpen(selectedNode: any, child: boolean) {
+    let menuItem: any;
+
+    const playable = {};
+    playable['clip'] = true;
+    playable['masterClip'] = true;
+
+    this.contextMenuItems = [];
+    const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
+
+    if (child) {
+      if (selectedNode.type in playable ) {
+        menuItem = {
+          label: 'Play',
+          icon: 'fa-play-circle-o',
+          command: (event) => {
+            this.playClip(selectedNode);
+          }
+        };
+        this.contextMenuItems.push(menuItem);
+      }
+
+      if (selectedNode.type in playable && selectedNode.type !== 'masterClip') {
+        menuItem = {
+          label: 'Cut',
+          icon: 'fa-scissors',
+          command: (event) => {
+            this.internalClipboardItem = new ClipboardItem();
+            this.internalClipboardItem.action = ClipboardAction.Cut;
+            this.internalClipboardItem.item = selectedNode;
+            this.internalClipboardItem.bin = this.tabs[this.selectedIndex];
+          }
+        };
+        this.contextMenuItems.push(menuItem);
+      }
+
+      menuItem = {
+        label: 'Copy',
+        icon: 'fa-files-o',
+        command: (event) => {
+          this.internalClipboardItem = new ClipboardItem();
+          this.internalClipboardItem.action = ClipboardAction.Copy;
+          this.internalClipboardItem.item = selectedNode;
+          this.internalClipboardItem.bin = null;
+        }
+      };
+      this.contextMenuItems.push(menuItem);
+
+      if (selectedNodeType.canDelete) {
+        menuItem = {
+          label: 'Delete',
+          icon: 'fa-trash-o',
+          command: (event) => {
+            this.openDeleteNodeDialog(selectedNode);
+          }
+        };
+        this.contextMenuItems.push(menuItem);
+      }
+    }
+
+    menuItem = {
+      label: 'Paste',
+      disabled: (this.internalClipboardItem === null) && this.tabs[this.selectedIndex].parent.type !== 'clipBin',
+      icon: 'fa-clipboard',
+      command: (event) => {
+
+        switch (this.internalClipboardItem.item.type) {
+          case 'masterClip':
+            this.binService.linkMasterclip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+            this.internalClipboardItem = null;
+            break;
+          case 'clip':
+            if (this.internalClipboardItem.action === ClipboardAction.Copy) {
+              this.binService.copyClip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+              this.internalClipboardItem = null;
+            } else if (this.internalClipboardItem.action === ClipboardAction.Cut) {
+              this.binService.cutClip(this.internalClipboardItem, this.tabs[this.selectedIndex].parent.id);
+            }
+            break;
+        }
+      }
+    };
+    this.contextMenuItems.push(menuItem);
+  }
+
 }

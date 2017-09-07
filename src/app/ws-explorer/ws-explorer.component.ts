@@ -89,6 +89,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     });
   }
 
+  /* *** Public *** */
+
   public selectNode(node: any) {
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
 
@@ -100,6 +102,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.explorerService.getNode(this.selectedNode.id);
     } else {
       this.loading = false;
+      this.openNode(node);
     }
 
     this.appState.selectNode(node);
@@ -114,95 +117,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     console.log(`Opening Node: ${node.name}`);
   }
 
-  private openInfoDialog(msg: string) {
-    const dialogRef = this.dialog.open(WsInfoDialogComponent, {
-      width: '300px',
-      data: msg
-    });
-  }
-
-  private openErrorDialog(msg: string) {
-    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
-      width: '600px',
-      data: msg
-    });
-  }
-
-  private openNewFolderDialog() {
-    const dialogRef = this.dialog.open(WsCreateFolderDialogComponent, {
-      width: '400px',
-      data: this.menuNodeType
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == null) {
-        return;
-      }
-
-      console.log(`Create Node`);
-      this.explorerService.createNode(this.menuNode.id, this.menuNodeType.type, result);
-    });
-  }
-
-  private openNewDocumentBinDialog() {
-    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
-      width: '400px',
-      data: this.menuNodeType
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == null) {
-        return;
-      }
-
-      console.log(`Create Document Bin`);
-      this.explorerService.createDocumentBin(this.menuNode.id, result);
-    });
-  }
-
-  private openNewClipBinDialog() {
-    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
-      width: '400px',
-      data: this.menuNodeType
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == null) {
-        return;
-      }
-
-      console.log(`Create Clip Bin`);
-      this.explorerService.createClipBin(this.menuNode.id, result);
-    });
-  }
-
-  private renameNodeDialog() {
-    const dialogRef = this.dialog.open(WsRenameDialogComponent, {
-      width: '400px',
-      data: { name: this.menuNode.name, type: this.menuNodeType.type }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == null) {
-        return;
-      }
-
-      console.log(`Rename Node`);
-      this.explorerService.renameNode(this.menuNode.id, result);
-    });
-  }
-
-  private openDeleteNodeDialog() {
-    const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
-      width: '400px',
-      data: this.menuNode.name
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
-
-      console.log(`Delete Node`);
-      this.explorerService.deleteNode(this.menuNode.id);
-    });
-  }
-
+  /* *** Service responses *** */
   private getRootResponse(response: any) {
     this.loading = false;
 
@@ -299,10 +214,99 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private breadcrumbClicked(node: any) {
-    this.selectNode(node);
+  /* *** Dialogs *** */
+
+  private openInfoDialog(msg: string) {
+    const dialogRef = this.dialog.open(WsInfoDialogComponent, {
+      width: '300px',
+      data: msg
+    });
   }
 
+  private openErrorDialog(msg: string) {
+    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
+      width: '600px',
+      data: msg
+    });
+  }
+
+  private openNewFolderDialog() {
+    const dialogRef = this.dialog.open(WsCreateFolderDialogComponent, {
+      width: '400px',
+      data: this.menuNodeType
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Create Node`);
+      this.explorerService.createNode(this.menuNode.id, this.menuNodeType.type, result);
+    });
+  }
+
+  private openNewDocumentBinDialog() {
+    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
+      width: '400px',
+      data: this.menuNodeType
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Create Document Bin`);
+      this.explorerService.createDocumentBin(this.menuNode.id, result);
+    });
+  }
+
+  private openNewClipBinDialog() {
+    const dialogRef = this.dialog.open(WsCreateBinDialogComponent, {
+      width: '400px',
+      data: this.menuNodeType
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Create Clip Bin`);
+      this.explorerService.createClipBin(this.menuNode.id, result);
+    });
+  }
+
+  private renameNodeDialog() {
+    const dialogRef = this.dialog.open(WsRenameDialogComponent, {
+      width: '400px',
+      data: { name: this.menuNode.name, type: this.menuNodeType.type }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      console.log(`Rename Node`);
+      this.explorerService.renameNode(this.menuNode.id, result);
+    });
+  }
+
+  private openDeleteNodeDialog() {
+    const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
+      width: '400px',
+      data: this.menuNode.name
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      console.log(`Delete Node`);
+      this.explorerService.deleteNode(this.menuNode.id);
+    });
+  }
+
+  /* *** Conetxt Menu *** */
+  
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
     let menuItem: any;
     let menuChildItems: any;
@@ -389,5 +393,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       };
       this.contextMenuItems.push(menuItem);
     }
+  }
+
+  /* *** Breadcrumbs *** */
+  private breadcrumbClicked(node: any) {
+    this.selectNode(node);
   }
 }

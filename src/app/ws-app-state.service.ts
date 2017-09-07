@@ -15,8 +15,10 @@ export class WsAppStateService {
   public openNodeSubject: Subject<any> = new Subject<any>();
   public updateNodeSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
+  public playClipSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
+  public tvFormats: {[type: string]: any } = {};
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};
   public descriptors: {[type: string]: any } = {};
@@ -54,7 +56,6 @@ export class WsAppStateService {
   }
 
   public openNode(node: any) {
-    // this.selectNodeSubject.next(node);
     this.openNodeSubject.next(node);
   }
 
@@ -64,5 +65,9 @@ export class WsAppStateService {
 
   public deleteNode(node: any) {
     this.deleteNodeSubject.next(node);
+  }
+
+  public playClip(node: any) {
+    this.playClipSubject.next(node);
   }
 }

@@ -21,9 +21,13 @@ export class WsMetadataService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=${type}`, this.getDescriptorsSubject);
   }
 
-  public getMetadata(id: string) {
-    this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`, this.getMetadataSubject);
+  public getMetadata(node: any) {
+    this.get(node.metadata.url, this.getMetadataSubject);
   }
+
+  // public getMetadata(id: string) {
+  //   this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`, this.getMetadataSubject);
+  // }
 
   public setMetadata(id: string, metadata: SaveMetadataRequest) {
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`,
