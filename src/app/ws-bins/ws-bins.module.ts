@@ -4,11 +4,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WsBinsService } from './ws-bins.service';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MdListModule, MdInputModule, MdTooltipModule, MdButtonModule, MdCardModule, MdTabsModule } from '@angular/material';
+// tslint:disable-next-line:max-line-length
+import { MdListModule, MdInputModule, MdTooltipModule, MdButtonModule, MdCardModule, MdTabsModule, MdPaginatorModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsBinsComponent } from './ws-bins.component';
-import { WsClipBinComponent } from './ws-clip-bin/ws-clip-bin.component';
 import { ContextMenuModule, MenuItem } from 'primeng/primeng';
 
 @NgModule({
@@ -23,9 +23,10 @@ import { ContextMenuModule, MenuItem } from 'primeng/primeng';
     MdTooltipModule,
     MdInputModule,
     MdListModule,
-    MdTabsModule
+    MdTabsModule,
+    MdPaginatorModule
   ],
-  declarations: [WsBinsComponent, WsClipBinComponent],
+  declarations: [WsBinsComponent],
   exports: [WsBinsComponent],
   providers: [WsBinsService,
     {

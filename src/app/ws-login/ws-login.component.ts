@@ -19,7 +19,7 @@ export class WsLoginComponent implements OnInit, OnDestroy {
 
   public username = '';
   public password = '';
-  public domain = '';
+  public domain = 'MOON';
 
   constructor(
     private appState: WsAppStateService,

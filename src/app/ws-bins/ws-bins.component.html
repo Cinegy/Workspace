@@ -2,24 +2,28 @@
   <md-card-content #binNodes>
     <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
     <md-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
-      <md-tab *ngFor="let tab of tabs" >
+      <md-tab *ngFor="let tab of tabs">
         <ng-template md-tab-label>
           <section (contextmenu)="contextMenuOpen(tab.parent, false)">
-            <app-ws-node-image *ngIf="tab.parent.type" md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16" [imageHeight]="16"></app-ws-node-image>
+            <app-ws-node-image *ngIf="tab.parent.type" md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
+              [imageHeight]="16"></app-ws-node-image>
             <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
             <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
             &nbsp;
             <i class="fa fa-times" (click)="closeTab(tab)"></i>
           </section>
         </ng-template>
+        <md-paginator fxFlex [length]="tab.childCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageEvent($event)">
+          </md-paginator>
         <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
           <ng-template [ngIf]="tab.children">
-            <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0"  (click)="selectItem(child)"  (contextmenu)="contextMenuOpen(child, true)">
-              <div [ngSwitch]="child.type" class="ws-card-item-content" >
-                  <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}">
-                  <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}">
-                  <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}">
-                  <app-ws-node-image *ngSwitchDefault md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
+            <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0" (click)="selectItem(child)"
+              (contextmenu)="contextMenuOpen(child, true)">
+              <div [ngSwitch]="child.type" class="ws-card-item-content">
+                <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}">
+                <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}">
+                <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}">
+                <app-ws-node-image *ngSwitchDefault md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
               </div>
               <md-card-content>
                 <div class="ws-card-item-name">{{child.name}}</div>

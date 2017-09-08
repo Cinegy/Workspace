@@ -8,6 +8,7 @@ import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.ser
 
 @Injectable()
 export class WsBinsService extends WsBaseMamService {
+  private readonly take = 10;
   private clipboardItem: ClipboardItem;
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public getRollSubject: Subject<any> = new Subject<any>();
@@ -39,15 +40,32 @@ export class WsBinsService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}clipbin?id=${id}&clipBinScope=videoFormat&linksScope=children&linksScope=metadata`, this.getClipBinSubject);
   }
 
-  public getChildren(id: string) {
+  public getChildren(id: string,  take?: number, skip?: number) {
+    if (take === undefined) {
+      take = this.take;
+    }
+
+    if (skip === undefined) {
+      skip = 0;
+    }
+
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${id}&linkScope=children&linksScope=metadata&filter.requestType=notDeleted`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${id}&linkScope=children&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
   }
 
-  public search(keywords: string) {
+  public search(keywords: string, take?: number, skip?: number) {
     this.startSearchSubject.next(keywords);
+
+    if (take === undefined) {
+      take = this.take;
+    }
+
+    if (skip === undefined) {
+      skip = 0;
+    }
+
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}search?take=100&linkScope=self&linkScope=self&linkScope=children&linksScope=metadata`,
+    this.post(`${this.appState.selectedMam.mamEndpoint}search?linkScope=self&linkScope=self&linkScope=children&linksScope=metadata&take=${take}&skip=${skip}`,
     {Query: keywords},
     this.searchSubject);
   }
