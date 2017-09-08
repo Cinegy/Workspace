@@ -23,18 +23,7 @@ export class WsCreateBinDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const subscriber = this.management.getDescriptorsSubject
-      .subscribe(response => this.getDescriptorsResponse(response));
-    this.subscribers.push(subscriber);
-
     const descriptors = this.appState.descriptors[this.data.type];
-
-    // if (descriptors === undefined) {
-    //   this.management.getDescriptors(this.data.type);
-    // } else {
-    //   this.setMediaGroupDescriptors(descriptors);
-    // }
-
     this.setMediaGroupDescriptors(descriptors);
   }
 
@@ -42,16 +31,6 @@ export class WsCreateBinDialogComponent implements OnInit, OnDestroy {
     this.subscribers.forEach(element => {
       element.unsubscribe();
     });
-  }
-
-  private getDescriptorsResponse(response) {
-    if (response instanceof WsMamError) {
-      return;
-    }
-
-    if (response.extra === this.data.type) {
-      this.setMediaGroupDescriptors(response.payload);
-    }
   }
 
   private setMediaGroupDescriptors(descriptors: any) {

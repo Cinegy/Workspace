@@ -17,6 +17,11 @@ export class WsPlayerService extends WsBaseMamService {
     super(httpClient, appState);
   }
 
+  public getClipDescriptors() {
+    // tslint:disable-next-line:max-line-length
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clip&scope.category=predefined`, this.getClipDescriptorSubject);
+  }
+
   public getMasterclip(id: string) {
     this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}`, this.getMasterClipSubject);
   }
@@ -33,6 +38,13 @@ export class WsPlayerService extends WsBaseMamService {
       }
     ];
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`, markerMetadata, this.setMarkerSubject);
+
+    // const markers = {
+    //   In: markIn.toFixed(),
+    //   Out: markOut.toFixed()
+    // };
+
+    // this.post(`${this.appState.selectedMam.mamEndpoint}node?id=${id}`, markers, this.setMarkerSubject);
   }
 
 }

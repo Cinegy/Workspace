@@ -37,7 +37,8 @@ export class WsAppManagementService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list`, this.getDescriptorsSubject);
+    // tslint:disable-next-line:max-line-length
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clipBin&scope.type=documentBin`, this.getDescriptorsSubject);
   }
 
   private selectedNodeResponse(response: any) {
@@ -85,12 +86,7 @@ export class WsAppManagementService extends WsBaseMamService {
       return;
     }
 
-    response.forEach(item => {
-      if (this.appState.descriptors[item.group.name] === undefined || this.appState.descriptors[item.group.name] === null) {
-        this.appState.descriptors[item.group.name] = [{ item }];
-      } else {
-        this.appState.descriptors[item.group.name].push(item);
-      }
-    });
+    this.appState.descriptors['clipBin'] = response;
+    this.appState.descriptors['documentBin'] = response;
   }
 }

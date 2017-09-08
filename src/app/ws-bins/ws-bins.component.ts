@@ -94,7 +94,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private closeTab(tab: BinNode) {
+  public closeTab(tab: BinNode) {
     const index = this.tabs.indexOf(tab);
 
     if (index > -1) {
@@ -102,7 +102,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private selectTab() {
+  public selectTab() {
     if (this.selectedIndex === -1) {
       return;
     }

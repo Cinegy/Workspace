@@ -71,6 +71,10 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.selectedNode && response.id === this.selectedNode.id) {
+      return;
+    }
+
     this.loading = true;
     this.selectedNode = response;
     this.descriptorGroups = [];
@@ -92,11 +96,11 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     }
 
     this.descriptors = response;
+    this.appState.descriptors[this.selectedNode.type] = response;
 
     if (this.selectedNode.metadata) {
       this.metadataService.getMetadata(this.selectedNode);
     }
-    // this.metadataService.getMetadata(this.selectedNode.id);
   }
 
   private getMetadataResponse(response) {

@@ -19,10 +19,6 @@
       <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (click)="playerClicked($event)">
       </video>
       <div fxLayout="column" style="height: 40px;">
-        <!-- <div> -->
-            <!-- <md-slider [fxShow]="showMarkerIn" id="inMarkerSlider" #inMarkerSlider fxFlex [min]="sliderStart" [max]="sliderEnd" [(value)]="markerIn" thumb-label disabled step="0.5"></md-slider>
-            <md-slider [fxShow]="showMarkerOut" id="outMarkerSlider" #outMarkerSlider fxFlex [min]="sliderStart" [max]="sliderEnd" [(value)]="markerOut" thumb-label disabled step="0.5" style="margin-top: -20px;"></md-slider> -->
-        <!-- </div> -->
         <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart" [max]="sliderEnd" [step]="0.1" [range]="true"></p-slider>
         <md-slider id="videoSlider" #videoSlider fxFlex  (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
           [min]="sliderStart" [max]="sliderEnd" [(value)]="sliderHead" [step]="0.1">
@@ -35,11 +31,11 @@
         <button md-icon-button *ngIf="!player?.paused" (click)="pause()"><i class="fa fa-pause"></i></button>
         <button md-icon-button (click)="setMarkOut()"><i class="fa fa-map-marker"></i></button>
         <button md-icon-button (click)="clearMarkOut()"><i class="fa fa-map-marker fa-border"></i></button>
-        <button md-icon-button (click)="createSubClip()" *ngIf="!isMasterclip"><i class="fa fa-photo"></i></button>
+        <!-- <button md-icon-button (click)="createSubClip()" *ngIf="!isMasterclip"><i class="fa fa-photo"></i></button> -->
         <button md-icon-button *ngIf="player?.muted" (click)="toggleMute()"><i class="fa fa-volume-off"></i></button>
         <button md-icon-button *ngIf="!player?.muted" (click)="toggleMute()"><i class="fa fa-volume-up"></i></button>
-        <button md-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button>
-        <button md-icon-button (click)="toggleFullscreen()" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button>
+        <!-- <button md-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button>
+        <button md-icon-button (click)="toggleFullscreen()" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button> -->
       </div>
     </div>
   </md-card-content>

@@ -14,7 +14,7 @@
         </ng-template>
         <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
           <ng-template [ngIf]="tab.children">
-            <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0"  (click)="selectItem(child)" (contextmenu)="contextMenuOpen(child, true)">
+            <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0"  (click)="selectItem(child)"  (contextmenu)="contextMenuOpen(child, true)">
               <div [ngSwitch]="child.type" class="ws-card-item-content" >
                   <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}">
                   <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}">

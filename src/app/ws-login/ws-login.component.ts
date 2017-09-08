@@ -17,9 +17,9 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   public isConnectionSpinnerHidden = true;
   public errorMsg = [];
 
-  public username = 'User1';
-  public password = 'aaiisstt!123';
-  public domain = 'MOON';
+  public username = '';
+  public password = '';
+  public domain = '';
 
   constructor(
     private appState: WsAppStateService,

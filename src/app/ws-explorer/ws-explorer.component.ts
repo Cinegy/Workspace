@@ -100,9 +100,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.breadcrumbService.add(node);
       this.childNodes = [];
       this.explorerService.getNode(this.selectedNode.id);
-    } else {
-      this.loading = false;
-      this.openNode(node);
     }
 
     this.appState.selectNode(node);
