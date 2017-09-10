@@ -17,14 +17,21 @@
             <input mdInput required type="password" placeholder="Password" [(ngModel)]="password" name="password">
           </md-input-container>
         </p>
-        <p>
+        <!-- <p>
           <md-input-container fxFlex="100">
             <input mdInput required placeholder="Domain" [(ngModel)]="domain" name="domain">
           </md-input-container>
+        </p> -->
+        <p>
+          <md-select *ngIf="configuration && configuration.domains" required placeholder="Select Domain" [(ngModel)]="selectedDomain" name="selectedDomain" fxFlex="100">
+            <md-option *ngFor="let domain of configuration.domains" [value]="domain">
+              {{domain}}
+            </md-option>
+          </md-select>
         </p>
         <p>
-          <md-select required placeholder="Select MAM" [(ngModel)]="selectedMam" name="mamConfig" fxFlex="100">
-            <md-option *ngFor="let mam of mamList" [value]="mam">
+          <md-select *ngIf="configuration && configuration.mams" required placeholder="Select MAM" [(ngModel)]="selectedMam" name="selectedMam" fxFlex="100">
+            <md-option *ngFor="let mam of configuration.mams" [value]="mam">
               {{mam.name}}
             </md-option>
           </md-select>

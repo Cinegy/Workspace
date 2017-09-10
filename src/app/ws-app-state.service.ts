@@ -18,6 +18,7 @@ export class WsAppStateService {
   public playClipSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
+  public itemsPerPage: number;
   public tvFormats: {[type: string]: any } = {};
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};

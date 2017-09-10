@@ -4,11 +4,11 @@
     <md-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
       <md-tab *ngFor="let tab of tabs">
         <ng-template md-tab-label>
-          <section (contextmenu)="contextMenuOpen(tab.parent, false)">
+          <section (contextmenu)="contextMenuOpen(tab.parent, false)" mdTooltip="{{tab.parent.name}}">
             <app-ws-node-image *ngIf="tab.parent.type" md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
               [imageHeight]="16"></app-ws-node-image>
-            <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
-            <span mdTooltip="{{tab.parent.name}}" *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
+            <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
+            <span *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
             &nbsp;
             <i class="fa fa-times" (click)="closeTab(tab)"></i>
           </section>
@@ -20,8 +20,8 @@
             <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0" (click)="selectItem(child)"
               (contextmenu)="contextMenuOpen(child, true)">
               <div [ngSwitch]="child.type" class="ws-card-item-content">
-                <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}">
-                <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}">
+                <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
+                <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
                 <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}">
                 <app-ws-node-image *ngSwitchDefault md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
               </div>

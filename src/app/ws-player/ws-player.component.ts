@@ -47,13 +47,11 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   private timerId: string;
   private timerName = 'videoTimer';
   public isMasterclip: boolean;
-  public videoPaused: boolean;
   public thumbnailUrl = '';
   public fullscreen = screenfull;
   public showMarkerIn = false;
   public showMarkerOut = false;
   public markers: number[] = [0, 0];
-  // private clipDescriptors: any;
   private markerClipDescriptors = [];
 
   constructor(
@@ -171,24 +169,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
       this.loading = true;
 
-      // if (this.markerClipDescriptors == null) {
-      //   this.markerClipDescriptors = [{}];
-      //   const descriptors = this.appState.descriptors['Predefined'];
-
-      //   descriptors.forEach(item => {
-      //     if (item.nameInternal === 'pd_in') {
-      //       this.markerClipDescriptors[0] = item.id;
-      //     }
-      //     if (item.nameInternal === 'pd_out') {
-      //       this.markerClipDescriptors[1] = item.id;
-      //     }
-      //   });
-      // }
-
       if (this.timerId != null && this.timerId.length > 0) {
         this.timer.unsubscribe(this.timerId);
         this.timer.delTimer(this.timerName);
       }
+
+      let mediaUrl: string;
 
       switch (this.selectedClip.type) {
         case 'clip':
@@ -203,8 +189,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
           this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
           this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.clipEnd);
-          this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.clipDuration);
-          this.player.src = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam) + this.setMediaFragment();
+          this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.clipOut - this.clipIn);
+          mediaUrl = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam);
           break;
         case 'masterClip':
           this.isMasterclip = true;
@@ -218,11 +204,18 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
           this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.clipEnd);
           this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.clipDuration);
-          this.player.src = this.videoHelper.getMediaUrl(this.selectedClip, this.appState.selectedMam) + this.setMediaFragment();
+          mediaUrl = this.videoHelper.getMediaUrl(this.selectedClip, this.appState.selectedMam);
           break;
       }
 
-      this.player.load();
+      if (mediaUrl === null) {
+        this.player.poster = './assets/img/noMedia.png';
+        this.player.src = null;
+      } else {
+        this.player.poster = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.tvFormat);
+        this.player.src = mediaUrl + this.setMediaFragment();
+        this.player.load();
+      }
 
       this.sliderHead = 0;
       this.sliderStart = 0;
@@ -243,7 +236,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
         this.showMarkerOut = false;
       }
 
-      this.markers = [this.markerIn, this.markerOut];
+      this.markers = [this.markerIn * 10, this.markerOut * 10];
 
       this.loading = false;
       this.player.focus();
@@ -268,11 +261,31 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.player.currentTime);
   }
 
+  // Marker Slider
+  public markerSliderChanged(event) {
+    // const markerInTmp = this.markerIn;
+    // this.markerIn = event.values[0] / 10;
+    // this.markerOut = event.values[1] / 10;
+    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
+
+    // if (markerInTmp !== this.markerIn) {
+    //   this.sliderHead = this.markerIn;
+    //   this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart + this.markerIn);
+    //   this.player.currentTime = this.clipStart + this.markerIn;
+    // } else {
+    //   this.sliderHead = this.markerOut;
+    //   this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart + this.markerOut);
+    //   this.player.currentTime = this.clipStart + this.markerOut;
+    // }
+  }
+
   // Video Slider
   public videoSliderMoved(pos) {
-    this.videoPaused = this.player.paused;
+    if (!this.player.src) {
+      return;
+    }
+
     this.pause();
-    // console.log(`Slider Head: ${pos}. Video paused: ${this.videoPaused}`);
 
     const newPos = this.clipStart + pos;
 
@@ -280,26 +293,35 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, newPos);
     this.sliderHead = pos;
+    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, newPos);
     this.player.currentTime = newPos;
   }
 
   public videoSliderChanged() {
-    console.log(`Vidoe Slider Changed. Video paused: ${this.videoPaused}`);
-    // if (!this.videoPaused) {
-    //   this.play();
-    // }
   }
 
   // Player
 
   // Player: Clicked and keys
   public playerClicked(event: any) {
+    if (!this.player.src) {
+      return;
+    }
+
     this.player.focus();
+
+    if (this.player.paused) {
+      this.play();
+    } else {
+      this.pause();
+    }
   }
 
   public playerKeyPressed(event: any) {
+    if (!this.player.src) {
+      return;
+    }
     // console.log(`Key pressed: ${event.key}: ${event.keyCode}`);
     switch (event.keyCode) {
       case 32: // space
@@ -344,11 +366,25 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       case 90: // z
         this.toggleFullscreen();
         break;
+      case 65: // a
+        this.previousEvent();
+        break;
+      case 83: // s
+        this.nextEvent();
+        break;
     }
+  }
+
+  public playerError(event: any) {
+
   }
 
   // Player: Play and pause
   public play() {
+    if (!this.player.src) {
+      return;
+    }
+
     if (this.player.currentTime >= this.clipEnd) {
       this.pause();
       console.log(`Video ended`);
@@ -361,6 +397,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   }
 
   public pause() {
+    if (!this.player.src) {
+      return;
+    }
+
     this.player.pause();
     this.timer.unsubscribe(this.timerId);
     this.timer.delTimer(this.timerName);
@@ -386,6 +426,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
   // Marker handling
   public setMarkIn() {
+    if (!this.player.src) {
+      return;
+    }
+
     this.markerIn = this.sliderHead;
     if (this.markerIn >= this.markerOut) {
       this.markerOut = this.sliderEnd;
@@ -394,12 +438,17 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       this.showMarkerIn = true;
     }
 
-    this.markers = [this.markerIn, this.markerOut];
+    this.markers = [this.markerIn * 10, this.markerOut * 10];
+    this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
   }
 
   public setMarkOut() {
+    if (!this.player.src) {
+      return;
+    }
+
     this.markerOut = this.sliderHead;
     if (this.markerIn >= this.markerOut) {
       this.markerIn = 0;
@@ -408,23 +457,34 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       this.showMarkerOut = true;
     }
 
-    this.markers = [this.markerIn, this.markerOut];
+    this.markers = [this.markerIn * 10, this.markerOut * 10];
+    this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
   }
 
   public clearMarkIn() {
+    if (!this.player.src) {
+      return;
+    }
+
     this.markerIn = 0;
     this.showMarkerIn = false;
-    this.markers = [this.markerIn, this.markerOut];
+    this.markers = [this.markerIn * 10, this.markerOut * 10];
+    this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
   }
 
   public clearMarkOut() {
+    if (!this.player.src) {
+      return;
+    }
+
     this.markerOut = this.sliderEnd;
     this.showMarkerOut = false;
-    this.markers = [this.markerIn, this.markerOut];
+    this.markers = [this.markerIn * 10, this.markerOut * 10];
+    this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
   }
@@ -446,6 +506,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
   // Jump to markers and start/end
   public previousEvent() {
+    if (!this.player.src) {
+      return;
+    }
+    this.pause();
     let pos = this.sliderHead;
 
     if (pos > this.markerOut) {
@@ -462,6 +526,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   }
 
   public nextEvent() {
+    if (!this.player.src) {
+      return;
+    }
+    this.pause();
     let pos = this.sliderHead;
 
     if (pos < this.markerIn) {

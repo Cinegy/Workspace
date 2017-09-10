@@ -8,7 +8,6 @@ import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.ser
 
 @Injectable()
 export class WsBinsService extends WsBaseMamService {
-  private readonly take = 10;
   private clipboardItem: ClipboardItem;
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public getRollSubject: Subject<any> = new Subject<any>();
@@ -42,7 +41,7 @@ export class WsBinsService extends WsBaseMamService {
 
   public getChildren(id: string,  take?: number, skip?: number) {
     if (take === undefined) {
-      take = this.take;
+      take = this.appState.itemsPerPage;
     }
 
     if (skip === undefined) {
@@ -57,7 +56,7 @@ export class WsBinsService extends WsBaseMamService {
     this.startSearchSubject.next(keywords);
 
     if (take === undefined) {
-      take = this.take;
+      take = this.appState.itemsPerPage;
     }
 
     if (skip === undefined) {

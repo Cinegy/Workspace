@@ -10,33 +10,35 @@
         </span>
     </div>
     <md-divider></md-divider>
-    <div id="videoContainer">
-      <md-chip-list fxLayout fxLayoutAlign="center  center">
-        <md-chip fxFlex>{{timmecodeHead}}</md-chip>
-        <md-chip fxFlex>{{timmecodeDuration}}</md-chip>
-        <md-chip fxFlex>{{timmecodeEnd}}</md-chip>
-      </md-chip-list>
-      <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (click)="playerClicked($event)">
+    <div id="videoContainer" style="margin-top: 10px;">
+      <div fxLayout  style="text-align: center;">
+        <div fxFlex><i class="fa fa-play"></i> {{timmecodeHead}}</div>
+        <div fxFlex>I/O {{timmecodeDuration}}</div>
+        <div fxFlex>E {{timmecodeEnd}}</div>
+      </div>
+      <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (click)="playerClicked($event)" (error)="playerError($event)">
       </video>
-      <div fxLayout="column" style="height: 40px;">
-        <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart" [max]="sliderEnd" [step]="0.1" [range]="true"></p-slider>
-        <md-slider id="videoSlider" #videoSlider fxFlex  (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
-          [min]="sliderStart" [max]="sliderEnd" [(value)]="sliderHead" [step]="0.1">
+      <div fxLayout="column" style="height: 30px;">
+        <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart * 10" [max]="sliderEnd * 10" [step]="1" [range]="true" disabled></p-slider>
+        <md-slider style="margin-top: -14px;" id="videoSlider" #videoSlider fxFlex  (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
+          [min]="sliderStart" [max]="sliderEnd" [(value)]="sliderHead" [step]="0.1" [disabled]="player == null || player.src == null">
         </md-slider>
       </div>
       <div fxLayout fxLayoutAlign="center  center">
-        <button md-icon-button (click)="clearMarkIn()"><i class="fa fa-map-marker fa-border"></i></button>
-        <button md-icon-button (click)="setMarkIn()"><i class="fa fa-map-marker"></i></button>
-        <button md-icon-button *ngIf="player?.paused" (click)="play()"><i class="fa fa-play"></i></button>
-        <button md-icon-button *ngIf="!player?.paused" (click)="pause()"><i class="fa fa-pause"></i></button>
-        <button md-icon-button (click)="setMarkOut()"><i class="fa fa-map-marker"></i></button>
-        <button md-icon-button (click)="clearMarkOut()"><i class="fa fa-map-marker fa-border"></i></button>
+        <button md-icon-button (click)="clearMarkIn()" mdTooltip="Clear Mark In (Press d)"><i class="fa fa-map-marker fa-border"></i></button>
+        <button md-icon-button (click)="setMarkIn()" mdTooltip="Set Mark In (Press i)"><i class="fa fa-map-marker"></i></button>
+        <button md-icon-button *ngIf="player?.paused" (click)="play()" mdTooltip="Toggle play/pause (Press space)"><i class="fa fa-play"></i></button>
+        <button md-icon-button *ngIf="!player?.paused" (click)="pause()" mdTooltip="Toggle play/pause (Press space)"><i class="fa fa-pause"></i></button>
+        <button md-icon-button (click)="setMarkOut()"  mdTooltip="Set Mark Out (Press o)"><i class="fa fa-map-marker"></i></button>
+        <button md-icon-button (click)="clearMarkOut()" mdTooltip="Clear Mark Out (Press f)"><i class="fa fa-map-marker fa-border"></i></button>
         <!-- <button md-icon-button (click)="createSubClip()" *ngIf="!isMasterclip"><i class="fa fa-photo"></i></button> -->
+        <button md-icon-button (click)="previousEvent()" mdTooltip="Previous Event (Press a)"><i class="fa fa-long-arrow-left"></i></button>
+        <button md-icon-button (click)="nextEvent()" mdTooltip="Next Event (Press s)"><i class="fa fa-long-arrow-right"></i></button>
         <button md-icon-button *ngIf="player?.muted" (click)="toggleMute()"><i class="fa fa-volume-off"></i></button>
         <button md-icon-button *ngIf="!player?.muted" (click)="toggleMute()"><i class="fa fa-volume-up"></i></button>
         <!-- <button md-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button>
         <button md-icon-button (click)="toggleFullscreen()" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button> -->
-      </div>
+        </div>
     </div>
   </md-card-content>
 </md-card>

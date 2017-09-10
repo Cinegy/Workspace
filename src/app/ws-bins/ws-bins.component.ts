@@ -25,7 +25,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   public contextMenuItems: MenuItem[];
   public selectedIndex = 0;
   public loading = false;
-  public pageSize = 10;
+  public pageSize: number;
   public pageSizeOptions = [5, 10, 25, 50];
 
   constructor(
@@ -88,6 +88,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.pageSize = this.appState.itemsPerPage;
   }
 
   ngOnDestroy() {
@@ -189,8 +190,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.tabs.length; i++) {
       const tab = this.tabs[i];
       if (
-        (tab.parent.type === 'searchBin' && this.lastOpenedNode.type === 'searchBin') ||
-        (tab.parent.id === this.lastOpenedNode.id)) {
+        (tab.parent.type === 'searchBin' && this.lastOpenedNode.type === 'searchBin' && tab.parent.name === this.lastOpenedNode.name) ||
+        (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
         tab.children = response.items;
 
         if (this.selectedIndex !== i) {

@@ -4,6 +4,7 @@ import { WsLoginService } from './ws-login.service';
 import { WsMamConnection } from './../shared/services/ws-base-mam/ws-mam-connection';
 import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { WsConfiguration } from '../ws-configuration/ws-configuration';
 
 @Component({
   selector: 'app-ws-login',
@@ -15,11 +16,11 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   public mamList: WsMamConnection[];
   public selectedMam: WsMamConnection;
   public isConnectionSpinnerHidden = true;
+  public configuration: WsConfiguration;
   public errorMsg = [];
-
-  public username = '';
-  public password = '';
-  public domain = 'MOON';
+  public selectedDomain: string;
+  public username: string;
+  public password: string;
 
   constructor(
     private appState: WsAppStateService,
@@ -28,12 +29,11 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.subscribers = [];
 
     this.configService.getConfig()
-      .subscribe(mamList => {
-        this.mamList = mamList;
-
-        if (this.mamList && this.mamList.length > 0) {
-          this.selectedMam = this.mamList[0];
-        }
+      .subscribe(configuration => {
+        this.configuration = configuration;
+        this.appState.itemsPerPage = this.configuration.itemsPerPage;
+        this.selectedDomain = this.configuration.domains[0];
+        this.selectedMam = this.configuration.mams[0];
       });
   }
 
@@ -55,7 +55,7 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.isConnectionSpinnerHidden = false;
     this.selectedMam.username = this.username;
     this.selectedMam.password = this.password;
-    this.selectedMam.domain = this.domain;
+    this.selectedMam.domain = this.selectedDomain;
     this.loginService.login(this.selectedMam);
   }
 
