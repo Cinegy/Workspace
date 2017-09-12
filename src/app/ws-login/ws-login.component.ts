@@ -27,20 +27,17 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     private configService: WsConfigurationService,
     private loginService: WsLoginService) {
     this.subscribers = [];
-
-    this.configService.getConfig()
-      .subscribe(configuration => {
-        this.configuration = configuration;
-        this.appState.itemsPerPage = this.configuration.itemsPerPage;
-        this.selectedDomain = this.configuration.domains[0];
-        this.selectedMam = this.configuration.mams[0];
-      });
   }
 
   ngOnInit() {
-    const subscriber = this.loginService.loginSubject
+    let subscriber = this.loginService.loginSubject
       .subscribe(response => this.loginResponse(response));
     this.subscribers.push(subscriber);
+    subscriber = this.configService.getConfigSubject
+      .subscribe(response => this.getConfigResponse(response));
+    this.subscribers.push(subscriber);
+
+    this.configService.getConfig();
   }
 
   ngOnDestroy() {
@@ -57,6 +54,13 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.selectedMam.password = this.password;
     this.selectedMam.domain = this.selectedDomain;
     this.loginService.login(this.selectedMam);
+  }
+
+  private getConfigResponse(response: any) {
+    this.configuration = response;
+    this.appState.itemsPerPage = this.configuration.itemsPerPage;
+    this.selectedDomain = this.configuration.domains[0];
+    this.selectedMam = this.configuration.mams[0];
   }
 
   private loginResponse(response: any) {
