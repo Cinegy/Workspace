@@ -22,13 +22,17 @@ export class WsConfigurationService {
 
   private getLocalConfig(response: any) {
     if (response.useRemoteConfig) {
+      this.setConfig(response);
+      const url = `${this.configuration.remoteConfigHost}/${this.configuration.configVersion}/${this.configuration.clientHost}/config.json`;
+      console.log(`Using remote configuration: ${url}`);
       // tslint:disable-next-line:max-line-length
-      this.httpClient.get(`${this.configuration.remoteConfigHost}/${this.configuration.configVersion}/${this.configuration.clientHost}/config.jsons`)
+      this.httpClient.get(url)
       .subscribe(
         remoteResponse => this.getRemoteConfig(remoteResponse),
         error => this.errorRemoteConfig(error)
       );
     } else {
+      console.log(`Using local configuration`);
       this.setConfig(response);
       this.getConfigSubject.next(this.configuration);
     }
@@ -48,6 +52,6 @@ export class WsConfigurationService {
   }
 
   private errorRemoteConfig(error: any) {
-
+    console.log(`Configuration error: ${error.statusText}, ${error.status}`);
   }
 }
