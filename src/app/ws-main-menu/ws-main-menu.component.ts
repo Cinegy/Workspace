@@ -1,3 +1,4 @@
+import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
 import { WsBinsService } from './../ws-bins/ws-bins.service';
 import { WsLoginService } from './../ws-login/ws-login.service';
 import { WsAppStateService } from './../ws-app-state.service';
@@ -17,7 +18,8 @@ export class WsMainMenuComponent implements OnInit {
     private router: Router,
     private binService: WsBinsService,
     public appState: WsAppStateService,
-    public loginService: WsLoginService) { }
+    public loginService: WsLoginService,
+    public configService: WsConfigurationService) { }
 
   ngOnInit() {
   }
