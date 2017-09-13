@@ -4,7 +4,6 @@ import { WsLoginService } from './ws-login/ws-login.service';
 import { WsAppStateService } from './ws-app-state.service';
 import { WsAppManagementService } from './ws-app-management.service';
 import { Observable } from 'rxjs/Observable';
-import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({

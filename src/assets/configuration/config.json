@@ -28,6 +28,6 @@
         "Mars"
     ],
     "itemsPerPage": 10,
-    "useRemoteConfig": true,
+    "useRemoteConfig": false,
     "remoteConfigHost":"https://workspace-configs.s3.amazonaws.com/workspace"
 }
