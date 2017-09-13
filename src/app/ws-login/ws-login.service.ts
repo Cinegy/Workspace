@@ -8,15 +8,13 @@ import { Injectable } from '@angular/core';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 
 @Injectable()
-export class WsLoginService { //extends WsBaseMamService {
+export class WsLoginService {
   private connectionInfo: WsMamConnection;
   public loginSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
-    protected appState: WsAppStateService) {
-    // super(httpClient, appState);
-  }
+    protected appState: WsAppStateService) { }
 
   public login(connectionInfo: WsMamConnection) {
     this.connectionInfo = connectionInfo;

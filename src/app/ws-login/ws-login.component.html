@@ -1,36 +1,33 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="ws-main-container">
   <md-card fxFlex="50">
-    <form class="login-form" (ngSubmit)="onSubmit()">
+    <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <md-card-header fxLayout fxLayoutAlign="center">
         <md-card-title>
           <h3><i class="fa fa-sign-in"></i> &nbsp; Login</h3>
         </md-card-title>
       </md-card-header>
       <md-card-content fxLayout="column">
-        <p>
+        <div>
           <md-input-container fxFlex="100">
-            <input mdInput required placeholder="Username" [(ngModel)]="username" name="username">
+            <input mdInput required placeholder="Username" [(ngModel)]="username" name="username" #localUsername="ngModel">
           </md-input-container>
-        </p>
-        <p>
+        </div>
+        <div>
           <md-input-container fxFlex="100">
-            <input mdInput required type="password" placeholder="Password" [(ngModel)]="password" name="password">
+            <input mdInput required type="password" placeholder="Password" [(ngModel)]="password" name="password" #localPassword="ngModel">
           </md-input-container>
-        </p>
-        <!-- <p>
-          <md-input-container fxFlex="100">
-            <input mdInput required placeholder="Domain" [(ngModel)]="domain" name="domain">
-          </md-input-container>
-        </p> -->
+        </div>
         <p>
-          <md-select *ngIf="configuration && configuration.domains" required placeholder="Select Domain" [(ngModel)]="selectedDomain" name="selectedDomain" fxFlex="100">
+          <md-select *ngIf="configuration && configuration.domains" required placeholder="Select Domain" [(ngModel)]="selectedDomain"
+            name="selectedDomain" fxFlex="100">
             <md-option *ngFor="let domain of configuration.domains" [value]="domain">
               {{domain}}
             </md-option>
           </md-select>
         </p>
         <p>
-          <md-select *ngIf="configuration && configuration.mams" required placeholder="Select MAM" [(ngModel)]="selectedMam" name="selectedMam" fxFlex="100">
+          <md-select *ngIf="configuration && configuration.mams" required placeholder="Select MAM" [(ngModel)]="selectedMam" name="selectedMam"
+            fxFlex="100">
             <md-option *ngFor="let mam of configuration.mams" [value]="mam">
               {{mam.name}}
             </md-option>
@@ -42,7 +39,7 @@
         <p-messages [(value)]="errorMsg"></p-messages>
       </md-card-content>
       <md-card-actions fxLayout fxLayoutAlign="center">
-        <button md-button type="submit">Connect &nbsp; <span [hidden]="isConnectionSpinnerHidden"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></button>
+        <button md-button type="submit" [disabled]="!loginForm.form.valid">Connect &nbsp; <span [hidden]="isConnectionSpinnerHidden"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></button>
       </md-card-actions>
     </form>
   </md-card>

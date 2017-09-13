@@ -1,17 +1,20 @@
-<h3 md-dialog-title>
-  <app-ws-node-image md-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
-  Create {{data.name}}</h3>
-<div md-dialog-content fxLayout="column" fxLayoutAlign="center" class="mat-typography">
-  <md-input-container>
-    <input mdInput required placeholder="New {{data.name}}" [(ngModel)]="result.name" name="result.name">
-  </md-input-container>
-  <md-select *ngIf="result.descriptor" placeholder="Media Group" [(ngModel)]="result.mediaGroup" required>
-    <md-option *ngFor="let mediaGroup of result.descriptor.possibleValues" [value]="mediaGroup">
-      {{ mediaGroup.name }}
-    </md-option>
-  </md-select>
-</div>
-<div md-dialog-actions fxLayout fxLayoutAlign="center">
-  <button md-button [md-dialog-close]="result"><i class="fa fa-check"></i> Create</button>
-  <button md-button [md-dialog-close]="null"><i class="fa fa-close"></i> Close</button>
-</div>
+<form #createBinForm="ngForm">
+  <h3 md-dialog-title>
+    <app-ws-node-image md-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
+    Create {{data.name}}</h3>
+  <div md-dialog-content fxLayout="column" fxLayoutAlign="center stretch" class="mat-typography">
+    <md-input-container fxFlex>
+      <input mdInput required placeholder="New {{data.name}}" [(ngModel)]="result.name" name="result.name" #localName>
+    </md-input-container>
+    <md-select fxFlex *ngIf="result.descriptor" placeholder="Media Group" [(ngModel)]="result.mediaGroup" name="result.mediaGroup"
+      required #localMediaGroups>
+      <md-option *ngFor="let mediaGroup of result.descriptor.possibleValues" [value]="mediaGroup">
+        {{ mediaGroup.name }}
+      </md-option>
+    </md-select>
+  </div>
+  <div md-dialog-actions fxLayout fxLayoutAlign="center">
+    <button md-button [md-dialog-close]="result" [disabled]="!createBinForm.form.valid"><i class="fa fa-check"></i> Create</button>
+    <button md-button [md-dialog-close]="null"><i class="fa fa-close"></i> Close</button>
+  </div>
+</form>

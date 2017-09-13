@@ -1,12 +1,14 @@
-<h3 md-dialog-title>
+<form #renameNodeForm="ngForm">
+  <h3 md-dialog-title>
     <app-ws-node-image md-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
     Rename {{data.name}}</h3>
-  <div md-dialog-content  fxLayout fxLayoutAlign="center" class="mat-typography">
+  <div md-dialog-content fxLayout fxLayoutAlign="center" class="mat-typography">
     <md-input-container>
       <input mdInput required placeholder="Rename {{data.name}}" [(ngModel)]="data.name" name="data.name" [value]="data.name">
     </md-input-container>
   </div>
   <div md-dialog-actions fxLayout fxLayoutAlign="center">
-    <button md-button [md-dialog-close]="data.name"><i class="fa fa-check"></i> Rename</button>
+    <button md-button [md-dialog-close]="data.name" [disabled]="!renameNodeForm.form.valid"><i class="fa fa-check"></i> Rename</button>
     <button md-button [md-dialog-close]="null"><i class="fa fa-close"></i> Close</button>
   </div>
+</form>
