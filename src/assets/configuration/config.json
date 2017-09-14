@@ -22,12 +22,13 @@
     ],
     "domains": 
     [
+        "cloud",
         "Sun",
         "Moon",
         "Earth",
         "Mars"
     ],
     "itemsPerPage": 10,
-    "useRemoteConfig": false,
+    "useRemoteConfig": true,
     "remoteConfigHost":"https://workspace-configs.s3.amazonaws.com/workspace"
 }

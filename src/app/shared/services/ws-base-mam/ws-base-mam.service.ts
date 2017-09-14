@@ -13,6 +13,7 @@ export class WsBaseMamService {
     protected appState: WsAppStateService) {}
 
   protected get(url: string, subject: Subject<any>, extraSubjectData?: any) {
+    url = this.setProtocol(url);
 
     this.httpClient
       .get(url)
@@ -51,6 +52,8 @@ export class WsBaseMamService {
   }
 
   protected put(url: string, payload: any, subject: Subject<any>) {
+    url = this.setProtocol(url);
+
     this.httpClient
       .put(url, payload)
       .subscribe(
@@ -65,6 +68,8 @@ export class WsBaseMamService {
   }
 
   protected delete(url: string, subject: Subject<any>) {
+    url = this.setProtocol(url);
+
     this.httpClient
       .delete(url)
       .subscribe(
@@ -107,6 +112,20 @@ export class WsBaseMamService {
       subject.next(mamError);
     }
 
+  }
+
+  // This is only a hack. MAM service does not support https right now.
+  private setProtocol(url: string) {
+    const isHttps = this.appState.selectedMam.mamEndpoint.startsWith('https');
+
+    if (isHttps) {
+      if (!url.startsWith('https')) {
+        url = url.replace('http', 'https');
+        return url;
+      } else {
+        return url;
+      }
+    }
   }
 
 }
