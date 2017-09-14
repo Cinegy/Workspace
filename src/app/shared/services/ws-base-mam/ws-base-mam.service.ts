@@ -125,6 +125,8 @@ export class WsBaseMamService {
       } else {
         return url;
       }
+    } else {
+      return url;
     }
   }
 
