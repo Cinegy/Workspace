@@ -376,24 +376,37 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   }
 
   public playerError(event: any) {
+    let msg: string;
 
+    if (event.path) {
+      msg = `Player Error: ${event.path[0].error.message}, Code ${event.path[0].error.code}`;
+    } else {
+      msg = `Player Error`;
+    }
+
+    throw new Error(msg);
   }
 
   // Player: Play and pause
   public play() {
-    if (!this.player.src) {
-      return;
-    }
+    try {
 
-    if (this.player.currentTime >= this.clipEnd) {
-      this.pause();
-      console.log(`Video ended`);
-      return;
+      if (!this.player.src) {
+        return;
+      }
+
+      if (this.player.currentTime >= this.clipEnd) {
+        this.pause();
+        console.log(`Video ended`);
+        return;
+      }
+      this.timer.newTimer(this.timerName, 0.1);
+      this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
+      this.player.play();
+      this.player.focus();
+    } catch (e) {
+      throw new Error(e.message);
     }
-    this.timer.newTimer(this.timerName, 0.1);
-    this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
-    this.player.play();
-    this.player.focus();
   }
 
   public pause() {

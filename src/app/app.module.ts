@@ -1,3 +1,5 @@
+import { WsDialogsModule } from './ws-dialogs/ws-dialogs.module';
+import { WsGlobalErrorHandler } from './ws-global-error-handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WsBaseMamInterceptor } from './shared/services/ws-base-mam/ws-base-mam-interceptor';
 import 'hammerjs';
@@ -11,7 +13,7 @@ import { WsConfigurationModule } from './ws-configuration/ws-configuration.modul
 import { WsLoginModule } from './ws-login/ws-login.module';
 import { WsMainMenuModule } from './ws-main-menu/ws-main-menu.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -42,6 +44,7 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    WsDialogsModule,
     WsMainModule,
     WsConfigurationModule,
     WsMainMenuModule,
@@ -54,6 +57,10 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: WsBaseMamInterceptor,
       multi: true
+    },
+    {
+      provide: ErrorHandler,
+      useClass: WsGlobalErrorHandler
     }
   ],
   exports: [],

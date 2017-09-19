@@ -37,6 +37,8 @@ export class WsBaseMamService {
   }
 
   protected post(url: string, payload: any, subject: Subject<any>) {
+    url = this.setProtocol(url);
+    
     this.httpClient
       .post(url, payload)
       .subscribe(
@@ -91,17 +93,17 @@ export class WsBaseMamService {
       // The response body may contain clues as to what went wrong.
       mamError.msg = `Backend returned code ${err.status}, message was: ${err.message}`;
       mamError.status = err.status;
-      console.log(mamError.msg);
+      // console.log(mamError.msg);
     } else if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       mamError.msg = err.error.message;
-      console.log('An error occurred:', mamError.msg);
+      // console.log('An error occurred:', mamError.msg);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       mamError.msg = `Backend returned code ${err.status}, message was: ${err.error.error}`;
       mamError.status = err.status;
-      console.log(mamError.msg);
+      // console.log(mamError.msg);
     }
 
     if (extraSubjectData) {
@@ -111,6 +113,8 @@ export class WsBaseMamService {
     if (subject) {
       subject.next(mamError);
     }
+
+    throw new Error(mamError.msg);
 
   }
 
