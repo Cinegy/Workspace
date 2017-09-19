@@ -378,8 +378,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public playerError(event: any) {
     let msg: string;
 
-    if (event.path) {
+    if (event.path && event.path[0]) {
       msg = `Player Error: ${event.path[0].error.message}, Code ${event.path[0].error.code}`;
+    } else if (event.currentTarget) {
+      msg = `Player Error: ${event.currentTarget.error.message}, Code ${event.currentTarget.error.code}`;
     } else {
       msg = `Player Error`;
     }

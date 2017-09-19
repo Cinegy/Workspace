@@ -38,7 +38,7 @@ export class WsBaseMamService {
 
   protected post(url: string, payload: any, subject: Subject<any>) {
     url = this.setProtocol(url);
-    
+
     this.httpClient
       .post(url, payload)
       .subscribe(

@@ -14,9 +14,15 @@ export class WsGlobalErrorHandler implements ErrorHandler {
       this.dialog = this.injector.get(MdDialog);
     }
 
+    let msg: string;
+    if (error.message) {
+      msg = error.message;
+    } else {
+      msg = error;
+    }
     this.dialog.open(WsErrorDialogComponent, {
       width: '600px',
-      data: error.message
+      data: msg
     });
     throw error;
  }
