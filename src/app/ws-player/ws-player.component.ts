@@ -4,7 +4,6 @@ import { WsAppStateService } from './../ws-app-state.service';
 import { WsVideoTools } from './ws-video-tools';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SimpleTimer } from 'ng2-simple-timer';
-
 import * as screenfull from 'screenfull';
 
 const DescriptorTypeIn = 1;
@@ -32,6 +31,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public timmecodeStart = '--:--:--:--';
   public timmecodeEnd = '--:--:--:--';
   public timmecodeDuration = '--:--:--:--';
+  private tapeStart: number;
   public clipStart: number;
   public clipEnd: number;
   public clipDuration: number;
@@ -184,25 +184,28 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
           this.clipDuration = this.videoHelper.getDuration(this.selectedClip);
-          this.clipIn = (this.selectedClip.in / 10000000);
-          this.clipOut = (this.selectedClip.out / 10000000);
+          this.clipIn = this.selectedClip.in / 10000000;
+          this.clipOut = this.selectedClip.out / 10000000;
+          this.tapeStart = this.videoHelper.getTimecodeStart(this.selectedClip);
           this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
-          this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
-          this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.clipEnd);
+          this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeStart(this.selectedClip));
+          this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeStart(this.selectedClip));
+          this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeEnd(this.selectedClip));
           this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.clipOut - this.clipIn);
           mediaUrl = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam);
           break;
         case 'masterClip':
           this.isMasterclip = true;
           this.tvFormat = this.appState.tvFormats[this.selectedClip.tvFormat];
-          this.clipStart = this.videoHelper.getMasterclipStart(this.selectedClip);
-          this.clipEnd = this.videoHelper.getMasterclipEnd(this.selectedClip);
+          this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
+          this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
           this.clipDuration = this.videoHelper.getDuration(this.selectedClip);
           this.clipIn = 0;
           this.clipOut = this.clipDuration;
-          this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
-          this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart);
-          this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.clipEnd);
+          this.tapeStart = this.videoHelper.getTimecodeStart(this.selectedClip);
+          this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeStart(this.selectedClip));
+          this.timmecodeStart = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeStart(this.selectedClip));
+          this.timmecodeEnd = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeEnd(this.selectedClip));
           this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.clipDuration);
           mediaUrl = this.videoHelper.getMediaUrl(this.selectedClip, this.appState.selectedMam);
           break;
@@ -246,7 +249,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private setMediaFragment(): string {
     return `#t=${this.clipStart},${this.clipEnd}`;
   }
@@ -258,7 +260,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
   private tick() {
     this.sliderHead = this.player.currentTime - this.clipStart;
-    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.player.currentTime);
+    // tslint:disable-next-line:max-line-length
+    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.tapeStart, this.clipStart, this.player.currentTime));
   }
 
   // Marker Slider
@@ -294,7 +297,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.sliderHead = pos;
-    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, newPos);
+    // tslint:disable-next-line:max-line-length
+    this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.tapeStart, this.clipStart, newPos));
     this.player.currentTime = newPos;
   }
 
@@ -429,14 +433,13 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   }
 
   public toggleFullscreen() {
-    const videoContainer: any = document.getElementById('videoContainer');
+    const videoContainer: any = document.getElementById('playerPage');
 
     if (screenfull.enabled) {
       screenfull.toggle(videoContainer);
     }
 
     this.player.focus();
-
   }
 
   // Marker handling
@@ -454,6 +457,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.markers = [this.markerIn * 10, this.markerOut * 10];
+    // tslint:disable-next-line:max-line-length
+    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -473,6 +478,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.markers = [this.markerIn * 10, this.markerOut * 10];
+    // tslint:disable-next-line:max-line-length
+    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn)));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -486,6 +493,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.markerIn = 0;
     this.showMarkerIn = false;
     this.markers = [this.markerIn * 10, this.markerOut * 10];
+    // tslint:disable-next-line:max-line-length
+    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -499,6 +508,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.markerOut = this.sliderEnd;
     this.showMarkerOut = false;
     this.markers = [this.markerIn * 10, this.markerOut * 10];
+    // tslint:disable-next-line:max-line-length
+    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();

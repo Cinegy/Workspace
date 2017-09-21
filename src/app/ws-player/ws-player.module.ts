@@ -1,3 +1,4 @@
+import { WsToggleFullscreenDirective } from './../ws-toggle-fullscreen.directive';
 import { FormsModule } from '@angular/forms';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsPlayerService } from './ws-player.service';
@@ -21,8 +22,8 @@ import { SliderModule } from 'primeng/components/slider/slider';
     MdSliderModule,
     MdTooltipModule
   ],
-  declarations: [WsPlayerComponent],
+  declarations: [WsPlayerComponent, WsToggleFullscreenDirective],
   exports: [WsPlayerComponent],
-  providers: [SimpleTimer, WsPlayerService]
+  providers: [SimpleTimer, WsPlayerService, WsToggleFullscreenDirective]
 })
 export class WsPlayerModule { }

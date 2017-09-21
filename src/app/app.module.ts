@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { WsPlayerComponent } from './ws-player/ws-player.component';
+import { WsToggleFullscreenDirective } from './ws-toggle-fullscreen.directive';
 
 const appRoutes: Routes = [
   { path: 'login', component: WsLoginComponent },

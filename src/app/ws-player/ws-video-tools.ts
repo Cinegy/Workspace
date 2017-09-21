@@ -5,12 +5,17 @@ export class WsVideoTools {
     }
 
     public getClipStart(clip: any): number {
-        return (clip.mog.offset + clip.tapeIn - clip.mog.tapeIn) / 10000000;
+        switch (clip.type) {
+            case 'clip':
+                return (clip.mog.offset + clip.tapeIn - clip.mog.tapeIn) / 10000000;
+            case 'masterClip':
+                return clip.offset / 10000000;
+        }
     }
 
-    public getMasterclipStart(masterClip: any): number {
-        return masterClip.offset / 10000000;
-    }
+    // public getMasterclipStart(masterClip: any): number {
+    //     return masterClip.offset / 10000000;
+    // }
 
     public getClipEnd(clip: any): number {
         const duration = this.getDuration(clip);
@@ -18,16 +23,38 @@ export class WsVideoTools {
         return (start + duration);
     }
 
-    public getMasterclipEnd(masterClip: any): number {
-        const duration = this.getDuration(masterClip);
-        const start = this.getMasterclipStart(masterClip);
-        return (start + duration);
-    }
+    // public getMasterclipEnd(masterClip: any): number {
+    //     const duration = this.getDuration(masterClip);
+    //     const start = this.getMasterclipStart(masterClip);
+    //     return (start + duration);
+    // }
 
     public getFrame(tvFormat: any, position: number) {
         const frequency: number = tvFormat.videoFormat.frameRate.fps;
         const frame: number = Math.round(position * frequency);
         return frame;
+    }
+
+    public getTimecodeHead(tapeStart: number, clipStart: number, position: number) {
+        return tapeStart + (position - clipStart);
+    }
+
+    public getTimecodeStart(clip: any) {
+        switch (clip.type) {
+            case 'clip':
+                return (clip.mog.originalTapeIn + clip.tapeIn - clip.mog.tapeIn) / 10000000;
+            case 'masterClip':
+                return clip.originalTapeIn / 10000000;
+        }
+    }
+
+    public getTimecodeEnd(clip: any) {
+        switch (clip.type) {
+            case 'clip':
+            return ((clip.mog.originalTapeIn + clip.tapeIn - clip.mog.tapeIn) / 10000000) + this.getDuration(clip);
+            case 'masterClip':
+                return (clip.originalTapeIn / 10000000) + this.getDuration(clip);
+        }
     }
 
     public getTimecodeString(tvFormat: any, position: number): string {

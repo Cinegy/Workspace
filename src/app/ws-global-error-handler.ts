@@ -24,8 +24,9 @@ export class WsGlobalErrorHandler implements ErrorHandler {
       width: '600px',
       data: msg
     });
-    
-    // throw error;
+
+     // IMPORTANT: Rethrow the error otherwise it gets swallowed
+    //  throw error;
  }
 
 }
