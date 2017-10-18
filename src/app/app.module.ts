@@ -1,3 +1,4 @@
+import { MdSnackBar, MdSnackBarModule } from '@angular/material';
 import { WsDialogsModule } from './ws-dialogs/ws-dialogs.module';
 import { WsGlobalErrorHandler } from './ws-global-error-handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     WsDialogsModule,
+    MdSnackBarModule,
     WsMainModule,
     WsConfigurationModule,
     WsMainMenuModule,
@@ -65,6 +67,7 @@ const appRoutes: Routes = [
     }
   ],
   exports: [],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 import { WsMamConnection } from './../shared/services/ws-base-mam/ws-mam-connection';
+
 export class WsVideoTools {
     public getDuration(clip: any): number {
         return (clip.tapeOut - clip.tapeIn) / 10000000;
@@ -13,21 +14,11 @@ export class WsVideoTools {
         }
     }
 
-    // public getMasterclipStart(masterClip: any): number {
-    //     return masterClip.offset / 10000000;
-    // }
-
     public getClipEnd(clip: any): number {
         const duration = this.getDuration(clip);
         const start = this.getClipStart(clip);
         return (start + duration);
     }
-
-    // public getMasterclipEnd(masterClip: any): number {
-    //     const duration = this.getDuration(masterClip);
-    //     const start = this.getMasterclipStart(masterClip);
-    //     return (start + duration);
-    // }
 
     public getFrame(tvFormat: any, position: number) {
         const frequency: number = tvFormat.videoFormat.frameRate.fps;

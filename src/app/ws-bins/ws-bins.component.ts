@@ -130,7 +130,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (node.type === 'image') {
       return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam);
     } else {
-      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam, this.appState.tvFormats[node.tvFormat]);
+      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam, node.videoFormat);
     }
   }
   /* *** Page events *** */
@@ -161,7 +161,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         break;
       case 'documentBin':
         this.lastOpenedNode = response;
-        this.binService.getChildren(this.lastOpenedNode.id);
+        this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
         this.loading = true;
         break;
     }
@@ -176,7 +176,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     this.lastOpenedNode = response;
     this.loading = true;
-    this.binService.getChildren(this.lastOpenedNode.id);
+    this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
   }
 
   private getChildrenResponse(response: any) {
@@ -304,8 +304,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       this.binService.deleteNode(selectedNode.id);
     });
   }
-  /* *** Context Menu *** */
 
+  /* *** Context Menu *** */
   private contextMenuOpen(selectedNode: any, child: boolean) {
     let menuItem: any;
 
@@ -354,6 +354,29 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       };
       this.contextMenuItems.push(menuItem);
 
+      menuItem = {
+        label: 'Paste',
+        disabled: (this.internalClipboardItem === null) && this.tabs[this.selectedIndex].parent.type !== 'clipBin',
+        icon: 'fa-clipboard',
+        command: (event) => {
+          switch (this.internalClipboardItem.item.type) {
+            case 'masterClip':
+              this.binService.linkMasterclip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+              this.internalClipboardItem = null;
+              break;
+            case 'clip':
+              if (this.internalClipboardItem.action === ClipboardAction.Copy) {
+                this.binService.copyClip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+                this.internalClipboardItem = null;
+              } else if (this.internalClipboardItem.action === ClipboardAction.Cut) {
+                this.binService.cutClip(this.internalClipboardItem, this.tabs[this.selectedIndex].parent.id);
+              }
+              break;
+          }
+        }
+      };
+      this.contextMenuItems.push(menuItem);
+
       if (selectedNodeType.canDelete) {
         menuItem = {
           label: 'Delete',
@@ -365,30 +388,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         this.contextMenuItems.push(menuItem);
       }
     }
-
-    menuItem = {
-      label: 'Paste',
-      disabled: (this.internalClipboardItem === null) && this.tabs[this.selectedIndex].parent.type !== 'clipBin',
-      icon: 'fa-clipboard',
-      command: (event) => {
-
-        switch (this.internalClipboardItem.item.type) {
-          case 'masterClip':
-            this.binService.linkMasterclip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
-            this.internalClipboardItem = null;
-            break;
-          case 'clip':
-            if (this.internalClipboardItem.action === ClipboardAction.Copy) {
-              this.binService.copyClip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
-              this.internalClipboardItem = null;
-            } else if (this.internalClipboardItem.action === ClipboardAction.Cut) {
-              this.binService.cutClip(this.internalClipboardItem, this.tabs[this.selectedIndex].parent.id);
-            }
-            break;
-        }
-      }
-    };
-    this.contextMenuItems.push(menuItem);
   }
 
 }

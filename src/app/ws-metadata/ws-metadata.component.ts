@@ -1,3 +1,4 @@
+import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { SaveMetadataRequest } from './save-metadata-request';
 import { WsMetadataService } from './ws-metadata.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
@@ -11,6 +12,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./ws-metadata.component.css']
 })
 export class WsMetadataComponent implements OnInit, OnDestroy {
+  private videoHelper = new WsVideoTools();
   public subscribers: any[];
   public descriptorGroups: any[];
   public descriptors: any[];

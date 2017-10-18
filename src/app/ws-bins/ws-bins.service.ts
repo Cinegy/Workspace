@@ -39,7 +39,7 @@ export class WsBinsService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}clipbin?id=${id}&clipBinScope=videoFormat&linksScope=children&linksScope=metadata`, this.getClipBinSubject);
   }
 
-  public getChildren(id: string,  take?: number, skip?: number) {
+  public getChildren(id: string, type: string, take?: number, skip?: number) {
     if (take === undefined) {
       take = this.appState.itemsPerPage;
     }
@@ -48,8 +48,23 @@ export class WsBinsService extends WsBaseMamService {
       skip = 0;
     }
 
+    let fragment: string;
+
+    switch (type) {
+      case 'roll':
+        // tslint:disable-next-line:max-line-length
+        fragment = `roll/list?parentId=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail`;
+        break;
+      default:
+        fragment = `node/list?parentId=${id}`;
+        break;
+    }
+
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${id}&linkScope=children&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
+
+    // tslint:disable-next-line:max-line-length
+    // this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${id}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
   }
 
   public search(keywords: string, take?: number, skip?: number) {
@@ -65,8 +80,8 @@ export class WsBinsService extends WsBaseMamService {
 
     // tslint:disable-next-line:max-line-length
     this.post(`${this.appState.selectedMam.mamEndpoint}search?linkScope=self&linkScope=self&linkScope=children&linksScope=metadata&take=${take}&skip=${skip}`,
-    {Query: keywords},
-    this.searchSubject);
+      { Query: keywords },
+      this.searchSubject);
   }
 
   public deleteNode(id: string) {

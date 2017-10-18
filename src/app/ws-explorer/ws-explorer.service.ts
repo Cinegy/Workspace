@@ -10,6 +10,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WsExplorerService extends WsBaseMamService {
   private binParams: NewBinParams;
+  private cutedNode: any;
+  private cutedNodeId: string;
 
   public getRootSubject: Subject<any> = new Subject<any>();
   public getChildrenSubject: Subject<any> = new Subject<any>();
@@ -21,6 +23,10 @@ export class WsExplorerService extends WsBaseMamService {
   public createClipBinSubject: Subject<any> = new Subject<any>();
   public renameNodeSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
+  public copyNodeSubject: Subject<any> = new Subject<any>();
+  public cutNodeSubject: Subject<any> = new Subject<any>();
+  private copyNodeInternalSubject: Subject<any> = new Subject<any>();
+  private deleteNodeInternalSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -28,9 +34,13 @@ export class WsExplorerService extends WsBaseMamService {
     super(httpClient, appState);
 
     this.createDocumentBinInternalSubject
-    .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
+      .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
+    this.copyNodeInternalSubject
+      .subscribe(response => this.copyNodeResponse(response));
+    this.deleteNodeInternalSubject
+      .subscribe(response => this.deletNodeResponse(response));
   }
 
   public getRoot() {
@@ -51,7 +61,7 @@ export class WsExplorerService extends WsBaseMamService {
   public createNode(parentId: string, nodeType: string, name: string) {
     this.put(
       `${this.appState.selectedMam.mamEndpoint}folder?parentId=${parentId}&type=${nodeType}`,
-      {Name: name},
+      { Name: name },
       this.createNodeSubject);
   }
 
@@ -59,7 +69,7 @@ export class WsExplorerService extends WsBaseMamService {
     this.binParams = params;
     this.put(
       `${this.appState.selectedMam.mamEndpoint}documentbin?parentId=${parentId}`,
-      {Name: this.binParams.name},
+      { Name: this.binParams.name },
       this.createDocumentBinInternalSubject);
   }
 
@@ -67,19 +77,34 @@ export class WsExplorerService extends WsBaseMamService {
     this.binParams = params;
     this.put(
       `${this.appState.selectedMam.mamEndpoint}clipbin?parentId=${parentId}`,
-      {Name: this.binParams.name},
+      { Name: this.binParams.name },
       this.createClipBinInternalSubject);
   }
 
   public renameNode(id: string, name: string) {
     this.post(
       `${this.appState.selectedMam.mamEndpoint}node?id=${id}`,
-      {Name: name},
+      { Name: name },
       this.renameNodeSubject);
   }
 
   public deleteNode(id: string) {
     this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${id}`, this.deleteNodeSubject);
+  }
+
+  public copyNode(id: string, parentId: string) {
+    this.post(
+      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}`,
+      null,
+      this.copyNodeSubject);
+  }
+
+  public cutNode(id: string, parentId: string) {
+    this.cutedNodeId = id;
+    this.post(
+      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}`,
+      null,
+      this.copyNodeInternalSubject);
   }
 
   private createBinResponse(response: any, subject: Subject<any>) {
@@ -98,5 +123,26 @@ export class WsExplorerService extends WsBaseMamService {
         Value: this.binParams.mediaGroup.value
       }],
       null);
+  }
+
+  private copyNodeResponse(response) {
+    if (response instanceof WsMamError) {
+      console.log(`Error: ${response.msg}`);
+      this.cutNodeSubject.next(response);
+      return;
+    }
+
+    this.cutedNode = response;
+    this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.cutedNodeId}`, this.deleteNodeInternalSubject);
+  }
+
+  private deletNodeResponse(response) {
+    if (response instanceof WsMamError) {
+      console.log(`Error: ${response.msg}`);
+      this.cutNodeSubject.next(response);
+      return;
+    }
+
+    this.cutNodeSubject.next(this.cutedNode);
   }
 }

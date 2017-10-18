@@ -119,7 +119,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
     this.selectedClip = response;
     // tslint:disable-next-line:max-line-length
-    this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.appState.tvFormats[this.selectedClip.tvFormat]);
+    this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
 
     if (this.selectedClip.type !== 'masterClip') {
       this.playerService.getMasterclip(this.selectedClip.masterClipId);
@@ -161,7 +161,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   /* *** Private Methods *** */
   private getThumbnail() {
     // tslint:disable-next-line:max-line-length
-    return this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.appState.tvFormats[this.selectedClip.tvFormat]);
+    return this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
   }
 
   private loadClip() {
@@ -180,7 +180,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
         case 'clip':
           this.isMasterclip = false;
           this.selectedClip.mog = this.masterClip;
-          this.tvFormat = this.appState.tvFormats[this.selectedClip.mog.tvFormat];
+          this.tvFormat = this.selectedClip.mog.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
           this.clipDuration = this.videoHelper.getDuration(this.selectedClip);
@@ -196,7 +196,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           break;
         case 'masterClip':
           this.isMasterclip = true;
-          this.tvFormat = this.appState.tvFormats[this.selectedClip.tvFormat];
+          this.tvFormat = this.selectedClip.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
           this.clipDuration = this.videoHelper.getDuration(this.selectedClip);
@@ -382,9 +382,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public playerError(event: any) {
     let msg: string;
 
-    if (event.path && event.path[0]) {
+    if (event && event.path && event.path[0]) {
       msg = `Player Error: ${event.path[0].error.message}, Code ${event.path[0].error.code}`;
-    } else if (event.currentTarget) {
+    } else if (event && event.currentTarget) {
       msg = `Player Error: ${event.currentTarget.error.message}, Code ${event.currentTarget.error.code}`;
     } else {
       msg = `Player Error`;

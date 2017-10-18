@@ -1,17 +1,19 @@
 import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { MdDialog } from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import { Injectable, ErrorHandler, Injector } from '@angular/core';
 
 @Injectable()
 export class WsGlobalErrorHandler implements ErrorHandler {
-  private dialog: MdDialog = null;
+  // private dialog: MdDialog = null;
+  private snackBar: MdSnackBar = null;
 
   constructor(private injector: Injector) {}
 
   handleError(error) {
     console.log(error.message);
-    if (this.dialog === null) {
-      this.dialog = this.injector.get(MdDialog);
+
+    if (this.snackBar === null) {
+      this.snackBar = this.injector.get(MdSnackBar);
     }
 
     let msg: string;
@@ -20,10 +22,8 @@ export class WsGlobalErrorHandler implements ErrorHandler {
     } else {
       msg = error;
     }
-    this.dialog.open(WsErrorDialogComponent, {
-      width: '600px',
-      data: msg
-    });
+
+    this.snackBar.open(msg, 'close');
 
      // IMPORTANT: Rethrow the error otherwise it gets swallowed
     //  throw error;

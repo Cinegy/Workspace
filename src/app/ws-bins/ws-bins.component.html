@@ -21,10 +21,11 @@
               (contextmenu)="contextMenuOpen(child, true)">
               <div [ngSwitch]="child.type" class="ws-card-item-content">
                 <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
-                <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
-                <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}">
+                <!-- <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)"> -->
+                <!-- <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}"> -->
                 <app-ws-node-image *ngSwitchDefault md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
               </div>
+              <!-- <app-ws-node-image md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image> -->
               <md-card-content>
                 <div class="ws-card-item-name">{{child.name}}</div>
               </md-card-content>

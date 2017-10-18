@@ -2,15 +2,6 @@
     "mams": 
     [
         {
-            "name": "MAM Simon",
-            "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
-            "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
-            "dbName": "mamSimon",
-            "dbServer": ".\\sqlexpress",
-            "thumbnailServer": "http://localhost:8000/image.svc/",
-            "mediaServer": "http://localhost/cinemedia/"
-        },
-        {
             "name": "MAM 11.1",
             "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
             "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
@@ -18,13 +9,22 @@
             "dbServer": ".\\sqlexpress",
             "thumbnailServer": "http://localhost:8000/image.svc/",
             "mediaServer": "http://localhost/cinemedia/"
+        },
+        {
+            "name": "MAM Simon",
+            "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
+            "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
+            "dbName": "mamSimon",
+            "dbServer": ".\\sqlexpress",
+            "thumbnailServer": "http://localhost:8000/image.svc/",
+            "mediaServer": "http://localhost/cinemedia/"
         }
     ],
     "domains": 
     [
-        "cloud",
-        "Sun",
         "Moon",
+        "Cloud",
+        "Sun",
         "Earth",
         "Mars"
     ],
