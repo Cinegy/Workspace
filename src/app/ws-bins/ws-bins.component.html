@@ -1,11 +1,11 @@
-<md-card fxFlex style="overflow-y: auto;">
-  <md-card-content #binNodes>
+<mat-card fxFlex style="overflow-y: auto;">
+  <mat-card-content #binNodes>
     <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
-    <md-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
-      <md-tab *ngFor="let tab of tabs">
-        <ng-template md-tab-label>
-          <section (contextmenu)="contextMenuOpen(tab.parent, false)" mdTooltip="{{tab.parent.name}}">
-            <app-ws-node-image *ngIf="tab.parent.type" md-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
+    <mat-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
+      <mat-tab *ngFor="let tab of tabs">
+        <ng-template mat-tab-label>
+          <section (contextmenu)="contextMenuOpen(tab.parent, false)" matTooltip="{{tab.parent.name}}">
+            <app-ws-node-image *ngIf="tab.parent.type" mat-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
               [imageHeight]="16"></app-ws-node-image>
             <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
             <span *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
@@ -13,28 +13,28 @@
             <i class="fa fa-times" (click)="closeTab(tab)"></i>
           </section>
         </ng-template>
-        <md-paginator fxFlex [length]="tab.childCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageEvent($event)">
-          </md-paginator>
+        <mat-paginator fxFlex [length]="tab.childCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageEvent($event)">
+        </mat-paginator>
         <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
           <ng-template [ngIf]="tab.children">
-            <md-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0" (click)="selectItem(child)"
+            <mat-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill tabindex="0" (click)="selectItem(child)"
               (contextmenu)="contextMenuOpen(child, true)">
               <div [ngSwitch]="child.type" class="ws-card-item-content">
-                <img *ngSwitchCase="'masterClip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
-                <!-- <img *ngSwitchCase="'clip'" md-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)"> -->
-                <!-- <img *ngSwitchCase="'image'" md-card-image src="{{getThumbnail(child)}}"> -->
-                <app-ws-node-image *ngSwitchDefault md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
+                <img *ngSwitchCase="'masterClip'" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
+                <!-- <img *ngSwitchCase="'clip'" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)"> -->
+                <!-- <img *ngSwitchCase="'image'" mat-card-image src="{{getThumbnail(child)}}"> -->
+                <app-ws-node-image *ngSwitchDefault mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
               </div>
-              <!-- <app-ws-node-image md-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image> -->
-              <md-card-content>
+              <!-- <app-ws-node-image mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image> -->
+              <mat-card-content>
                 <div class="ws-card-item-name">{{child.name}}</div>
-              </md-card-content>
-            </md-card>
+              </mat-card-content>
+            </mat-card>
           </ng-template>
         </div>
-      </md-tab>
-    </md-tab-group>
-  </md-card-content>
-</md-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>
 
 <p-contextMenu [target]="binNodes" [model]="contextMenuItems"></p-contextMenu>

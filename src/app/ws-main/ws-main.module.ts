@@ -10,7 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { WsMainComponent } from './ws-main.component';
 import { BreadcrumbModule, MenuItem, PanelModule } from 'primeng/primeng';
-import { MdCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { MdCardModule } from '@angular/material';
     RouterModule,
     FlexLayoutModule,
     BreadcrumbModule,
-    MdCardModule,
+    MatCardModule,
     PanelModule,
     WsExplorerModule,
     WsBinsModule,

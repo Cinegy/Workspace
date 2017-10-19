@@ -1,17 +1,17 @@
-<md-card fxFlex>
-  <md-card-content id="playerPage" #playerPage>
+<mat-card fxFlex>
+  <mat-card-content id="playerPage" #playerPage>
     <div *ngIf="loading" style="text-align: center;">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
     <div>
       <span *ngIf="selectedClip">
-        <app-ws-node-image md-card-avatar *ngIf="appState.nodeIcons[selectedClip.type] && appState.nodeIcons[selectedClip.type].large"
+        <app-ws-node-image mat-card-avatar *ngIf="appState.nodeIcons[selectedClip.type] && appState.nodeIcons[selectedClip.type].large"
           [imageData]="appState.nodeIcons[selectedClip.type].large" [imageWidth]="16" [imageHeight]="16">
         </app-ws-node-image>
         {{selectedClip.name}}
       </span>
     </div>
-    <md-divider></md-divider>
+    <mat-divider></mat-divider>
     <div id="videoContainer" #videoContainer style="margin-top: 10px;" align="center">
       <div fxLayout style="text-align: center;">
         <div fxFlex>
@@ -24,48 +24,48 @@
       </video>
       <div fxLayout="column" style="height: 30px;">
         <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart * 10" [max]="sliderEnd * 10" [step]="1" [range]="true" disabled></p-slider>
-        <md-slider style="margin-top: -14px;" id="videoSlider" #videoSlider fxFlex (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
+        <mat-slider style="margin-top: -14px;" id="videoSlider" #videoSlider fxFlex (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
           [min]="sliderStart" [max]="sliderEnd" [(value)]="sliderHead" [step]="0.1" [disabled]="player == null || player.src == null">
-        </md-slider>
+        </mat-slider>
       </div>
       <div fxLayout fxLayoutAlign="center  center">
-        <button md-icon-button (click)="previousEvent()" mdTooltip="Previous Event (Press a)">
+        <button mat-icon-button (click)="previousEvent()" mdTooltip="Previous Event (Press a)">
           <i class="fa fa-long-arrow-left"></i>
         </button>
-        <button md-icon-button (click)="nextEvent()" mdTooltip="Next Event (Press s)">
+        <button mat-icon-button (click)="nextEvent()" mdTooltip="Next Event (Press s)">
           <i class="fa fa-long-arrow-right"></i>
         </button>
-        <button md-icon-button (click)="clearMarkIn()" mdTooltip="Clear Mark In (Press d)">
+        <button mat-icon-button (click)="clearMarkIn()" mdTooltip="Clear Mark In (Press d)">
           <i class="fa fa-map-marker fa-border"></i>
         </button>
-        <button md-icon-button (click)="setMarkIn()" mdTooltip="Set Mark In (Press i)">
+        <button mat-icon-button (click)="setMarkIn()" mdTooltip="Set Mark In (Press i)">
           <i class="fa fa-map-marker"></i>
         </button>
-        <button md-icon-button *ngIf="player?.paused" (click)="play()" mdTooltip="Toggle play/pause (Press space)">
+        <button mat-icon-button *ngIf="player?.paused" (click)="play()" mdTooltip="Toggle play/pause (Press space)">
           <i class="fa fa-play"></i>
         </button>
-        <button md-icon-button *ngIf="!player?.paused" (click)="pause()" mdTooltip="Toggle play/pause (Press space)">
+        <button mat-icon-button *ngIf="!player?.paused" (click)="pause()" mdTooltip="Toggle play/pause (Press space)">
           <i class="fa fa-pause"></i>
         </button>
-        <button md-icon-button (click)="setMarkOut()" mdTooltip="Set Mark Out (Press o)">
+        <button mat-icon-button (click)="setMarkOut()" mdTooltip="Set Mark Out (Press o)">
           <i class="fa fa-map-marker"></i>
         </button>
-        <button md-icon-button (click)="clearMarkOut()" mdTooltip="Clear Mark Out (Press f)">
+        <button mat-icon-button (click)="clearMarkOut()" mdTooltip="Clear Mark Out (Press f)">
           <i class="fa fa-map-marker fa-border"></i>
         </button>
-        <!-- <button md-icon-button (click)="createSubClip()" *ngIf="!isMasterclip"><i class="fa fa-photo"></i></button> -->
-        <button md-icon-button *ngIf="player?.muted" (click)="toggleMute()">
+        <!-- <button mat-icon-button (click)="createSubClip()" *ngIf="!isMasterclip"><i class="fa fa-photo"></i></button> -->
+        <button mat-icon-button *ngIf="player?.muted" (click)="toggleMute()">
           <i class="fa fa-volume-off"></i>
         </button>
-        <button md-icon-button *ngIf="!player?.muted" (click)="toggleMute()">
+        <button mat-icon-button *ngIf="!player?.muted" (click)="toggleMute()">
           <i class="fa fa-volume-up"></i>
         </button>
-        <!-- <button md-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen">
+        <!-- <button mat-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen">
           <i class="fa fa-expand"></i>
         </button> -->
-        <!-- <button md-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button> -->
-        <!-- <button md-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button> -->
+        <!-- <button mat-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button> -->
+        <!-- <button mat-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button> -->
       </div>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

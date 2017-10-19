@@ -5,7 +5,7 @@ import { WsMetadataService } from './ws-metadata.service';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
 // tslint:disable-next-line:max-line-length
-import { MdCardModule, MdButtonModule, MdInputModule, MdTooltipModule, MdListModule, MdTableModule, MdTabsModule, MdSelectModule, MdCheckboxModule } from '@angular/material';
+import { MatCardModule, MatButtonModule, MatInputModule, MatTooltipModule, MatListModule, MatTableModule, MatTabsModule, MatSelectModule, MatCheckboxModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,17 +17,17 @@ import { WsMetadataComponent } from './ws-metadata.component';
     FlexLayoutModule,
     FormsModule,
     WsNodeImageModule,
-    MdCardModule,
-    MdButtonModule,
-    MdTooltipModule,
-    MdInputModule,
-    MdListModule,
-    MdTableModule,
-    MdTabsModule,
-    MdListModule,
-    MdTooltipModule,
-    MdSelectModule,
-    MdCheckboxModule
+    MatCardModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatListModule,
+    MatTableModule,
+    MatTabsModule,
+    MatListModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatCheckboxModule
   ],
   declarations: [WsMetadataComponent],
   exports: [WsMetadataComponent],

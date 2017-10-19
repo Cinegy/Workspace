@@ -1,6 +1,6 @@
 import { ClipboardItem, ClipboardAction } from './clipboard-item';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { MenuItem } from 'primeng/primeng';
 import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { BinNode } from './bin-node';
@@ -32,7 +32,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     public appState: WsAppStateService,
     public management: WsAppManagementService,
     private binService: WsBinsService,
-    public dialog: MdDialog) {
+    public dialog: MatDialog) {
     this.subscribers = [];
     this.tabs = [];
     this.contextMenuItems = [];

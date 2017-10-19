@@ -1,6 +1,6 @@
 import { WsAppStateService } from './../../ws-app-state.service';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-ws-create-folder-dialog',
@@ -12,8 +12,8 @@ export class WsCreateFolderDialogComponent implements OnInit {
 
   constructor(
     public appState: WsAppStateService,
-    @Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<WsCreateFolderDialogComponent>) {}
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<WsCreateFolderDialogComponent>) {}
 
   ngOnInit() {
   }

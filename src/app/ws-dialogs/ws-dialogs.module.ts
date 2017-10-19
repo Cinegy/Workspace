@@ -1,7 +1,7 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MdButtonModule, MdInputModule, MdSelectModule, MdDialogModule } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatSelectModule, MatDialogModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsCreateFolderDialogComponent } from './ws-create-folder-dialog/ws-create-folder-dialog.component';
@@ -16,10 +16,10 @@ import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin
     CommonModule,
     FlexLayoutModule,
     WsNodeImageModule,
-    MdButtonModule,
-    MdInputModule,
-    MdSelectModule,
-    MdDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule
   ],

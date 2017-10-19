@@ -12,7 +12,7 @@ import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.servi
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsExplorerService } from './ws-explorer.service';
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-ws-explorer',
@@ -38,7 +38,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     public appState: WsAppStateService,
     private explorerService: WsExplorerService,
     private breadcrumbService: WsMainBreadcrumbsService,
-    public dialog: MdDialog) {
+    public dialog: MatDialog) {
 
     this.contextMenuItems = [];
     this.subscribers = [];
