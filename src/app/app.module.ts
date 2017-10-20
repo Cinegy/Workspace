@@ -1,4 +1,4 @@
-import { MatSnackBar, MatSnackBarModule } from '@angular/material';
+import { MatSnackBar, MatSnackBarModule, MatNativeDateModule } from '@angular/material';
 import { WsDialogsModule } from './ws-dialogs/ws-dialogs.module';
 import { WsGlobalErrorHandler } from './ws-global-error-handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -48,6 +48,7 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     WsDialogsModule,
     MatSnackBarModule,
+    MatNativeDateModule,
     WsMainModule,
     WsConfigurationModule,
     WsMainMenuModule,

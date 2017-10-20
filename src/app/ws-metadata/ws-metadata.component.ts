@@ -157,7 +157,12 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
         const item = metadata[i];
 
         if (item.descriptorId === descriptor.id && item.value) {
-          descriptor.value = item.value;
+          if (descriptor.type === 'date') {
+            // descriptor.value = new Date(item.value);
+            descriptor.value = item.value;
+          } else {
+            descriptor.value = item.value;
+          }
           break;
         }
       }

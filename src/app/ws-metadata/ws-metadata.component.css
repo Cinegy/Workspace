@@ -1,5 +1,5 @@
-mat-select, mat-option {
-    font-size: smaller;
+mat-select, mat-option, mat-checkbox  {
+    font-size: small;
 }
 .ws-metadata-name {
     width: 40%;

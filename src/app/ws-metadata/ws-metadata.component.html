@@ -20,9 +20,9 @@
           </ng-template>
           <mat-list dense fxFlexFill fxFlex style="overflow: hidden;">
             <mat-list-item *ngFor="let item of group">
-              <span class="ws-metadata-icon">
+              <!-- <span class="ws-metadata-icon">
                 <i *ngIf="item.isReadOnly" class="fa fa-lock"></i>
-              </span>
+              </span> -->
               <!-- <span class="ws-metadata-icon">
                 <i *ngIf="!item.isReadOnly" class="fa fa-pencil"></i>
               </span> -->
@@ -30,13 +30,17 @@
               <span class="ws-metadata-value">
                 <span [ngSwitch]="item.type">
                   <mat-input-container *ngSwitchCase="'string'" fxFlex fxFlexFill>
-                    <input matInput value="{{item.value.value}}" type="text" readonly [(ngModel)]="item.value.value">
+                    <input matInput value="{{item.value.value}}" type="text" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value">
                   </mat-input-container>
-                  <mat-input-container *ngSwitchCase="'date'" fxFlex fxFlexFill>
-                    <input matInput value="{{item.value.value}}" readonly [(ngModel)]="item.value.value">
-                  </mat-input-container>
+                  <md-form-field *ngSwitchCase="'date'" fxFlexFill fxLayout>
+                    <!-- <input matInput [matDatepicker]="picker" placeholder="Choose a date"  matInput value="{{item.value.value}}" [(ngModel)]="item.value.value"> -->
+                    <input matInput fxFlex [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date">
+                    <mat-datepicker-toggle fxFlexAlign="end" mdSuffix [for]="picker"></mat-datepicker-toggle> 
+                    <mat-datepicker #picker [disabled]="item.isReadOnly"></mat-datepicker>  
+                    <!-- <input matInput value="{{item.value.value}}" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value"> -->
+                  </md-form-field>
                   <mat-input-container *ngSwitchCase="'text'" fxFlex fxFlexFill>
-                    <textarea matInput readonly [(ngModel)]="item.value.value">{{item.value.value}}</textarea>
+                    <textarea matInput [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">{{item.value.value}}</textarea>
                   </mat-input-container>
                   <div *ngSwitchCase="'bool'" fxFlex fxFlexFill style="text-align: center;">
                     <mat-checkbox [(ngModel)]="item.value.value"></mat-checkbox>
@@ -56,7 +60,7 @@
                     </span>
                   </span>
                   <mat-input-container *ngSwitchDefault fxFlex fxFlexFill>
-                    <input matInput value="{{item.value.name}}" readonly [(ngModel)]="item.value.value">
+                    <input matInput value="{{item.value.name}}" [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">
                   </mat-input-container>
                 </span>
               </span>
