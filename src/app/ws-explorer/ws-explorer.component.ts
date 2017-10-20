@@ -149,7 +149,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -164,7 +164,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -176,7 +176,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private createNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -191,7 +191,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private deleteNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -208,7 +208,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private renameNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -226,7 +226,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private copyNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
@@ -240,7 +240,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private cutNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
+      // this.openErrorDialog(response.msg);
       return;
     }
 
