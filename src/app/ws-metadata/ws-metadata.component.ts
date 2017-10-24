@@ -157,11 +157,22 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
         const item = metadata[i];
 
         if (item.descriptorId === descriptor.id && item.value) {
-          if (descriptor.type === 'date') {
-            // descriptor.value = new Date(item.value);
-            descriptor.value = item.value;
-          } else {
-            descriptor.value = item.value;
+          switch (descriptor.type) {
+            case 'date':
+               // descriptor.value = new Date(item.value);
+              descriptor.value = item.value;
+              break;
+            case 'bool':
+              if (item.value.value === 'False') {
+                item.value.value = false;
+              } else {
+                item.value.value = true;
+              }
+              descriptor.value = item.value;
+              break;
+            default:
+              descriptor.value = item.value;
+              break;
           }
           break;
         }
@@ -169,10 +180,9 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
       if (group === undefined) {
         tmpGroups[descriptor.group.id] = [];
-        tmpGroups[descriptor.group.id].push(descriptor);
-      } else {
-        tmpGroups[descriptor.group.id].push(descriptor);
       }
+
+      tmpGroups[descriptor.group.id].push(descriptor);
     }
 
     // tslint:disable-next-line:forin
@@ -180,6 +190,8 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       const value = tmpGroups[key];
       this.descriptorGroups.push(value);
     }
+
+    this.descriptors = [];
   }
 
 }
