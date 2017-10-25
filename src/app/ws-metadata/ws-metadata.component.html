@@ -18,49 +18,49 @@
               <span>{{group[0].group.name}}</span>
             </section>
           </ng-template>
-          <mat-list dense fxFlexFill fxFlex style="overflow: hidden;">
+          <mat-list dense style="overflow: hidden;">
             <mat-list-item *ngFor="let item of group">
-              <span class="ws-metadata-name" matTooltip="{{item.description}}" matTooltipPosition="below">{{item.name}}</span>
+              <span class="ws-metadata-name" matTooltip="{{item.description}}" matTooltipPosition="below">{{item.name}} [T:{{item.type}}, I:{{item.nameInternal}}]</span>
               <span class="ws-metadata-value">
 
                 <span [ngSwitch]="item.type">
 
-                  <mat-input-container *ngSwitchCase="'string'" fxFlex fxFlexFill>
+                  <mat-input-container *ngSwitchCase="'string'"  >
                     <input matInput value="{{item.value.value}}" type="text" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value">
                   </mat-input-container>
                   
-                  <md-form-field *ngSwitchCase="'date'" fxFlexFill fxLayout>
+                  <mat-input-container *ngSwitchCase="'text'"  >
+                    <textarea matInput [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">{{item.value.value}}</textarea>
+                  </mat-input-container>
+
+                  <md-form-field *ngSwitchCase="'date'"  fxLayout>
                     <!-- <input matInput [matDatepicker]="picker" placeholder="Choose a date"  matInput value="{{item.value.value}}" [(ngModel)]="item.value.value"> -->
-                    <input matInput fxFlex [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date">
+                    <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date">
                     <mat-datepicker-toggle fxFlexAlign="end" mdSuffix [for]="picker"></mat-datepicker-toggle> 
                     <mat-datepicker #picker [disabled]="item.isReadOnly"></mat-datepicker>  
                     <!-- <input matInput value="{{item.value.value}}" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value"> -->
                   </md-form-field>
                   
-                  <mat-input-container *ngSwitchCase="'text'" fxFlex fxFlexFill>
-                    <textarea matInput [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">{{item.value.value}}</textarea>
-                  </mat-input-container>
-                  
-                  <div *ngSwitchCase="'bool'" fxFlex fxFlexFill style="text-align: center;">
+                  <div *ngSwitchCase="'bool'"   style="text-align: center;">
                     <mat-checkbox [(ngModel)]="item.value.value" [disabled]="item.isReadOnly"></mat-checkbox>
                   </div>
                   
                   <span *ngSwitchCase="'preset'">
                     <span *ngIf="!item.isReadOnly">
-                      <mat-select [(ngModel)]="item.value.value" fxFlex fxFlexFill>
+                      <mat-select [(ngModel)]="item.value.value" >
                         <mat-option *ngFor="let presetValue of item.possibleValues" [value]="presetValue.value">
                           {{ presetValue.name }}
                         </mat-option>
                       </mat-select>
                     </span>
                     <span *ngIf="item.isReadOnly">
-                      <mat-input-container fxFlex fxFlexFill>
+                      <mat-input-container >
                         <input matInput value="{{item.value.value}}" readonly>
                       </mat-input-container>
                     </span>
                   </span>
                   
-                  <mat-input-container *ngSwitchDefault fxFlex fxFlexFill>
+                  <mat-input-container *ngSwitchDefault >
                     <input matInput value="{{item.value.name}}" [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">
                   </mat-input-container>
 

@@ -148,25 +148,46 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
   private sortDescriptors(descriptors, metadata) {
     const tmpGroups = {};
+    let durationDescriptorCreated = false;
 
     for (const descriptor of descriptors) {
       descriptor.value = { name: null, value: null };
       const group = tmpGroups[descriptor.group.id];
+
+      // tslint:disable-next-line:max-line-length
+      if (!durationDescriptorCreated && group && group[0] && group[0].group.name.toLowerCase() === 'clip' && this.selectedNode.videoFormat) {
+        const durationDescriptor = {
+          group: group[0].group,
+          name: 'Duration',
+          nameInternal: 'duration',
+          type: 'timecode',
+          isReadOnly: true,
+          value: {
+            // tslint:disable-next-line:max-line-length
+            value:  this.videoHelper.getTimecodeString(this.selectedNode.videoFormat, this.videoHelper.getDuration(this.selectedNode))
+          }
+        };
+        group.push(group[0]);
+        group[0] = durationDescriptor;
+        durationDescriptorCreated = true;
+      }
 
       for (let i = 0; i < metadata.length; i++) {
         const item = metadata[i];
 
         if (item.descriptorId === descriptor.id && item.value) {
           switch (descriptor.type) {
-            case 'date':
-               // descriptor.value = new Date(item.value);
-              descriptor.value = item.value;
-              break;
             case 'bool':
               if (item.value.value === 'False') {
                 item.value.value = false;
               } else {
                 item.value.value = true;
+              }
+              descriptor.value = item.value;
+              break;
+            case 'timecode':
+              if (this.selectedNode.videoFormat) {
+                item.value.value = this.videoHelper.getTimecodeString(this.selectedNode.videoFormat, item.value.value / 10000000);
               }
               descriptor.value = item.value;
               break;
@@ -180,6 +201,10 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
       if (group === undefined) {
         tmpGroups[descriptor.group.id] = [];
+      }
+
+      if (this.selectedNode.videoFormat && descriptor.nameInternal === 'pd_tv_format_desc') {
+        descriptor.value.value = this.selectedNode.videoFormat.name;
       }
 
       tmpGroups[descriptor.group.id].push(descriptor);
