@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsMetadataComponent } from './ws-metadata.component';
+import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor/ws-metadata-text-editor.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { WsMetadataComponent } from './ws-metadata.component';
     MatCheckboxModule,
     MatDatepickerModule
   ],
-  declarations: [WsMetadataComponent],
+  declarations: [WsMetadataComponent, WsMetadataTextEditorComponent],
   exports: [WsMetadataComponent],
   providers: [WsMetadataService,
     {
