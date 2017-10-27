@@ -2,16 +2,18 @@
   <h3 mat-dialog-title>
     <app-ws-node-image md-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
     Create {{data.name}}</h3>
-  <div mat-dialog-content fxLayout="column" fxLayoutAlign="center stretch" class="mat-typography">
-    <mat-input-container fxFlex>
-      <input matInput required placeholder="New {{data.name}}" [(ngModel)]="result.name" name="result.name" #localName>
+  <div mat-dialog-content fxLayout="column" class="mat-typography">
+    <mat-input-container fxFlex fxFlexFill>
+      <input matInput required placeholder="New {{data.name}}" [(ngModel)]="result.name" name="result.name" #localName >
     </mat-input-container>
-    <mat-select fxFlex *ngIf="result.descriptor" placeholder="Media Group" [(ngModel)]="result.mediaGroup" name="result.mediaGroup"
-      required #localMediaGroups>
-      <mat-option *ngFor="let mediaGroup of result.descriptor.possibleValues" [value]="mediaGroup">
-        {{ mediaGroup.name }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field fxFlex fxFlexFill >
+      <mat-select *ngIf="result.descriptor" placeholder="Select Media Group" [(ngModel)]="result.mediaGroup" name="result.mediaGroup"
+        required #localMediaGroups>
+        <mat-option *ngFor="let mediaGroup of result.descriptor.possibleValues" [value]="mediaGroup">
+          {{ mediaGroup.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div md-dialog-actions fxLayout fxLayoutAlign="center">
     <button mat-button [mat-dialog-close]="result" [disabled]="!createBinForm.form.valid"><i class="fa fa-check"></i> Create</button>
