@@ -12,6 +12,7 @@ export class WsBinsService extends WsBaseMamService {
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public getRollSubject: Subject<any> = new Subject<any>();
   public getClipBinSubject: Subject<any> = new Subject<any>();
+  public getDocumentBinSubject: Subject<any> = new Subject<any>();
   public startSearchSubject: Subject<any> = new Subject<any>();
   public searchSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
@@ -29,14 +30,26 @@ export class WsBinsService extends WsBaseMamService {
       .subscribe(response => this.internalCutClipResponse(response));
   }
 
-  public getRoll(id: string) {
-    // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}roll?id=${id}&rollScope=videoFormat&linksScope=children&linksScope=metadata`, this.getRollSubject);
-  }
+  public getBin(id: string, type: string) {
+    let fragment: string;
+    let subject: Subject<any>;
 
-  public getClipBin(id: string) {
-    // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}clipbin?id=${id}&clipBinScope=videoFormat&linksScope=children&linksScope=metadata`, this.getClipBinSubject);
+    switch (type) {
+      case 'roll':
+        fragment = `roll?id=${id}&rollScope=videoFormat&linksScope=children&linksScope=metadata`;
+        subject = this.getRollSubject;
+        break;
+      case 'clipBin':
+        fragment = `clipbin?id=${id}&clipBinScope=videoFormat&linksScope=children&linksScope=metadata`;
+        subject = this.getClipBinSubject;
+        break;
+      case 'documentBin':
+        fragment = `node?id=${id}&linksScope=children&linksScope=metadata`;
+        subject = this.getDocumentBinSubject;
+        break;
+    }
+
+    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}`, subject);
   }
 
   public getChildren(id: string, type: string, take?: number, skip?: number) {
@@ -55,6 +68,13 @@ export class WsBinsService extends WsBaseMamService {
         // tslint:disable-next-line:max-line-length
         fragment = `roll/list?parentId=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail`;
         break;
+      case 'clipBin':
+        // tslint:disable-next-line:max-line-length
+        fragment = `clipbin/list?parentId=${id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileSet&clipScope=thumbnail`;
+        break;
+      case 'documentBin':
+        fragment = `documentbin/list?parentId=${id}&documentScope=full`;
+        break;
       default:
         fragment = `node/list?parentId=${id}`;
         break;
@@ -62,9 +82,6 @@ export class WsBinsService extends WsBaseMamService {
 
     // tslint:disable-next-line:max-line-length
     this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
-
-    // tslint:disable-next-line:max-line-length
-    // this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${id}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
   }
 
   public search(keywords: string, take?: number, skip?: number) {

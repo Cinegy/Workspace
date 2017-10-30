@@ -110,39 +110,47 @@ export class WsVideoTools {
     }
 
     public getThumbnailUrl(clip: any, mam: WsMamConnection, tvFormat?: any) {
-        let url: string;
+        let url: string = null;
 
         switch (clip.type) {
             case 'image':
-                url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(clip.path + clip.fileName)}&frame=0&width=160`;
+                if (clip.path && clip.fileName) {
+                    url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(clip.path + clip.fileName)}&frame=0&width=160`;
+                }
+
                 return url;
             case 'masterClip':
             case 'clip':
                 let fileName: string;
 
-                for (const file of clip.fileSet.files) {
-                    if (file.fileType.toLowerCase() === 'fT_Video'.toLowerCase()) {
-                        fileName = `${file.filePath}${file.fileName}`;
-                        break;
+                if (clip.fileSet) {
+
+                    for (const file of clip.fileSet.files) {
+                        if (file.fileType.toLowerCase() === 'fT_Video'.toLowerCase()) {
+                            fileName = `${file.filePath}${file.fileName}`;
+                            break;
+                        }
                     }
+
+                    let thumbnail = clip.thumbnail;
+
+                    if (thumbnail < clip.tapeIn) {
+                        thumbnail = clip.tapeIn;
+                    }
+
+                    if (thumbnail > clip.tapeOut) {
+                        thumbnail = clip.tapeOut;
+                    }
+
+                    const pos = (thumbnail - clip.tapeIn + clip.offset) / 10000000;
+                    const frame = this.getFrame(tvFormat, pos);
+
+                    url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(fileName)}&frame=${frame}&width=160`;
                 }
 
-                let thumbnail = clip.thumbnail;
-
-                if (thumbnail < clip.tapeIn) {
-                    thumbnail = clip.tapeIn;
-                }
-
-                if (thumbnail > clip.tapeOut) {
-                    thumbnail = clip.tapeOut;
-                }
-
-                const pos = (thumbnail - clip.tapeIn + clip.offset) / 10000000;
-                const frame = this.getFrame(tvFormat, pos);
-
-                url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(fileName)}&frame=${frame}&width=160`;
                 return url;
-            default: return null;
+            default:
+                return null;
         }
     }
 

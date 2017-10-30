@@ -57,6 +57,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.getParentResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.binService.getDocumentBinSubject
+      .subscribe(response => this.getParentResponse(response));
+    this.subscribers.push(subscriber);
+
     subscriber = this.binService.getChildrenSubject
       .subscribe(response => this.getChildrenResponse(response));
     this.subscribers.push(subscriber);
@@ -150,21 +154,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    switch (response.type) {
-      case 'roll':
-        this.binService.getRoll(response.id);
-        this.loading = true;
-        break;
-      case 'clipBin':
-        this.binService.getClipBin(response.id);
-        this.loading = true;
-        break;
-      case 'documentBin':
-        this.lastOpenedNode = response;
-        this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
-        this.loading = true;
-        break;
-    }
+    this.loading = true;
+    this.binService.getBin(response.id, response.type);
   }
 
   private getParentResponse(response: any) {
