@@ -433,7 +433,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   }
 
   public toggleFullscreen() {
-    const videoContainer: any = document.getElementById('playerPage');
+    const videoContainer: any = document.getElementById('playerComponent');
 
     if (screenfull.enabled) {
       screenfull.toggle(videoContainer);

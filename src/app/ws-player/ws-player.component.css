@@ -1,4 +1,11 @@
+mat-card {
+  width: 100%;
+  max-width: 100%;
+}
 video {
-    width: 100%;
-    overflow: hidden;
+    width: 90%;
+    margin-bottom: -10px;
+  }
+  .videoContainer {
+    margin-top: 10px;
   }

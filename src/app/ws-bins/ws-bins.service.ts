@@ -70,7 +70,7 @@ export class WsBinsService extends WsBaseMamService {
         break;
       case 'clipBin':
         // tslint:disable-next-line:max-line-length
-        fragment = `clipbin/list?parentId=${id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileSet&clipScope=thumbnail`;
+        fragment = `clipbin/list?parentId=${id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileSet&clipScope=thumbnail&clipScope=general`;
         break;
       case 'documentBin':
         fragment = `documentbin/list?parentId=${id}&documentScope=full`;
@@ -96,7 +96,7 @@ export class WsBinsService extends WsBaseMamService {
     }
 
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}search?linkScope=self&linkScope=self&linkScope=children&linksScope=metadata&take=${take}&skip=${skip}`,
+    this.post(`${this.appState.selectedMam.mamEndpoint}search?linkScope=self&linkScope=self&linkScope=children&linksScope=metadata&searchScope=fullInfo&take=${take}&skip=${skip}`,
       { Query: keywords },
       this.searchSubject);
   }

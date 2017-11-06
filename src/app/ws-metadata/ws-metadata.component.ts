@@ -69,6 +69,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private selectedNodeResponse(response: any) {
+    this.loading = false;
     if (response instanceof WsMamError) {
       return;
     }
@@ -76,19 +77,18 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (this.selectedNode && response.id === this.selectedNode.id) {
       return;
     }
-
-    this.loading = true;
+    
     this.selectedNode = response;
     this.descriptorGroups = [];
     this.descriptors = this.appState.descriptors[this.selectedNode.type];
 
     if (this.descriptors === undefined) {
+      this.loading = true;
       this.metadataService.getDescriptors(this.selectedNode.type);
     } else if (this.selectedNode.metadata) {
+      this.loading = true;
       this.metadataService.getMetadata(this.selectedNode);
-    } else {
-      this.loading = false;
-    }
+    } 
   }
 
   private getDescriptorsResponse(response) {

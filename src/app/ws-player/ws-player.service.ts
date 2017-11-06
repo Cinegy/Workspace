@@ -23,7 +23,8 @@ export class WsPlayerService extends WsBaseMamService {
   }
 
   public getMasterclip(id: string) {
-    this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}`, this.getMasterClipSubject);
+    // tslint:disable-next-line:max-line-length
+    this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail`, this.getMasterClipSubject);
   }
 
   public setMarker(id: string, markIn: number, markOut: number, markInDesc: string, markOutDesc: string) {

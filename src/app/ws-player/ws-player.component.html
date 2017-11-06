@@ -1,4 +1,4 @@
-<mat-card fxFlex>
+<mat-card fxFlex id="playerComponent" #playerComponent>
   <mat-card-content id="playerPage" #playerPage>
     <div *ngIf="loading" style="text-align: center;">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
@@ -12,7 +12,7 @@
       </span>
     </div>
     <mat-divider></mat-divider>
-    <div id="videoContainer" #videoContainer style="margin-top: 10px;" align="center">
+    <div id="videoContainer" #videoContainer align="center" class="videoContainer">
       <div fxLayout style="text-align: center;">
         <div fxFlex>
           <i class="fa fa-play"></i> {{timmecodeHead}}</div>
@@ -23,8 +23,8 @@
         (error)="playerError($event)">
       </video>
       <div fxLayout="column" style="height: 30px;">
-        <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart * 10" [max]="sliderEnd * 10" [step]="1" [range]="true" disabled></p-slider>
-        <mat-slider style="margin-top: -14px;" id="videoSlider" #videoSlider fxFlex (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
+        <p-slider fxFlex [(ngModel)]="markers" [min]="sliderStart * 10" [max]="sliderEnd * 10" [step]="1" [range]="true"></p-slider>
+        <mat-slider style="margin-top: -50px; z-index: 100;" id="videoSlider" #videoSlider fxFlex (change)="videoSliderChanged()" (input)="videoSliderMoved(videoSlider.value)"
           [min]="sliderStart" [max]="sliderEnd" [(value)]="sliderHead" [step]="0.1" [disabled]="player == null || player.src == null">
         </mat-slider>
       </div>
@@ -60,11 +60,14 @@
         <button mat-icon-button *ngIf="!player?.muted" (click)="toggleMute()">
           <i class="fa fa-volume-up"></i>
         </button>
-        <!-- <button mat-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen">
-          <i class="fa fa-expand"></i>
-        </button> -->
-        <!-- <button mat-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="!fullscreen.isFullscreen"><i class="fa fa-expand"></i></button> -->
-        <!-- <button mat-icon-button appWsToggleFullscreen [targetElement]="playerPage" *ngIf="fullscreen.isFullscreen"><i class="fa fa-compress"></i></button> -->
+        <span *ngIf="selectedClip">
+          <button mat-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen">
+            <i class="fa fa-expand"></i>
+          </button>
+          <button mat-icon-button (click)="toggleFullscreen()" *ngIf="fullscreen.isFullscreen">
+            <i class="fa fa-compress"></i>
+          </button>
+        </span>
       </div>
     </div>
   </mat-card-content>
