@@ -117,6 +117,16 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.appState.selectNode(node);
   }
 
+  public selectParent() {
+    this.appState.selectNode(this.selectedNode);
+  }
+
+  public refreshParent() {
+    this.loading = true;
+    this.childNodes = [];
+    this.explorerService.getNode(this.selectedNode.id);
+  }
+
   public openNode(node: any) {
     if (node === null) {
       return;
@@ -365,6 +375,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       };
 
       this.contextMenuItems.push(menuItem);
+      this.contextMenuItems.push({separator: true});
     }
 
     if (this.mainNodeTypes.includes(selectedNodeType.typeGroup) && selectedNodeType.children) {
@@ -403,6 +414,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           items: menuChildItems
         };
         this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push({separator: true});
       }
     }
 
@@ -487,6 +499,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           this.renameNodeDialog();
         }
       };
+      this.contextMenuItems.push({separator: true});
       this.contextMenuItems.push(menuItem);
     }
 
@@ -500,6 +513,18 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           this.openDeleteNodeDialog();
         }
       };
+      this.contextMenuItems.push(menuItem);
+    }
+
+    if (!this.childOpenedMenu) {
+      menuItem = {
+        label: 'Refresh',
+        icon: 'fa-refresh',
+        command: (event) => {
+          this.refreshParent();
+        }
+      };
+      this.contextMenuItems.push({separator: true});
       this.contextMenuItems.push(menuItem);
     }
   }

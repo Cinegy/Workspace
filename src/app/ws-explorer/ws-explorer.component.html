@@ -1,6 +1,6 @@
 <mat-card fxFlex>
   <mat-card-content #explorerNodes>
-    <h3 *ngIf="selectedNode" (contextmenu)="contextMenuOpen(selectedNode, false)" class="ws-explorer-header">
+    <h3 *ngIf="selectedNode" (click)="selectParent()" (contextmenu)="contextMenuOpen(selectedNode, false)" class="ws-explorer-header">
       <app-ws-node-image mat-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
         [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
       </app-ws-node-image>

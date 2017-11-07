@@ -184,6 +184,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         (tab.parent.type === 'searchBin' && this.lastOpenedNode.type === 'searchBin' && tab.parent.name === this.lastOpenedNode.name) ||
         (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
         tab.children = response.items;
+        tab.childCount = response.totalCount;
 
         if (this.selectedIndex !== i) {
           this.selectedIndex = i;
@@ -317,6 +318,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           }
         };
         this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push({separator: true});
       }
 
       if (selectedNode.type in playable && selectedNode.type !== 'masterClip') {
@@ -330,6 +332,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.internalClipboardItem.bin = this.tabs[this.selectedIndex];
           }
         };
+        this.contextMenuItems.push({separator: true});
         this.contextMenuItems.push(menuItem);
       }
 
@@ -367,6 +370,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         }
       };
       this.contextMenuItems.push(menuItem);
+      this.contextMenuItems.push({separator: true});
 
       if (selectedNodeType.canDelete) {
         menuItem = {
@@ -378,6 +382,19 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         };
         this.contextMenuItems.push(menuItem);
       }
+    }
+
+    if (!child) {
+      menuItem = {
+        label: 'Refresh',
+        icon: 'fa-refresh',
+        command: (event) => {
+          this.loading = true;
+          this.binService.getChildren(selectedNode.id, selectedNode.type);
+        }
+      };
+      this.contextMenuItems.push({separator: true});
+      this.contextMenuItems.push(menuItem);
     }
   }
 
