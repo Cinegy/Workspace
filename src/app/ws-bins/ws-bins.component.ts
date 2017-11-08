@@ -145,7 +145,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (tab.parent.type === 'searchBin') {
       this.binService.search(tab.parent.name, event.pageSize, skip);
     } else {
-      this.binService.getChildren(this.tabs[this.selectedIndex].parent.id, event.pageSize, skip);
+      this.binService.getChildren(this.tabs[this.selectedIndex].parent.id, this.tabs[this.selectedIndex].parent.type, event.pageSize, skip);
     }
   }
   /* *** Service Response *** */
@@ -332,7 +332,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.internalClipboardItem.bin = this.tabs[this.selectedIndex];
           }
         };
-        this.contextMenuItems.push({separator: true});
         this.contextMenuItems.push(menuItem);
       }
 
