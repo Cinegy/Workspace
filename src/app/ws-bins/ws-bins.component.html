@@ -1,10 +1,10 @@
 <mat-card fxFlex style="overflow-y: auto;">
-  <mat-card-content >
+  <mat-card-content #binNodes>
     <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
     <mat-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
       <mat-tab *ngFor="let tab of tabs">
         <ng-template mat-tab-label>
-          <section (contextmenu)="contextMenuOpen(tab.parent, false)" matTooltip="{{tab.parent.name}}">
+          <section matTooltip="{{tab.parent.name}}" (contextmenu)="contextMenuOpen(tab.parent, false)">
             <app-ws-node-image *ngIf="tab.parent.type" mat-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
               [imageHeight]="16"></app-ws-node-image>
             <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
@@ -15,7 +15,7 @@
         </ng-template>
         <mat-paginator fxFlex [length]="tab.childCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageEvent($event)">
         </mat-paginator>
-        <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px" (contextmenu)="contextMenuOpen(tab.parent, false)">
+        <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
           <ng-template [ngIf]="tab.children">
             <mat-card class="ws-card-item" *ngFor="let child of tab.children" fxFlex fxFlexFill fxLayout="column" tabindex="0" (click)="selectItem(child)"
               (contextmenu)="contextMenuOpen(child, true)">

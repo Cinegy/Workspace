@@ -283,7 +283,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   /* *** Dialogs *** */
   private openDeleteNodeDialog(selectedNode: any) {
     const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
-      width: '400px',
+      // width: '400px',
       data: selectedNode.name
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -347,9 +347,46 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       };
       this.contextMenuItems.push(menuItem);
 
+      // menuItem = {
+      //   label: 'Paste',
+      //   disabled: (this.internalClipboardItem === null) && this.tabs[this.selectedIndex].parent.type !== 'clipBin',
+      //   icon: 'fa-clipboard',
+      //   command: (event) => {
+      //     switch (this.internalClipboardItem.item.type) {
+      //       case 'masterClip':
+      //         this.binService.linkMasterclip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+      //         this.internalClipboardItem = null;
+      //         break;
+      //       case 'clip':
+      //         if (this.internalClipboardItem.action === ClipboardAction.Copy) {
+      //           this.binService.copyClip(this.internalClipboardItem.item.id, this.tabs[this.selectedIndex].parent.id);
+      //           this.internalClipboardItem = null;
+      //         } else if (this.internalClipboardItem.action === ClipboardAction.Cut) {
+      //           this.binService.cutClip(this.internalClipboardItem, this.tabs[this.selectedIndex].parent.id);
+      //         }
+      //         break;
+      //     }
+      //   }
+      // };
+      // this.contextMenuItems.push(menuItem);
+      // this.contextMenuItems.push({separator: true});
+
+      if (selectedNodeType.canDelete) {
+        menuItem = {
+          label: 'Delete',
+          icon: 'fa-trash-o',
+          command: (event) => {
+            this.openDeleteNodeDialog(selectedNode);
+          }
+        };
+        this.contextMenuItems.push(menuItem);
+      }
+    }
+
+    if (!child) {
       menuItem = {
         label: 'Paste',
-        disabled: (this.internalClipboardItem === null) && this.tabs[this.selectedIndex].parent.type !== 'clipBin',
+        disabled: (this.internalClipboardItem === null) || this.tabs[this.selectedIndex].parent.type === 'roll',
         icon: 'fa-clipboard',
         command: (event) => {
           switch (this.internalClipboardItem.item.type) {
@@ -369,21 +406,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         }
       };
       this.contextMenuItems.push(menuItem);
-      this.contextMenuItems.push({separator: true});
 
-      if (selectedNodeType.canDelete) {
-        menuItem = {
-          label: 'Delete',
-          icon: 'fa-trash-o',
-          command: (event) => {
-            this.openDeleteNodeDialog(selectedNode);
-          }
-        };
-        this.contextMenuItems.push(menuItem);
-      }
-    }
-
-    if (!child) {
       menuItem = {
         label: 'Refresh',
         icon: 'fa-refresh',
