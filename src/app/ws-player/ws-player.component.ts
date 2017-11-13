@@ -94,6 +94,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.sliderStep = 0.05;
 
     this.player = this.mediaPlayer.nativeElement;
+    // this.player.poster = './assets/img/noMedia.png';
 
     this.player.ontimeupdate = () => {
       if (this.player.currentTime >= this.clipEnd) {
@@ -215,7 +216,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
         this.player.poster = './assets/img/noMedia.png';
         this.player.src = null;
       } else {
-        this.player.poster = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.tvFormat);
+        // this.player.poster = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.tvFormat);
         this.player.src = mediaUrl + this.setMediaFragment();
         this.player.load();
       }

@@ -4,8 +4,9 @@ mat-card {
 }
 video {
     width: 90%;
-    margin-bottom: -10px;
-  }
-  .videoContainer {
-    margin-top: 10px;
-  }
+}
+.player-header {
+  text-align: center; 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}
