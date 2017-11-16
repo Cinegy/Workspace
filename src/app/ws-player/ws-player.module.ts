@@ -1,5 +1,6 @@
 import { WsToggleFullscreenDirective } from './../ws-toggle-fullscreen.directive';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatListModule } from '@angular/material';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsPlayerService } from './ws-player.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -16,6 +17,8 @@ import { SliderModule } from 'primeng/components/slider/slider';
     WsNodeImageModule,
     FlexLayoutModule,
     FormsModule,
+    ReactiveFormsModule,
+    MatListModule,
     SliderModule,
     MatCardModule,
     MatButtonModule,

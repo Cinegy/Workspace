@@ -5,11 +5,23 @@ import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppManagementService } from './../ws-app-management.service';
 import { WsAppStateService } from './../ws-app-state.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import * as _moment from 'moment';
+const moment = _moment;
 
 @Component({
   selector: 'app-ws-metadata',
   templateUrl: './ws-metadata.component.html',
-  styleUrls: ['./ws-metadata.component.css']
+  styleUrls: ['./ws-metadata.component.css'],
+  providers: [
+    // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
+    // `MatMomentDateModule` in your applications root module. We provide it at the component level
+    // here, due to limitations of our example generation script.
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+  ],
 })
 export class WsMetadataComponent implements OnInit, OnDestroy {
   private videoHelper = new WsVideoTools();
@@ -190,6 +202,10 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
                 item.value.value = this.videoHelper.getTimecodeString(this.selectedNode.videoFormat, item.value.value / 10000000);
               }
               descriptor.value = item.value;
+              break;
+            case 'date':
+              // item.value.value = new FormControl(moment(item.value.value));
+              descriptor.value = item.value.value;
               break;
             default:
               descriptor.value = item.value;
