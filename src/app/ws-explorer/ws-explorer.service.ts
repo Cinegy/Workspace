@@ -1,6 +1,6 @@
 import { NewBinParams } from './../ws-dialogs/ws-create-bin-dialog/new-bin-params';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { Observable } from 'rxjs/RX';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { WsAppStateService } from './../ws-app-state.service';
 import { HttpClient } from '@angular/common/http';
