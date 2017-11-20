@@ -19,7 +19,6 @@ import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor
     CommonModule,
     FlexLayoutModule,
     FormsModule,
-    ReactiveFormsModule,
     WsNodeImageModule,
     MatCardModule,
     MatButtonModule,

@@ -34,12 +34,9 @@
                   </mat-input-container>
 
                   <mat-form-field *ngSwitchCase="'date'">
-                    <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date"  matInput value="{{item.value.value}}" [(ngModel)]="item.value.value">
-                    <!-- <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date"  matInput [formControl]="item.value.value"> -->
-                    <!-- <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date"> -->
+                    <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker" placeholder="Choose a date" value="{{item.value.value}}" [(ngModel)]="item.value.value" (dateChange)="addEvent('change', $event, item)">
                     <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle> 
-                    <mat-datepicker  #picker [disabled]="item.isReadOnly"></mat-datepicker>  
-                    <!-- <input matInput value="{{item.value.value}}" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value"> -->
+                    <mat-datepicker #picker [disabled]="item.isReadOnly"></mat-datepicker>  
                   </mat-form-field>
                   
                   <div *ngSwitchCase="'bool'"   style="text-align: center;">
