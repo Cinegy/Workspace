@@ -1,3 +1,4 @@
+import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor/ws-metadata-text-editor.component';
 import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { SaveMetadataRequest } from './save-metadata-request';
 import { WsMetadataService } from './ws-metadata.service';
@@ -10,6 +11,8 @@ import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-ws-metadata',
@@ -34,7 +37,8 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   constructor(
     public appState: WsAppStateService,
     public management: WsAppManagementService,
-    private metadataService: WsMetadataService) {
+    private metadataService: WsMetadataService,
+    public dialog: MatDialog) {
     this.subscribers = [];
 
     let subscriber = this.appState.selectNodeSubject
@@ -97,7 +101,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (this.selectedNode && response.id === this.selectedNode.id) {
       return;
     }
-    
+
     this.selectedNode = response;
     this.descriptorGroups = [];
     this.descriptors = this.appState.descriptors[this.selectedNode.type];
@@ -108,7 +112,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     } else if (this.selectedNode.metadata) {
       this.loading = true;
       this.metadataService.getMetadata(this.selectedNode);
-    } 
+    }
   }
 
   private getDescriptorsResponse(response) {
@@ -212,7 +216,6 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
               descriptor.value = item.value;
               break;
             case 'date':
-              // item.value.value = new FormControl(moment(item.value.value));
               item.value.value = moment(item.value.value, ['MM-DD-YYYY', moment.ISO_8601]);
               descriptor.value = item.value;
               break;
@@ -244,8 +247,35 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.descriptors = [];
   }
 
-  public  addEvent(type: string, event: MatDatepickerInputEvent<Date>, item) {
+  public addEvent(type: string, event: MatDatepickerInputEvent<Date>, item) {
     item.value.value = moment(event.value);
+  }
+
+  private openEditTextDialog(item) {
+    const dialogRef = this.dialog.open(WsMetadataTextEditorComponent, {
+      width: '600px',
+      height: '380px',
+      data: _.cloneDeep(item)
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      this.saveMetadata(result);
+    });
+  }
+
+  public textClicked(item) {
+    this.openEditTextDialog(item);
+  }
+
+  public dateClicked(picker, item) {
+    if (item.isReadOnly) {
+      return;
+    }
+
+    picker.open();
   }
 
 }
