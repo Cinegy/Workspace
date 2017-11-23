@@ -6,7 +6,7 @@ import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
 // tslint:disable-next-line:max-line-length
 import { MatCardModule, MatButtonModule, MatInputModule, MatTooltipModule, MatListModule,
-  MatTableModule, MatTabsModule, MatSelectModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule } from '@angular/material';
+  MatTableModule, MatTabsModule, MatSelectModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
@@ -33,7 +33,8 @@ import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor
     MatCheckboxModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   declarations: [WsMetadataComponent, WsMetadataTextEditorComponent],
   exports: [WsMetadataComponent],

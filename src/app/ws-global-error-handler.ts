@@ -1,32 +1,35 @@
 import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { MatSnackBar } from '@angular/material';
-import { Injectable, ErrorHandler, Injector } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Injectable, ErrorHandler, Injector, NgZone } from '@angular/core';
 
 @Injectable()
 export class WsGlobalErrorHandler implements ErrorHandler {
-  // private dialog: MdDialog = null;
-  private snackBar: MatSnackBar = null;
+  private dialog: MatDialog = null;
 
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector, private ngZone: NgZone) {
+  }
 
   handleError(error) {
-    console.log(error.message);
 
-    if (this.snackBar === null) {
-      this.snackBar = this.injector.get(MatSnackBar);
-    }
+    this.ngZone.run(() => {
+      console.log(error.message);
 
-    let msg: string;
-    if (error.message) {
-      msg = error.message;
-    } else {
-      msg = error;
-    }
+      if (this.dialog == null) {
+        this.dialog = this.injector.get(MatDialog);
+      }
 
-    this.snackBar.open(msg, 'close');
+      let msg: string;
+      if (error.message) {
+        msg = error.message;
+      } else {
+        msg = error;
+      }
 
-     // IMPORTANT: Rethrow the error otherwise it gets swallowed
-    //  throw error;
- }
+      const dialogRef = this.dialog.open(WsErrorDialogComponent, {
+        width: '600px',
+        data: msg
+      });
+    });
+  }
 
 }

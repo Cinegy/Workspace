@@ -26,26 +26,59 @@
                 <span [ngSwitch]="item.type">
 
                   <mat-form-field *ngSwitchCase="'string'"  >
-                    <input matInput value="{{item.value.value}}" type="text" [readonly]="item.isReadOnly"  [(ngModel)]="item.value.value">
+                    <input matInput type="text" 
+                      [readonly]="item.isReadOnly" 
+                      value="{{item.value.value}}" 
+                      [(ngModel)]="item.value.value"
+                      (focus)="inputFocused(item)"
+                      (change)="inputValueChanged(item)"
+                      (blur)="inputLostFocus(item)"
+                      (keydown)="inputKeyPressed(item, $event)">
                   </mat-form-field>
                   
                   <mat-form-field *ngSwitchCase="'text'"  >
-                    <textarea matInput readonly [(ngModel)]="item.value.value" (click)="textClicked(item)" style="cursor: pointer; overflow:hidden; resize: none;">{{item.value.value}}</textarea>
+                    <textarea matInput 
+                      readonly 
+                      [(ngModel)]="item.value.value" 
+                      (click)="textClicked(item)" 
+                      (focus)="inputFocused(item)"
+                      (change)="inputValueChanged(item)"
+                      (blur)="inputLostFocus(item)"
+                      style="cursor: pointer; overflow:hidden; resize: none;">
+                        {{item.value.value}}
+                      </textarea>
                   </mat-form-field>
 
                   <mat-form-field *ngSwitchCase="'date'">
-                    <input matInput [readonly]="item.isReadOnly" [matDatepicker]="picker"  value="{{item.value.value}}" [(ngModel)]="item.value.value" (click)="dateClicked(picker, item)" (dateChange)="addEvent('change', $event, item)" style="cursor: pointer;">
-                    <!-- <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>  -->
+                    <input matInput 
+                      readonly 
+                      [matDatepicker]="picker"  
+                      value="{{item.value.value}}" 
+                      [(ngModel)]="item.value.value" 
+                      (click)="dateClicked(picker, item)" 
+                      (dateChange)="addDateEvent('change', $event, item)" 
+                      style="cursor: pointer;">
+                    <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>  -->
                     <mat-datepicker #picker [disabled]="item.isReadOnly"></mat-datepicker>  
                   </mat-form-field>
                   
-                  <div *ngSwitchCase="'bool'"   style="text-align: center;">
-                    <mat-checkbox [(ngModel)]="item.value.value" [disabled]="item.isReadOnly"></mat-checkbox>
+                  <div *ngSwitchCase="'bool'" style="text-align: center;">
+                    <mat-checkbox 
+                      [(ngModel)]="item.value.value" 
+                      [disabled]="item.isReadOnly"
+                      (focusin)="inputFocused(item)"
+                      (change)="checkBoxValueChanged(item, $event)"
+                      (blur)="inputLostFocus(item)">
+                    </mat-checkbox>
                   </div>
                   
                   <span *ngSwitchCase="'preset'">
                     <mat-form-field *ngIf="!item.isReadOnly">
-                      <mat-select [(ngModel)]="item.value.value" >
+                      <mat-select 
+                        [(ngModel)]="item.value.value" 
+                        (focus)="inputFocused(item)"
+                        (change)="inputValueChanged(item)"
+                        (selectionChange)="selectValueChanged(item, $event)">
                         <mat-option *ngFor="let presetValue of item.possibleValues" [value]="presetValue.value">
                           {{ presetValue.name }}
                         </mat-option>
@@ -53,23 +86,32 @@
                     </mat-form-field>
                     <span *ngIf="item.isReadOnly">
                       <mat-form-field >
-                        <input matInput value="{{item.value.value}}" readonly>
+                        <input matInput 
+                        value="{{item.value.value}}" 
+                        readonly>
                       </mat-form-field>
                     </span>
                   </span>
                   
                   <mat-form-field *ngSwitchDefault >
-                    <input matInput value="{{item.value.name}}" [readonly]="item.isReadOnly" [(ngModel)]="item.value.value">
+                    <input matInput 
+                      value="{{item.value.name}}" 
+                      [readonly]="item.isReadOnly" 
+                      [(ngModel)]="item.value.value"
+                      (focus)="inputFocused(item)"
+                      (change)="inputValueChanged(item)"
+                      (blur)="inputLostFocus(item)"
+                      (keydown)="inputKeyPressed(item, $event)">
                   </mat-form-field>
 
                 </span>
               </span>
               <div class="ws-metadata-indicator-button">
-                <button mat-icon-button *ngIf="item.isReadOnly" disabled>
+                <button mat-icon-button *ngIf="item.isReadOnly" matTooltip="{{item.name}} is readonly">
                   <i class="fa fa-lock"></i>
                 </button>
-                <button mat-icon-button *ngIf="!item.isReadOnly" (click)="saveMetadata(item)">
-                  <i class="fa fa-pencil"></i>
+                <button mat-icon-button *ngIf="!item.isReadOnly" (click)="undoMetadata(item)" matTooltip="Undo last save operation">
+                  <i class="fa fa-undo"></i>
                 </button>
               </div>
             </mat-list-item>

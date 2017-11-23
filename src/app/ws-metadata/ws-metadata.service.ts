@@ -10,6 +10,7 @@ export class WsMetadataService extends WsBaseMamService {
   public getDescriptorsSubject: Subject<any> = new Subject<any>();
   public getMetadataSubject: Subject<any> = new Subject<any>();
   public setMetadataSubject: Subject<any> = new Subject<any>();
+  public undoSetMetadataSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -24,7 +25,7 @@ export class WsMetadataService extends WsBaseMamService {
   public getMetadata(node: any) {
     this.get(node.metadata.url, this.getMetadataSubject);
   }
-  
+
   public setMetadata(id: string, metadata: SaveMetadataRequest) {
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`,
       [
@@ -34,5 +35,16 @@ export class WsMetadataService extends WsBaseMamService {
         }
       ],
       this.setMetadataSubject);
+  }
+
+  public undoSetMetadata(id: string, metadata: SaveMetadataRequest) {
+    this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`,
+      [
+        {
+          DescriptorId: metadata.descriptorId,
+          value: metadata.value
+        }
+      ],
+      this.undoSetMetadataSubject);
   }
 }
