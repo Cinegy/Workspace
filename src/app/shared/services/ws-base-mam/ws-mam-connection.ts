@@ -1,5 +1,6 @@
 export class WsMamConnection {
   public name: string;
+  public mamVersion: string;
   public mamEndpoint: string;
   public casEndpoint: string;
   public dbServer: string;
@@ -10,4 +11,5 @@ export class WsMamConnection {
   public username: string;
   public password: string;
   public domain: string;
+  public loginTime: Date;
 }

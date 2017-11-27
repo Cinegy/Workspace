@@ -44,6 +44,7 @@ export class WsAppStateService {
       this.authHeader = null;
       this._selectedMam = null;
     } else {
+      this._selectedMam.loginTime = new Date(Date.now());
       this.loggedInSubject.next(true);
     }
   }

@@ -11,6 +11,7 @@ import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 export class WsLoginService {
   private connectionInfo: WsMamConnection;
   public loginSubject: Subject<any> = new Subject<any>();
+  public logoutSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -46,6 +47,7 @@ export class WsLoginService {
 
   public logout() {
     this.appState.setConnectionState(false, null);
+    this.logoutSubject.next(true);
     console.log(`${this.connectionInfo.username} logged out`);
   }
 
@@ -77,7 +79,6 @@ export class WsLoginService {
     if (subject) {
       subject.next(mamError);
     }
-
   }
 
 }
