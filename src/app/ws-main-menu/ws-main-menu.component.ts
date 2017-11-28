@@ -20,7 +20,6 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
   private timerName = 'heartbeat';
   private timerId: string;
   private subscribers: any[];
-  private timeoutErrorCount: 0;
   public menusDisabled = true;
   public keywords = '';
   public angularVersion = '';
@@ -74,7 +73,6 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
   public logout() {
     this.loginService.logout();
     this.router.navigate(['/login']);
-    this.timeoutErrorCount = 0;
   }
 
   public search() {
@@ -92,16 +90,16 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // this.timer.newTimer(this.timerName, 10);
-    // this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
+    this.timer.newTimer(this.timerName, 5);
+    this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
   }
 
   private logoutResponse(response: any) {
-    // this.stopTimer();
+    this.stopTimer();
   }
 
   private heartbeatResponse(response: any) {
-    if (response instanceof WsMamError && this.timeoutErrorCount > 3) {
+    if (response instanceof WsMamError) {
       this.stopTimer();
 
       const dialogRef = this.errorDialog.open(WsErrorDialogComponent, {
@@ -112,8 +110,6 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
         this.logout();
       });
       return;
-    } else if (response instanceof WsMamError) {
-      this.timeoutErrorCount++;
     }
   }
 
