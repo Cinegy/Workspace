@@ -90,7 +90,7 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.timer.newTimer(this.timerName, 5);
+    this.timer.newTimer(this.timerName, 10);
     this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
   }
 
@@ -114,7 +114,6 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
   }
 
   private timerCallback() {
-    console.log(`heartbeat: ${new Date(Date.now())}`);
     this.management.heartbeat();
 
     if (this.timerIconIndex === 1) {
