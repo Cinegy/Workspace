@@ -48,7 +48,7 @@ export class WsAppManagementService extends WsBaseMamService {
   }
 
   public heartbeat() {
-    this.get(`${this.appState.selectedMam.mamEndpoint}management/version`, this.heartbeatSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.heartbeatSubject);
   }
 
   private selectedNodeResponse(response: any) {

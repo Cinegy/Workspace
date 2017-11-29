@@ -25,7 +25,7 @@ export class WsLoginService {
     authRequest.database = connectionInfo.dbName;
     authRequest.server = connectionInfo.dbServer;
     authRequest.product = 'CinegyWorkspace';
-    authRequest.productLicense = '{705EADF7-EAAD-4f7c-8141-862C2C511A61}';
+    authRequest.productLicense = '{6eecc5d8-df37-4ead-b79c-25874fd616a2}';
     authRequest.productVersion = '1.0';
 
     const authHeader = btoa(`${this.connectionInfo.domain}/${this.connectionInfo.username}:${this.connectionInfo.password}`);
