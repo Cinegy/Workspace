@@ -5,9 +5,6 @@
     </div>
     <div>
       <span *ngIf="selectedClip">
-        <app-ws-node-image mat-card-avatar *ngIf="appState.nodeIcons[selectedClip.type] && appState.nodeIcons[selectedClip.type].large"
-          [imageData]="appState.nodeIcons[selectedClip.type].large" [imageWidth]="16" [imageHeight]="16">
-        </app-ws-node-image>
         {{selectedClip.name}}
       </span>
     </div>
