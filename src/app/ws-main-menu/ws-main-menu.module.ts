@@ -7,6 +7,7 @@ import { WsMainMenuComponent } from './ws-main-menu.component';
 import { MatToolbarModule, MatInputModule } from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { MatButtonModule } from '@angular/material';
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule
   ],
   exports: [
     WsMainMenuComponent

@@ -1,6 +1,9 @@
 <h3 mat-dialog-title>
-  <i class="fa fa-info"></i> Connection Info</h3>
+  <i class="fa fa-info"></i> Info</h3>
 <div mat-dialog-content fxLayout="column" class="mat-typography">
+  <mat-form-field>
+    <input matInput readonly placeholder="Workspace Version" [value]="workspaceVersion">
+  </mat-form-field>
   <mat-form-field>
     <input matInput readonly placeholder="MAM Name" [value]="data.name">
   </mat-form-field>

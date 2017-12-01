@@ -1,3 +1,4 @@
+import { MatIconRegistry } from '@angular/material/icon';
 import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsAppManagementService } from './../ws-app-management.service';
 import { SimpleTimer } from 'ng2-simple-timer';
@@ -36,8 +37,10 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     public loginService: WsLoginService,
     public configService: WsConfigurationService,
     private management: WsAppManagementService,
-    private timer: SimpleTimer) {
+    private timer: SimpleTimer,
+    private matIconRegistry: MatIconRegistry) {
     this.angularVersion = `Angular v${VERSION.full}`;
+    this. matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
     this.timerIconName = this.timerIconNames[0];
     this.subscribers = [];
   }

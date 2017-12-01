@@ -21,6 +21,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { WsPlayerComponent } from './ws-player/ws-player.component';
 import { WsToggleFullscreenDirective } from './ws-toggle-fullscreen.directive';
+import { MatIconRegistry } from '@angular/material/icon';
 
 const appRoutes: Routes = [
   { path: 'login', component: WsLoginComponent },
@@ -60,6 +61,7 @@ const appRoutes: Routes = [
   providers: [
     WsAppStateService,
     WsAppManagementService,
+    MatIconRegistry,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: WsBaseMamInterceptor,
