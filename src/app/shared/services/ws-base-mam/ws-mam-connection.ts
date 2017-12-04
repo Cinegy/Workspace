@@ -6,7 +6,7 @@ export class WsMamConnection {
   public dbServer: string;
   public dbName: string;
   public thumbnailServer: string;
-  public mediaServer: string;
+  // public mediaServer: string;
   public domains: string;
   public username: string;
   public password: string;

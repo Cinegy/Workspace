@@ -102,7 +102,7 @@ export class WsVideoTools {
     public getMediaUrl(clip: any, mam: WsMamConnection) {
         for (const file of clip.fileSet.files) {
             if (file.auxFileType && file.auxFileType === 'AW1') {
-                return `${mam.mediaServer}${encodeURI(file.fileName)}`;
+                return `${file.url}${encodeURI(file.fileName)}`;
             }
         }
 
