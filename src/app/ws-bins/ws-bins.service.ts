@@ -1,4 +1,3 @@
-import { ClipboardItem } from './clipboard-item';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppStateService } from './../ws-app-state.service';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +7,7 @@ import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.ser
 
 @Injectable()
 export class WsBinsService extends WsBaseMamService {
-  private clipboardItem: ClipboardItem;
+  private clipboardItem: any;
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public getRollSubject: Subject<any> = new Subject<any>();
   public getClipBinSubject: Subject<any> = new Subject<any>();
@@ -17,17 +16,17 @@ export class WsBinsService extends WsBaseMamService {
   public searchSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public linkMasterclipSubject: Subject<any> = new Subject<any>();
-  public copyClipSubject: Subject<any> = new Subject<any>();
+  public copyNodeSubject: Subject<any> = new Subject<any>();
   public internalCutClipSubject: Subject<any> = new Subject<any>();
-  public cutClipSubject: Subject<any> = new Subject<any>();
+  public cutNodeSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
     protected appState: WsAppStateService) {
     super(httpClient, appState);
 
-    this.internalCutClipSubject
-      .subscribe(response => this.internalCutClipResponse(response));
+    // this.internalCutClipSubject
+    //   .subscribe(response => this.internalCutClipResponse(response));
   }
 
   public getBin(id: string, type: string) {
@@ -110,23 +109,23 @@ export class WsBinsService extends WsBaseMamService {
     this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterclipId}&clipBin=${clipBinId}`, null, this.linkMasterclipSubject);
   }
 
-  public copyClip(clipId: string, clipBinId: string) {
+  public copyNode(clipId: string, clipBinId: string) {
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}`, null, this.copyClipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}`, null, this.copyNodeSubject);
   }
 
-  public cutClip(clipboardItem: ClipboardItem, clipBinId: string) {
-    this.clipboardItem = clipboardItem;
+  public moveNode(clipboardItem: any, clipBinId: string) {
+    // this.clipboardItem = clipboardItem;
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipboardItem.item.id}&parentId=${clipBinId}`, null, this.internalCutClipSubject);
+    // this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipboardItem.id}&parentId=${clipBinId}`, null, this.internalCutClipSubject);
   }
 
-  private internalCutClipResponse(response) {
-    if (response instanceof WsMamError) {
-      return;
-    }
+  // private internalCutClipResponse(response) {
+  //   if (response instanceof WsMamError) {
+  //     return;
+  //   }
 
-    this.copyClipSubject.next(response);
-    this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.clipboardItem.item.id}`, this.cutClipSubject);
-  }
+  //   this.copyClipSubject.next(response);
+  //   this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.clipboardItem.id}`, this.cutClipSubject);
+  // }
 }

@@ -7,7 +7,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsExplorerComponent } from './ws-explorer.component';
 // tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatCardModule, MatSelectModule, MatListModule, MatTooltipModule, MatInputModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatSelectModule, MatListModule, MatTooltipModule, MatInputModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 // tslint:disable-next-line:max-line-length
 import {
@@ -16,6 +16,7 @@ import {
 } from 'primeng/primeng';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   imports: [
@@ -28,11 +29,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     MatListModule,
     MatSelectModule,
     MatDialogModule,
+    MatSnackBarModule,
     ContextMenuModule,
     FormsModule,
     ReactiveFormsModule,
     WsNodeImageModule,
     WsDialogsModule,
+    DragulaModule
   ],
   declarations: [WsExplorerComponent],
   providers: [WsExplorerService,

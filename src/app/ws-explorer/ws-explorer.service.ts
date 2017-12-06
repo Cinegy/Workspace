@@ -94,17 +94,17 @@ export class WsExplorerService extends WsBaseMamService {
 
   public copyNode(id: string, parentId: string) {
     this.post(
-      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}`,
+      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&linksScope=metadata`,
       null,
       this.copyNodeSubject);
   }
 
-  public cutNode(id: string, parentId: string) {
-    this.cutedNodeId = id;
-    this.post(
-      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}`,
-      null,
-      this.copyNodeInternalSubject);
+  public moveNode(id: string, parentId: string) {
+    // this.cutedNodeId = id;
+    // this.post(
+    //   `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&linksScope=metadata`,
+    //   null,
+    //   this.copyNodeInternalSubject);
   }
 
   private createBinResponse(response: any, subject: Subject<any>) {
