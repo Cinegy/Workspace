@@ -1,6 +1,6 @@
 import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, PageEvent } from '@angular/material';
 import { MenuItem } from 'primeng/primeng';
 import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { BinNode } from './bin-node';
@@ -156,8 +156,9 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     console.log(`Play Clip: ${node.name}`);
   }
 
-  private selectItem(item: any) {
+  private selectItem(item: any, event) {
     this.appState.selectNode(item);
+    // console.log(event.target);
   }
 
   private getThumbnail(node: any) {
@@ -168,9 +169,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
   }
   /* *** Page events *** */
-  private pageEvent(event) {
+  private onPageEvent(event: PageEvent) {
     const tab = this.tabs[this.selectedIndex];
-    const skip = (event.pageIndex) * event.pageSize;
+    const skip = event.pageIndex * event.pageSize;
+    tab.pageEvent = event;
     this.loading = true;
     if (tab.parent.type === 'searchBin') {
       this.binService.search(tab.parent.name, event.pageSize, skip);
@@ -287,8 +289,29 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // this.tabs[this.selectedIndex].children.push(response);
-    // this.tabs[this.selectedIndex].childCount++;
+    const tab = this.tabs[this.selectedIndex];
+    tab.childCount++;
+
+    let skip: boolean;
+
+    if (tab.pageEvent == null) {
+      if (this.pageSize >= tab.childCount) {
+        skip = false;
+      } else {
+        skip = true;
+      }
+    } else {
+      if (tab.childCount <= ((tab.pageEvent.pageIndex + 1) * tab.pageEvent.pageSize)) {
+        skip = false;
+      } else {
+        skip = true;
+      }
+    }
+
+    if (!skip) {
+      tab.children.push(response);
+    }
+
 
   }
 
@@ -399,9 +422,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         if ((selectedNode.type === 'clipBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInClipBin) ||
           (selectedNode.type === 'documentBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInDocumentBin)) {
           menuItem = {
-            label: 'Paste at end',
-            // tslint:disable-next-line:max-line-length
-            // disabled: (this.clipboard.items.length === 0) || (this.tabs[this.selectedIndex].parent.type !== 'clipBin' && this.tabs[this.selectedIndex].parent.type !== 'documentBin'),
+            label: 'Paste to end',
             icon: 'fa-clipboard',
             command: (event) => {
               switch (this.clipboard.items[0].type) {
@@ -423,15 +444,24 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         }
       }
 
-      menuItem = {
-        label: 'Refresh',
-        icon: 'fa-refresh',
-        command: (event) => {
-          this.loading = true;
-          this.binService.getChildren(selectedNode.id, selectedNode.type);
-        }
-      };
-      this.contextMenuItems.push(menuItem);
+      if (selectedNode.type !== 'searchBin') {
+        menuItem = {
+          label: 'Refresh',
+          icon: 'fa-refresh',
+          command: (event) => {
+            this.loading = true;
+            const tab = this.tabs[this.selectedIndex];
+            if (tab.pageEvent) {
+              const skip = tab.pageEvent.pageIndex * tab.pageEvent.pageSize;
+                // tslint:disable-next-line:max-line-length
+                this.binService.getChildren(selectedNode.id, selectedNode.type, tab.pageEvent.pageSize, skip);
+            } else {
+              this.binService.getChildren(selectedNode.id, selectedNode.type);
+            }
+          }
+        };
+        this.contextMenuItems.push(menuItem);
+      }
     }
   }
 

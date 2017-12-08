@@ -5,7 +5,7 @@ import { WsBinsService } from './ws-bins.service';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 // tslint:disable-next-line:max-line-length
-import { MatListModule, MatInputModule, MatTooltipModule, MatButtonModule, MatCardModule, MatTabsModule, MatPaginatorModule } from '@angular/material';
+import { MatListModule, MatInputModule, MatTooltipModule, MatButtonModule, MatCardModule, MatTabsModule, MatPaginatorModule, MatCheckboxModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsBinsComponent } from './ws-bins.component';
@@ -24,7 +24,8 @@ import { ContextMenuModule, MenuItem } from 'primeng/primeng';
     MatInputModule,
     MatListModule,
     MatTabsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCheckboxModule
   ],
   declarations: [WsBinsComponent],
   exports: [WsBinsComponent],

@@ -106,12 +106,12 @@ export class WsBinsService extends WsBaseMamService {
 
   public linkMasterclip(masterclipId: string, clipBinId: string) {
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterclipId}&clipBin=${clipBinId}`, null, this.linkMasterclipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterclipId}&clipBinId=${clipBinId}&clipScope=videoFormat&clipScope=offsets&clipScope=fileset&clipScope=general&clipScope=thumbnail`, null, this.linkMasterclipSubject);
   }
 
   public copyNode(clipId: string, clipBinId: string) {
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}`, null, this.copyNodeSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}&dataScope=fullInfo`, null, this.copyNodeSubject);
   }
 
   public moveNode(clipboardItem: any, clipBinId: string) {
