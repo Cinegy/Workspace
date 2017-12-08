@@ -1,6 +1,6 @@
 import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { MatDialog, PageEvent } from '@angular/material';
+import { MatDialog, PageEvent, MatSnackBar } from '@angular/material';
 import { MenuItem } from 'primeng/primeng';
 import { WsVideoTools } from './../ws-player/ws-video-tools';
 import { BinNode } from './bin-node';
@@ -41,7 +41,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     public management: WsAppManagementService,
     private binService: WsBinsService,
     private clipboard: WsClipboardService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar) {
     this.subscribers = [];
     this.tabs = [];
     this.contextMenuItems = [];
@@ -275,6 +276,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const index = this.tabs[this.selectedIndex].children.indexOf(this.deletedNode);
 
     if (index > -1) {
+      this.snackBar.open(`${this.deletedNode.name} deleted`, null, { duration: 1000 });
       this.tabs[this.selectedIndex].children.splice(index, 1);
       this.tabs[this.selectedIndex].childCount--;
       this.deletedNode = null;
@@ -312,7 +314,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       tab.children.push(response);
     }
 
-
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
   }
 
   private cutNodeResponse(response) {
