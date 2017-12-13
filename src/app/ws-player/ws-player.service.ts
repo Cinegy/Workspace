@@ -1,3 +1,4 @@
+import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppStateService } from './../ws-app-state.service';
 import { HttpClient } from '@angular/common/http';
 import { WsBaseMamService } from './../shared/services/ws-base-mam/ws-base-mam.service';
@@ -10,11 +11,22 @@ export class WsPlayerService extends WsBaseMamService {
   public getClipDescriptorSubject: Subject<any> = new Subject<any>();
   public getMasterclipDescriptorSubject: Subject<any> = new Subject<any>();
   public setMarkerSubject: Subject<any> = new Subject<any>();
+  public createSubclipSubject: Subject<any> = new Subject<any>();
+
+  private internalCreateSubclipSubject: Subject<any> = new Subject<any>();
+  private selectedClip: any;
+  private clipDescriptors: { [id: string]: any; } = {};
 
   constructor(
     protected httpClient: HttpClient,
     protected appState: WsAppStateService) {
     super(httpClient, appState);
+
+    this.getClipDescriptorSubject
+      .subscribe(response => this.getClipDescriptorsResponse(response));
+
+    this.internalCreateSubclipSubject
+      .subscribe(response => this.createSubclipResponse(response));
   }
 
   public getClipDescriptors() {
@@ -39,13 +51,62 @@ export class WsPlayerService extends WsBaseMamService {
       }
     ];
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`, markerMetadata, this.setMarkerSubject);
+  }
 
-    // const markers = {
-    //   In: markIn.toFixed(),
-    //   Out: markOut.toFixed()
-    // };
+  public createSubclip(clip: any) {
+    this.selectedClip = clip;
+    // tslint:disable-next-line:max-line-length
+    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clip.id}&parentId=${clip.parent}&dataScope=fullInfo&linksScope=metadata`, null, this.internalCreateSubclipSubject);
+  }
 
-    // this.post(`${this.appState.selectedMam.mamEndpoint}node?id=${id}`, markers, this.setMarkerSubject);
+  public createMasterclip(clip: any) {
+    this.selectedClip = clip;
+    // tslint:disable-next-line:max-line-length
+    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${clip.id}&clipBinId=${clip.parent}&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.internalCreateSubclipSubject);
+  }
+
+  private createSubclipResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    response.tapeIn = this.selectedClip.in + this.selectedClip.tapeIn;
+    response.tapeOut = this.selectedClip.out + this.selectedClip.tapeIn;
+    response.in = 0;
+    response.out = response.tapeOut - response.tapeIn;
+
+    this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${response.id}`,
+    [
+      {
+        DescriptorId: this.clipDescriptors['pd_in'].id,
+        value: response.in
+      },
+      {
+        DescriptorId: this.clipDescriptors['pd_out'].id,
+        value: response.out
+      },
+      {
+        DescriptorId: this.clipDescriptors['pd_tape_in'].id,
+        value: response.tapeIn
+      },
+      {
+        DescriptorId: this.clipDescriptors['pd_tape_out'].id,
+        value: response.tapeOut
+      }
+    ], null);
+
+    this.createSubclipSubject.next(response);
+  }
+
+  private getClipDescriptorsResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    response.forEach(descriptor => {
+      this.clipDescriptors[descriptor.nameInternal] = descriptor;
+    });
+
   }
 
 }

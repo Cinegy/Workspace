@@ -194,7 +194,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 

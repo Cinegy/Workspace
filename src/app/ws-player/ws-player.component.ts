@@ -1,3 +1,5 @@
+import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
+import { MatDialog } from '@angular/material';
 import { WsPlayerService } from './ws-player.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppStateService } from './../ws-app-state.service';
@@ -5,6 +7,7 @@ import { WsVideoTools } from './ws-video-tools';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SimpleTimer } from 'ng2-simple-timer';
 import * as screenfull from 'screenfull';
+import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 
 const DescriptorTypeIn = 1;
 const FieldNumberIn = 5;
@@ -46,7 +49,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public markerOut: number;
   private timerId: string;
   private timerName = 'videoTimer';
-  public isMasterclip: boolean;
+  public canCreateSubclip: boolean;
   public thumbnailUrl = '';
   public fullscreen = screenfull;
   public showMarkerIn = false;
@@ -57,7 +60,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   constructor(
     private timer: SimpleTimer,
     private appState: WsAppStateService,
-    private playerService: WsPlayerService
+    private playerService: WsPlayerService,
+    public dialog: MatDialog
   ) {
     this.subscribers = [];
 
@@ -85,7 +89,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.showMarkerOut = false;
     this.markers = [0, 0];
 
-    this.isMasterclip = false;
+    this.canCreateSubclip = false;
 
     this.sliderHead = 0;
     this.sliderStart = 0;
@@ -159,6 +163,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
   }
+
+
   /* *** Private Methods *** */
   private getThumbnail() {
     // tslint:disable-next-line:max-line-length
@@ -179,7 +185,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
       switch (this.selectedClip.type) {
         case 'clip':
-          this.isMasterclip = false;
+          this.canCreateSubclip = true;
           this.selectedClip.mog = this.masterClip;
           this.tvFormat = this.selectedClip.mog.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
@@ -196,7 +202,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           mediaUrl = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam);
           break;
         case 'masterClip':
-          this.isMasterclip = true;
+          this.canCreateSubclip = false;
           this.tvFormat = this.selectedClip.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
@@ -519,19 +525,31 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public saveMarkers() {
     const markerIn: number = this.markerIn * 10000000;
     const markerOut: number = this.markerOut * 10000000;
+    this.selectedClip.in = markerIn;
+    this.selectedClip.out = markerOut;
+    console.log(this.selectedClip);
     this.playerService.setMarker(this.selectedClip.id, markerIn, markerOut, this.markerClipDescriptors[0], this.markerClipDescriptors[1]);
   }
 
-  // Subclip creation
   public createSubClip() {
-    // switch (this.container._subtype) {
-    //   case 15: // Clip Bin
-    //     this.videoService.createSubClip(this.selectedClip, this.container);
-    //     break;
-    // }
+    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
+      this.openErrorDialog('Markers not set');
+      return;
+    }
+
+
+    switch (this.selectedClip.type) {
+      case 'masterClip':
+        this.playerService.createMasterclip(this.selectedClip);
+        break;
+      default:
+        this.playerService.createSubclip(this.selectedClip);
+        break;
+    }
+
+    // this.playerService.createSubclip(this.selectedClip);
   }
 
-  // Jump to markers and start/end
   public previousEvent() {
     if (!this.player.src) {
       return;
@@ -570,5 +588,14 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.player.currentTime = pos + this.clipStart;
     this.tick();
     this.player.focus();
+  }
+
+   /* *** Dialogs *** */
+
+   private openErrorDialog(msg: string) {
+    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
+      width: '300px',
+      data: msg
+    });
   }
 }

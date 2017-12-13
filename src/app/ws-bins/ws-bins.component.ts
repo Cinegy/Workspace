@@ -1,3 +1,4 @@
+import { WsPlayerService } from './../ws-player/ws-player.service';
 import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
 import { MatDialog, PageEvent, MatSnackBar } from '@angular/material';
@@ -41,6 +42,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     public management: WsAppManagementService,
     private binService: WsBinsService,
     private clipboard: WsClipboardService,
+    private playerService: WsPlayerService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar) {
     this.subscribers = [];
@@ -118,6 +120,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     subscriber = this.binService.cutNodeSubject
       .subscribe(response => this.cutNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.playerService.createSubclipSubject
+      .subscribe(response => this.createSubclipResponse(response));
     this.subscribers.push(subscriber);
 
   }
@@ -340,6 +346,49 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     // this.internalClipboardItem = null;
   }
 
+  private createSubclipResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    for (let i = 0; i < this.tabs.length; i++) {
+      const tab = this.tabs[i];
+
+      if (response.parent === tab.parent.id) {
+        // tab.children.push(response);
+        tab.childCount++;
+        this.selectedIndex = i;
+        this.selectTab();
+        this.amIVisible(tab, response);
+        break;
+      }
+    }
+
+    this.snackBar.open(`Clip ${response.name} created`, null, { duration: 1000 });
+  }
+
+  private amIVisible(tab, response) {
+    let skip: boolean;
+
+    if (tab.pageEvent == null) {
+      if (this.pageSize >= tab.childCount) {
+        skip = false;
+      } else {
+        skip = true;
+      }
+    } else {
+      if (tab.childCount <= ((tab.pageEvent.pageIndex + 1) * tab.pageEvent.pageSize)) {
+        skip = false;
+      } else {
+        skip = true;
+      }
+    }
+
+    if (!skip) {
+      tab.children.push(response);
+    }
+  }
+
   /* *** Dialogs *** */
   private openDeleteNodeDialog(selectedNode: any) {
     const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
@@ -455,8 +504,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             const tab = this.tabs[this.selectedIndex];
             if (tab.pageEvent) {
               const skip = tab.pageEvent.pageIndex * tab.pageEvent.pageSize;
-                // tslint:disable-next-line:max-line-length
-                this.binService.getChildren(selectedNode.id, selectedNode.type, tab.pageEvent.pageSize, skip);
+              // tslint:disable-next-line:max-line-length
+              this.binService.getChildren(selectedNode.id, selectedNode.type, tab.pageEvent.pageSize, skip);
             } else {
               this.binService.getChildren(selectedNode.id, selectedNode.type);
             }
