@@ -10,8 +10,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WsExplorerService extends WsBaseMamService {
   private binParams: NewBinParams;
-  private cutedNode: any;
-  private cutedNodeId: string;
+  private cuttedNode: any;
+  // private cutedNodeId: string;
 
   public getRootSubject: Subject<any> = new Subject<any>();
   public getChildrenSubject: Subject<any> = new Subject<any>();
@@ -25,8 +25,8 @@ export class WsExplorerService extends WsBaseMamService {
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public copyNodeSubject: Subject<any> = new Subject<any>();
   public cutNodeSubject: Subject<any> = new Subject<any>();
-  private copyNodeInternalSubject: Subject<any> = new Subject<any>();
-  private deleteNodeInternalSubject: Subject<any> = new Subject<any>();
+  // private copyNodeInternalSubject: Subject<any> = new Subject<any>();
+  // private cutNodeInternalSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -37,10 +37,10 @@ export class WsExplorerService extends WsBaseMamService {
       .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
-    this.copyNodeInternalSubject
-      .subscribe(response => this.copyNodeResponse(response));
-    this.deleteNodeInternalSubject
-      .subscribe(response => this.deletNodeResponse(response));
+    // this.copyNodeInternalSubject
+    // //   .subscribe(response => this.copyNodeResponse(response));
+    // this.cutNodeInternalSubject
+    //   .subscribe(response => this.cutNodeResponse(response));
   }
 
   public getRoot() {
@@ -94,17 +94,18 @@ export class WsExplorerService extends WsBaseMamService {
 
   public copyNode(id: string, parentId: string) {
     this.post(
-      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&linksScope=metadata`,
+      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&dataScope=fullInfo&linksScope=metadata`,
       null,
       this.copyNodeSubject);
   }
 
-  public moveNode(id: string, parentId: string) {
-    // this.cutedNodeId = id;
-    // this.post(
-    //   `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&linksScope=metadata`,
-    //   null,
-    //   this.copyNodeInternalSubject);
+  public moveNode(cuttedNodeId: any, parentNodeId: any) {
+    // this.cuttedNode = cuttedNode;
+    this.post(
+      // tslint:disable-next-line:max-line-length
+      `${this.appState.selectedMam.mamEndpoint}node/move?id=${cuttedNodeId}&parentId=${parentNodeId}&dataScope=fullInfo&linksScope=metadata`,
+      null,
+      this.cutNodeSubject);
   }
 
   private createBinResponse(response: any, subject: Subject<any>) {
@@ -125,24 +126,24 @@ export class WsExplorerService extends WsBaseMamService {
       null);
   }
 
-  private copyNodeResponse(response) {
-    if (response instanceof WsMamError) {
-      console.log(`Error: ${response.msg}`);
-      this.cutNodeSubject.next(response);
-      return;
-    }
+  // private copyNodeResponse(response) {
+  //   if (response instanceof WsMamError) {
+  //     console.log(`Error: ${response.msg}`);
+  //     this.cutNodeSubject.next(response);
+  //     return;
+  //   }
 
-    this.cutedNode = response;
-    this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.cutedNodeId}`, this.deleteNodeInternalSubject);
-  }
+  //   this.cutedNode = response;
+  //   this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.cutedNodeId}`, this.deleteNodeInternalSubject);
+  // }
 
-  private deletNodeResponse(response) {
-    if (response instanceof WsMamError) {
-      console.log(`Error: ${response.msg}`);
-      this.cutNodeSubject.next(response);
-      return;
-    }
+  // private cutNodeResponse(response) {
+  //   if (response instanceof WsMamError) {
+  //     console.log(`Error: ${response.msg}`);
+  //     this.cutNodeSubject.next(response);
+  //     return;
+  //   }
 
-    this.cutNodeSubject.next(this.cutedNode);
-  }
+  //   this.cutNodeSubject.next(this.cutedNode);
+  // }
 }

@@ -301,13 +301,24 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   }
 
   private cutNodeResponse(response: any) {
-    this.clipboard.done();
-
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
+      this.clipboard.done();
       return;
     }
 
+    const cuttedClip = this.clipboard.items[0];
+
+    if (cuttedClip.parent === response.parent) {
+      const index = this.childNodes.indexOf(cuttedClip);
+
+      if (index > -1) {
+        this.childNodes.splice(index, 1);
+      }
+    }
+
+    this.clipboard.done();
+    
     if (this.childOpenedMenu) {
       this.selectNode(this.menuNode);
     } else {
