@@ -10,8 +10,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WsExplorerService extends WsBaseMamService {
   private binParams: NewBinParams;
-  private cuttedNode: any;
-  // private cutedNodeId: string;
 
   public getRootSubject: Subject<any> = new Subject<any>();
   public getChildrenSubject: Subject<any> = new Subject<any>();
@@ -25,8 +23,6 @@ export class WsExplorerService extends WsBaseMamService {
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public copyNodeSubject: Subject<any> = new Subject<any>();
   public cutNodeSubject: Subject<any> = new Subject<any>();
-  // private copyNodeInternalSubject: Subject<any> = new Subject<any>();
-  // private cutNodeInternalSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -37,10 +33,6 @@ export class WsExplorerService extends WsBaseMamService {
       .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
-    // this.copyNodeInternalSubject
-    // //   .subscribe(response => this.copyNodeResponse(response));
-    // this.cutNodeInternalSubject
-    //   .subscribe(response => this.cutNodeResponse(response));
   }
 
   public getRoot() {
@@ -99,8 +91,7 @@ export class WsExplorerService extends WsBaseMamService {
       this.copyNodeSubject);
   }
 
-  public moveNode(cuttedNodeId: any, parentNodeId: any) {
-    // this.cuttedNode = cuttedNode;
+  public moveNode(cuttedNodeId: string, parentNodeId: string) {
     this.post(
       // tslint:disable-next-line:max-line-length
       `${this.appState.selectedMam.mamEndpoint}node/move?id=${cuttedNodeId}&parentId=${parentNodeId}&dataScope=fullInfo&linksScope=metadata`,
@@ -126,24 +117,4 @@ export class WsExplorerService extends WsBaseMamService {
       null);
   }
 
-  // private copyNodeResponse(response) {
-  //   if (response instanceof WsMamError) {
-  //     console.log(`Error: ${response.msg}`);
-  //     this.cutNodeSubject.next(response);
-  //     return;
-  //   }
-
-  //   this.cutedNode = response;
-  //   this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.cutedNodeId}`, this.deleteNodeInternalSubject);
-  // }
-
-  // private cutNodeResponse(response) {
-  //   if (response instanceof WsMamError) {
-  //     console.log(`Error: ${response.msg}`);
-  //     this.cutNodeSubject.next(response);
-  //     return;
-  //   }
-
-  //   this.cutNodeSubject.next(this.cutedNode);
-  // }
 }

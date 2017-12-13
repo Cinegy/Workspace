@@ -299,51 +299,36 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     const tab = this.tabs[this.selectedIndex];
     tab.childCount++;
-
-    let skip: boolean;
-
-    if (tab.pageEvent == null) {
-      if (this.pageSize >= tab.childCount) {
-        skip = false;
-      } else {
-        skip = true;
-      }
-    } else {
-      if (tab.childCount <= ((tab.pageEvent.pageIndex + 1) * tab.pageEvent.pageSize)) {
-        skip = false;
-      } else {
-        skip = true;
-      }
-    }
-
-    if (!skip) {
-      tab.children.push(response);
-    }
-
+    this.amIVisible(tab, response);
     this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
   }
 
   private cutNodeResponse(response) {
-    this.clipboard.done();
-
     if (response instanceof WsMamError) {
+      this.clipboard.done();
       return;
     }
 
-    // for (let i = 0; i < this.tabs.length; i++) {
-    //   if (this.tabs[i].parent.id === this.internalClipboardItem.bin.parent.id) {
-    //     const index = this.tabs[i].children.indexOf(this.internalClipboardItem.item);
+    const tab = this.tabs[this.selectedIndex];
+    tab.childCount++;
+    this.amIVisible(tab, response);
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
 
-    //     if (index > -1) {
-    //       this.tabs[i].children.splice(index, 1);
-    //       this.tabs[i].childCount--;
-    //     }
+    const cuttedClip = this.clipboard.items[0];
 
-    //     this.internalClipboardItem = null;
-    //     return;
-    //   }
-    // }
-    // this.internalClipboardItem = null;
+    for (let i = 0; i < this.tabs.length; i++) {
+      if (this.tabs[i].parent.id === cuttedClip.parent) {
+        const index = this.tabs[i].children.indexOf(cuttedClip);
+
+        if (index > -1) {
+          this.tabs[i].children.splice(index, 1);
+          this.tabs[i].childCount--;
+        }
+        break;
+      }
+    }
+
+    this.clipboard.done();
   }
 
   private createSubclipResponse(response) {
@@ -355,7 +340,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       const tab = this.tabs[i];
 
       if (response.parent === tab.parent.id) {
-        // tab.children.push(response);
         tab.childCount++;
         this.selectedIndex = i;
         this.selectTab();

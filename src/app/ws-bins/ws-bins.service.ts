@@ -17,7 +17,7 @@ export class WsBinsService extends WsBaseMamService {
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public linkMasterclipSubject: Subject<any> = new Subject<any>();
   public copyNodeSubject: Subject<any> = new Subject<any>();
-  public internalCutClipSubject: Subject<any> = new Subject<any>();
+  // public internalCutClipSubject: Subject<any> = new Subject<any>();
   public cutNodeSubject: Subject<any> = new Subject<any>();
 
   constructor(
@@ -114,10 +114,16 @@ export class WsBinsService extends WsBaseMamService {
     this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}&dataScope=fullInfo&linksScope=metadata`, null, this.copyNodeSubject);
   }
 
-  public moveNode(clipboardItem: any, clipBinId: string) {
+  public moveNode(cuttedNodeId: string, parentNodeId: string) {
     // this.clipboardItem = clipboardItem;
     // tslint:disable-next-line:max-line-length
     // this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipboardItem.id}&parentId=${clipBinId}`, null, this.internalCutClipSubject);
+
+    this.post(
+      // tslint:disable-next-line:max-line-length
+      `${this.appState.selectedMam.mamEndpoint}node/move?id=${cuttedNodeId}&parentId=${parentNodeId}&dataScope=fullInfo&linksScope=metadata`,
+      null,
+      this.cutNodeSubject);
   }
 
   // private internalCutClipResponse(response) {
