@@ -111,7 +111,7 @@ export class WsBinsService extends WsBaseMamService {
 
   public copyNode(clipId: string, clipBinId: string) {
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}&dataScope=fullInfo`, null, this.copyNodeSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clipId}&parentId=${clipBinId}&dataScope=fullInfo&linksScope=metadata`, null, this.copyNodeSubject);
   }
 
   public moveNode(clipboardItem: any, clipBinId: string) {

@@ -12,7 +12,7 @@ import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.servi
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsExplorerService } from './ws-explorer.service';
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { DragulaService } from 'ng2-dragula';
 
 @Component({
@@ -42,6 +42,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     private breadcrumbService: WsMainBreadcrumbsService,
     private clipboard: WsClipboardService,
     // private dragulaService: DragulaService,
+    public snackBar: MatSnackBar,
     public dialog: MatDialog) {
 
     this.contextMenuItems = [];
@@ -243,6 +244,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.childNodes.push(response);
     }
 
+    this.snackBar.open(`${response.name} created`, null, { duration: 1000 });
+
   }
 
   private deleteNodeResponse(response: any) {
@@ -254,6 +257,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     const index = this.childNodes.indexOf(this.menuNode);
 
     if (index > -1) {
+      this.snackBar.open(`${this.menuNode.name} deleted`, null, { duration: 1000 });
       this.childNodes.splice(index, 1);
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.deleteNode(this.menuNode);
@@ -271,6 +275,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (index > -1) {
       this.childNodes[index] = response;
+      this.snackBar.open(`${response.name} renamed`, null, { duration: 1000 });
 
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.updateNode(response);
@@ -291,6 +296,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     } else {
       this.childNodes.push(response);
     }
+
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
   }
 
   private cutNodeResponse(response: any) {
@@ -306,6 +313,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     } else {
       this.childNodes.push(response);
     }
+
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
   }
 
   /* *** Dragula *** */
