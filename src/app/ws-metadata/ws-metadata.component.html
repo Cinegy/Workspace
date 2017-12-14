@@ -109,9 +109,9 @@
                 <button mat-icon-button *ngIf="item.isReadOnly" matTooltip="{{item.name}} is readonly">
                   <i class="fa fa-lock"></i>
                 </button>
-                <button mat-icon-button *ngIf="!item.isReadOnly" (click)="undoMetadata(item)" matTooltip="Undo last save operation">
+                <!-- <button mat-icon-button *ngIf="!item.isReadOnly" (click)="undoMetadata(item)" matTooltip="Undo last save operation">
                   <i class="fa fa-undo"></i>
-                </button>
+                </button> -->
               </div>
             </mat-list-item>
           </mat-list>

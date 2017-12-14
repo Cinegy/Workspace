@@ -35,7 +35,6 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   public selectedNode: any;
   public selectedMetadata: any;
   public selectedMetadataOpState = WsOperationState.None;
-  // public selectedMetadataValueChanged = false;
   public loading = false;
 
   constructor(
@@ -106,6 +105,8 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       this.metadataService.setMetadata(this.selectedNode.id, metadata);
     }
   }
+
+  /* *** Service Respomses *** */
 
   private selectedNodeResponse(response: any) {
     this.loading = false;
@@ -195,6 +196,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.snackBar.open('Undo successfull', null, { duration: 1000 });
   }
 
+  /* *** Private *** */
   private sortDescriptors(descriptors, metadata) {
     const tmpGroups = {};
     let durationDescriptorCreated = false;
@@ -273,6 +275,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.descriptors = [];
   }
 
+  /* *** Events *** */
   public inputFocused(item) {
     console.log(`Metadata focused: ${item.name}`);
   }
@@ -288,15 +291,17 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
     switch (event.key) {
       case 'Enter':
-        if (item.value.value === item.backup.value) {
-          this.snackBar.open('Nothing to save - there are no changes', null, { duration: 2000 });
-          return;
+        if (item.value.value != null)  {
+          this.saveMetadata(item, false);
+          item.backup =  _.cloneDeep(item.value);
         }
-        this.saveMetadata(item, false);
         break;
       case 'Escape':
-        item.value.name = item.backup.name;
-        item.value.value = item.backup.value;
+        if (item.backup) {
+          item.value.value = item.backup.value;
+        } else {
+          item.value.value = null;
+        }
         break;
       default:
         break;
@@ -312,8 +317,6 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private openEditTextDialog(item) {
-    const org = _.cloneDeep(item);
-
     const dialogRef = this.dialog.open(WsMetadataTextEditorComponent, {
       width: '600px',
       height: '380px',

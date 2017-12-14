@@ -501,13 +501,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (selectedNode.type in this.notCutable) {
-      menuItem = {
-        label: 'Cut',
-        icon: 'fa-scissors',
-        disabled: true
-      };
-    } else {
+    if (isChild && !(selectedNode.type in this.notCutable)) {
       menuItem = {
         label: 'Cut',
         icon: 'fa-scissors',
@@ -517,8 +511,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           this.clipboard.add(selectedNode);
         }
       };
+      this.contextMenuItems.push(menuItem);
     }
-    this.contextMenuItems.push(menuItem);
 
     if (selectedNode.type in this.copyable) {
       menuItem = {

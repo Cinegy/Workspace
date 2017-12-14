@@ -408,11 +408,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.playClip(selectedNode);
           }
         };
-        this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push(menuItem); 
         this.contextMenuItems.push({ separator: true });
       }
 
-      if (selectedNode.type in this.cutable) {
+      if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNode.type in this.cutable) {
         menuItem = {
           label: 'Cut',
           icon: 'fa-scissors',
@@ -440,7 +440,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         this.contextMenuItems.push(menuItem);
       }
 
-      if (selectedNodeType.canDelete) {
+      if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNodeType.canDelete) {
         menuItem = {
           label: 'Delete',
           icon: 'fa-trash-o',
