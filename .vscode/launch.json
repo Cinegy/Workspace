@@ -1,26 +1,28 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "firefox",
-            "request": "launch",
-            "reAttach": true,
-            "name": "Launch Firefox against localhost",
-            "url": "http://localhost:4200/",
-            "webRoot": "${workspaceRoot}",
-            "log": {
-                "consoleLevel": {
-                    "PathConversion": "Debug",
-                    "default": "Debug"
-                }
-            }
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:4200/",
-            "webRoot": "${workspaceRoot}"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Edge",
+      "type": "edge",
+      "request": "launch",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true,
+      "diagnosticLogging": false
+    }
+  ]
 }

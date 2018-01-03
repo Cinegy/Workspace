@@ -36,7 +36,9 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: '**', component: WsLoginComponent
+    path: '**',
+    redirectTo: '/login',
+    pathMatch: 'full'
   }
 ];
 
@@ -46,7 +48,8 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(
-      appRoutes
+      appRoutes,
+      {useHash: true}
     ),
     BrowserModule,
     BrowserAnimationsModule,
