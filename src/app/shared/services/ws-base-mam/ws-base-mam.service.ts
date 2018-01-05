@@ -14,6 +14,13 @@ export class WsBaseMamService {
 
   protected get(url: string, subject: Subject<any>, extraSubjectData?: any) {
     url = this.setProtocol(url);
+    const now = Date.now();
+
+    if (url.indexOf('?') === -1) {
+      url += `?timestamp=${now}`;
+    } else {
+      url += `&timestamp=${now}`;
+    }
 
     this.httpClient
       .get(url)
