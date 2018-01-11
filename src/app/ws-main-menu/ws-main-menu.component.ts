@@ -40,7 +40,7 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     private timer: SimpleTimer,
     private matIconRegistry: MatIconRegistry) {
     this.angularVersion = `Angular v${VERSION.full}`;
-    this. matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
+    this.matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
     this.timerIconName = this.timerIconNames[0];
     this.subscribers = [];
   }

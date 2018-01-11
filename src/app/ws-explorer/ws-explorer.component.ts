@@ -203,7 +203,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.breadcrumbService.add(this.selectedNode);
     console.log(`Get Root: ${this.selectedNode.name}`);
     this.loading = true;
-    this.explorerService.getChildren(this.selectedNode.list.url);
+    this.explorerService.getChildren(this.selectedNode.id);
   }
 
   private getNodeResponse(response: any) {
@@ -217,7 +217,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.selectedNode = response;
     console.log(`Get Node: ${this.selectedNode.name}`);
     this.loading = true;
-    this.explorerService.getChildren(this.selectedNode.list.url);
+    this.explorerService.getChildren(this.selectedNode.id);
   }
 
   private getChildrenResponse(response: any) {
@@ -318,7 +318,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     this.clipboard.done();
-    
+
     if (this.childOpenedMenu) {
       this.selectNode(this.menuNode);
     } else {

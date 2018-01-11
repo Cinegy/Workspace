@@ -1,5 +1,5 @@
 {
-    "mams": 
+    "mams":
     [
         {
             "name": "MAM 11.1",
@@ -16,9 +16,18 @@
             "dbName": "mamSimon",
             "dbServer": ".\\sqlexpress",
             "thumbnailServer": "http://localhost:8000/image.svc/"
-        }
+        },
+        {
+          "name": "MAM 10",
+          "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
+          "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
+          "dbName": "mam_10",
+          "dbServer": ".\\sqlexpress",
+          "thumbnailServer": "http://localhost:8000/image.svc/"
+      }
+
     ],
-    "domains": 
+    "domains":
     [
         "Moon",
         "Cloud",
