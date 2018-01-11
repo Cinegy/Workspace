@@ -11,6 +11,8 @@ export class WsAppManagementService extends WsBaseMamService {
   public getNodeTypesSubject: Subject<any> = new Subject<any>();
   public getIconsSubject: Subject<any> = new Subject<any>();
   public getDescriptorsSubject: Subject<any> = new Subject<any>();
+  public mamVersionSubject: Subject<any> = new Subject<any>();
+  public heartbeatSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -21,6 +23,9 @@ export class WsAppManagementService extends WsBaseMamService {
   public initialize() {
     this.appState.selectNodeSubject
       .subscribe(response => this.selectedNodeResponse(response));
+
+    this.mamVersionSubject
+      .subscribe(response => this.getMamVerionResponse(response));
 
     this.getTvFormatsSubject
       .subscribe(response => this.getTvFormatsResponse(response));
@@ -34,11 +39,16 @@ export class WsAppManagementService extends WsBaseMamService {
     this.getDescriptorsSubject
       .subscribe(response => this.getDescriptorsResponse(response));
 
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/version`, this.mamVersionSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
     // tslint:disable-next-line:max-line-length
     this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clipBin&scope.type=documentBin`, this.getDescriptorsSubject);
+  }
+
+  public heartbeat() {
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.heartbeatSubject);
   }
 
   private selectedNodeResponse(response: any) {
@@ -47,6 +57,14 @@ export class WsAppManagementService extends WsBaseMamService {
     }
 
     const descriptors = this.appState.descriptors[response.type];
+  }
+
+  private getMamVerionResponse(response: any) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+     this.appState.selectedMam.mamVersion = response;
   }
 
   private getTvFormatsResponse(response: any) {

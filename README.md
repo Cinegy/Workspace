@@ -1,5 +1,9 @@
 # CinegyWorkspace
 
+```
+TODO: Write some stuff that is relevant to Workspace here
+```
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.0-rc.5.
 
 ## Development server

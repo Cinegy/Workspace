@@ -1,3 +1,4 @@
+import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
 import { WsCreateBinDialogComponent } from './../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
 import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
@@ -11,7 +12,8 @@ import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.servi
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsExplorerService } from './ws-explorer.service';
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-ws-explorer',
@@ -20,11 +22,13 @@ import { MdDialog } from '@angular/material';
 })
 export class WsExplorerComponent implements OnInit, OnDestroy {
   private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
+  private notCutable = {};
+  private copyable = {};
+  private pasteable = {};
   public subscribers: any[];
   public loading = true;
   public selectedNode: any;
   public childNodes: any[];
-  public childCount = 0;
   public contextMenuItems: MenuItem[];
   public childOpenedMenu: boolean;
   public displayNewDialog = false;
@@ -36,10 +40,61 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     public appState: WsAppStateService,
     private explorerService: WsExplorerService,
     private breadcrumbService: WsMainBreadcrumbsService,
-    public dialog: MdDialog) {
+    private clipboard: WsClipboardService,
+    // private dragulaService: DragulaService,
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog) {
 
     this.contextMenuItems = [];
     this.subscribers = [];
+
+    this.notCutable['usersRootFolder'] = true;
+    this.notCutable['usersFolder'] = true;
+    this.notCutable['jobDropfolderContainer'] = true;
+    this.notCutable['jobServersInfoFolders'] = true;
+    this.notCutable['newsFolder'] = true;
+    this.notCutable['lib'] = true;
+    this.notCutable['usersRootFolder'] = true;
+    this.notCutable['usersFolder'] = true;
+    this.notCutable['publicSearchQueryFolder'] = true;
+
+    this.copyable['clipBin'] = true;
+
+    this.pasteable['libraryFolder'] = true;
+    this.pasteable['folder'] = true;
+    this.pasteable['portfolio'] = true;
+    this.pasteable['production'] = true;
+    this.pasteable['programme'] = true;
+    this.pasteable['programmeVersion'] = true;
+
+    // dragulaService.setOptions('explorer-bag', {
+    //   revertOnSpill: true
+    // });
+
+    // let subscriber = dragulaService.drag.subscribe((value) => {
+    //   this.onDrag(value);
+    // });
+    // this.subscribers.push(subscriber);
+
+    // subscriber = dragulaService.drop.subscribe((value) => {
+    //   this.onDrop(value);
+    // });
+    // this.subscribers.push(subscriber);
+
+    // subscriber = dragulaService.dropModel.subscribe((value) => {
+    //   this.onDropModel(value);
+    // });
+    // this.subscribers.push(subscriber);
+
+    // subscriber = dragulaService.over.subscribe((value) => {
+    //   this.onOver(value);
+    // });
+    // this.subscribers.push(subscriber);
+
+    // subscriber = dragulaService.out.subscribe((value) => {
+    //   this.onOut(value);
+    // });
+    // this.subscribers.push(subscriber);
 
     let subscriber = this.explorerService.getRootSubject
       .subscribe(response => this.getRootResponse(response));
@@ -73,6 +128,14 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       .subscribe(response => this.renameNodeResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.explorerService.copyNodeSubject
+      .subscribe(response => this.copyNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.explorerService.cutNodeSubject
+      .subscribe(response => this.cutNodeResponse(response));
+    this.subscribers.push(subscriber);
+
     subscriber = this.breadcrumbService.breadcrumbClickedSubject
       .subscribe(node => this.breadcrumbClicked(node));
     this.subscribers.push(subscriber);
@@ -94,6 +157,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public selectNode(node: any) {
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
 
+    console.log(`Select Node: ${node.type}, ${typeGroup}`);
+
     if (this.mainNodeTypes.includes(typeGroup)) {
       this.loading = true;
       this.selectedNode = node;
@@ -103,6 +168,16 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     this.appState.selectNode(node);
+  }
+
+  public selectParent() {
+    this.appState.selectNode(this.selectedNode);
+  }
+
+  public refreshParent() {
+    this.loading = true;
+    this.childNodes = [];
+    this.explorerService.getNode(this.selectedNode.id);
   }
 
   public openNode(node: any) {
@@ -120,7 +195,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -129,7 +203,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.breadcrumbService.add(this.selectedNode);
     console.log(`Get Root: ${this.selectedNode.name}`);
     this.loading = true;
-    this.explorerService.getChildren(this.selectedNode.list.url);
+    this.explorerService.getChildren(this.selectedNode.id);
   }
 
   private getNodeResponse(response: any) {
@@ -137,14 +211,13 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
     this.selectedNode = response;
     console.log(`Get Node: ${this.selectedNode.name}`);
     this.loading = true;
-    this.explorerService.getChildren(this.selectedNode.list.url);
+    this.explorerService.getChildren(this.selectedNode.id);
   }
 
   private getChildrenResponse(response: any) {
@@ -152,19 +225,16 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
     this.childNodes = response.items;
-    this.childCount = response.totalCount;
     console.log(`Get Children: ${this.childNodes.length}`);
   }
 
   private createNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -174,18 +244,20 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.childNodes.push(response);
     }
 
+    this.snackBar.open(`${response.name} created`, null, { duration: 1000 });
+
   }
 
   private deleteNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
     const index = this.childNodes.indexOf(this.menuNode);
 
     if (index > -1) {
+      this.snackBar.open(`${this.menuNode.name} deleted`, null, { duration: 1000 });
       this.childNodes.splice(index, 1);
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.deleteNode(this.menuNode);
@@ -196,7 +268,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private renameNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       console.log(`Error: ${response.msg}`);
-      this.openErrorDialog(response.msg);
       return;
     }
 
@@ -204,11 +275,73 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     if (index > -1) {
       this.childNodes[index] = response;
+      this.snackBar.open(`${response.name} renamed`, null, { duration: 1000 });
 
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.updateNode(response);
       }
     }
+  }
+
+  private copyNodeResponse(response: any) {
+    this.clipboard.done();
+
+    if (response instanceof WsMamError) {
+      console.log(`Error: ${response.msg}`);
+      return;
+    }
+
+    if (this.childOpenedMenu) {
+      this.selectNode(this.menuNode);
+    } else {
+      this.childNodes.push(response);
+    }
+
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+  }
+
+  private cutNodeResponse(response: any) {
+    if (response instanceof WsMamError) {
+      console.log(`Error: ${response.msg}`);
+      this.clipboard.done();
+      return;
+    }
+
+    const cuttedClip = this.clipboard.items[0];
+
+    if (cuttedClip.parent === response.parent) {
+      const index = this.childNodes.indexOf(cuttedClip);
+
+      if (index > -1) {
+        this.childNodes.splice(index, 1);
+      }
+    }
+
+    this.clipboard.done();
+
+    if (this.childOpenedMenu) {
+      this.selectNode(this.menuNode);
+    } else {
+      this.childNodes.push(response);
+    }
+
+    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+  }
+
+  /* *** Dragula *** */
+  private onDrag(args) {
+  }
+
+  private onDrop(args) {
+  }
+
+  private onDropModel(args) {
+  }
+
+  private onOver(args) {
+  }
+
+  private onOut(args) {
   }
 
   /* *** Dialogs *** */
@@ -303,16 +436,18 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   }
 
   /* *** Conetxt Menu *** */
-  
+
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
     let menuItem: any;
     let menuChildItems: any;
     let menuChildItem: any;
 
+    this.menuNode = selectedNode;
     this.childOpenedMenu = isChild;
     this.contextMenuItems = [];
     menuChildItems = [];
     const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
+    const typeGroup = this.appState.nodeTypes[selectedNode.type].typeGroup;
 
     if (!this.mainNodeTypes.includes(selectedNodeType.typeGroup)) {
       menuItem = {
@@ -324,6 +459,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       };
 
       this.contextMenuItems.push(menuItem);
+      this.contextMenuItems.push({ separator: true });
     }
 
     if (this.mainNodeTypes.includes(selectedNodeType.typeGroup) && selectedNodeType.children) {
@@ -332,7 +468,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           menuChildItem = {
             label: this.appState.nodeTypes[item].name,
             command: (event) => {
-              this.menuNode = selectedNode;
               this.menuNodeType = this.appState.nodeTypes[item];
 
               switch (this.menuNodeType.typeGroup) {
@@ -362,7 +497,49 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
           items: menuChildItems
         };
         this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push({ separator: true });
       }
+    }
+
+    if (isChild && !(selectedNode.type in this.notCutable)) {
+      menuItem = {
+        label: 'Cut',
+        icon: 'fa-scissors',
+        command: (event) => {
+          this.clipboard.cancel();
+          this.clipboard.action = ClipboardAction.Cut;
+          this.clipboard.add(selectedNode);
+        }
+      };
+      this.contextMenuItems.push(menuItem);
+    }
+
+    if (selectedNode.type in this.copyable) {
+      menuItem = {
+        label: 'Copy',
+        icon: 'fa-files-o',
+        command: (event) => {
+          this.clipboard.cancel();
+          this.clipboard.action = ClipboardAction.Copy;
+          this.clipboard.add(selectedNode);
+        }
+      };
+      this.contextMenuItems.push(menuItem);
+    }
+
+    if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable) {
+      menuItem = {
+        label: 'Paste',
+        icon: 'fa-clipboard',
+        command: (event) => {
+          if (this.clipboard.action === ClipboardAction.Copy) {
+            this.explorerService.copyNode(this.clipboard.items[0].id, selectedNode.id);
+          } else if (this.clipboard.action === ClipboardAction.Cut) {
+            this.explorerService.moveNode(this.clipboard.items[0].id, selectedNode.id);
+          }
+        }
+      };
+      this.contextMenuItems.push(menuItem);
     }
 
     if (this.childOpenedMenu && selectedNodeType.canDelete) {
@@ -370,11 +547,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         label: 'Rename',
         icon: 'fa-pencil',
         command: (event) => {
-          this.menuNode = selectedNode;
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.renameNodeDialog();
         }
       };
+      this.contextMenuItems.push({ separator: true });
       this.contextMenuItems.push(menuItem);
     }
 
@@ -383,11 +560,22 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         label: 'Delete',
         icon: 'fa-minus',
         command: (event) => {
-          this.menuNode = selectedNode;
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.openDeleteNodeDialog();
         }
       };
+      this.contextMenuItems.push(menuItem);
+    }
+
+    if (!this.childOpenedMenu) {
+      menuItem = {
+        label: 'Refresh',
+        icon: 'fa-refresh',
+        command: (event) => {
+          this.refreshParent();
+        }
+      };
+      this.contextMenuItems.push({ separator: true });
       this.contextMenuItems.push(menuItem);
     }
   }

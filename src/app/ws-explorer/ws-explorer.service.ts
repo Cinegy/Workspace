@@ -21,6 +21,8 @@ export class WsExplorerService extends WsBaseMamService {
   public createClipBinSubject: Subject<any> = new Subject<any>();
   public renameNodeSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
+  public copyNodeSubject: Subject<any> = new Subject<any>();
+  public cutNodeSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -28,7 +30,7 @@ export class WsExplorerService extends WsBaseMamService {
     super(httpClient, appState);
 
     this.createDocumentBinInternalSubject
-    .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
+      .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
   }
@@ -38,9 +40,9 @@ export class WsExplorerService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.getRootSubject);
   }
 
-  public getChildren(url: string) {
+  public getChildren(parentId: string) {
     // tslint:disable-next-line:max-line-length
-    this.get(`${url}&linksScope=self&filter.requestType=notDeleted&linksScope=children&linksScope=metadata`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter.requestType=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
   }
 
   public getNode(id: string) {
@@ -51,7 +53,7 @@ export class WsExplorerService extends WsBaseMamService {
   public createNode(parentId: string, nodeType: string, name: string) {
     this.put(
       `${this.appState.selectedMam.mamEndpoint}folder?parentId=${parentId}&type=${nodeType}`,
-      {Name: name},
+      { Name: name },
       this.createNodeSubject);
   }
 
@@ -59,7 +61,7 @@ export class WsExplorerService extends WsBaseMamService {
     this.binParams = params;
     this.put(
       `${this.appState.selectedMam.mamEndpoint}documentbin?parentId=${parentId}`,
-      {Name: this.binParams.name},
+      { Name: this.binParams.name },
       this.createDocumentBinInternalSubject);
   }
 
@@ -67,19 +69,34 @@ export class WsExplorerService extends WsBaseMamService {
     this.binParams = params;
     this.put(
       `${this.appState.selectedMam.mamEndpoint}clipbin?parentId=${parentId}`,
-      {Name: this.binParams.name},
+      { Name: this.binParams.name },
       this.createClipBinInternalSubject);
   }
 
   public renameNode(id: string, name: string) {
     this.post(
       `${this.appState.selectedMam.mamEndpoint}node?id=${id}`,
-      {Name: name},
+      { Name: name },
       this.renameNodeSubject);
   }
 
   public deleteNode(id: string) {
     this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${id}`, this.deleteNodeSubject);
+  }
+
+  public copyNode(id: string, parentId: string) {
+    this.post(
+      `${this.appState.selectedMam.mamEndpoint}node/copy?id=${id}&parentId=${parentId}&dataScope=fullInfo&linksScope=metadata`,
+      null,
+      this.copyNodeSubject);
+  }
+
+  public moveNode(cuttedNodeId: string, parentNodeId: string) {
+    this.post(
+      // tslint:disable-next-line:max-line-length
+      `${this.appState.selectedMam.mamEndpoint}node/move?id=${cuttedNodeId}&parentId=${parentNodeId}&dataScope=fullInfo&linksScope=metadata`,
+      null,
+      this.cutNodeSubject);
   }
 
   private createBinResponse(response: any, subject: Subject<any>) {
@@ -99,4 +116,5 @@ export class WsExplorerService extends WsBaseMamService {
       }],
       null);
   }
+
 }

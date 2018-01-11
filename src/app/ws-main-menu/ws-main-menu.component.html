@@ -1,25 +1,30 @@
-<md-toolbar color="primary">
-  <span>Cinegy Workspace v{{configService.getVersion()}}</span>
+<mat-toolbar color="primary">
+  <span>Cinegy Workspace</span>&nbsp;
+  <div style="font-size: 8pt;"><li class="fa fa-{{timerIconName}}"></li></div>
   <span class="ws-menu-fill-remaining-space"></span>
   <div layout="row" flex>
     <form>
-      <md-input-container flex class="md-icon-float md-block md-title">
-        <input class="ws-input" mdInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords" [disabled]="!appState.connected">
-      </md-input-container>
-      <button md-icon-button [disabled]="!appState.connected" (click)="search()">
+      <mat-input-container flex class="mat-icon-float mat-block mat-title">
+        <input class="ws-input" matInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords" [disabled]="!appState.connected">
+      </mat-input-container>
+      <button mat-icon-button [disabled]="!appState.connected" (click)="search()">
       <i class="fa fa-search"></i>
     </button>
     </form>
   </div>
-  <button md-button [mdMenuTriggerFor]="menu">
+  <button mat-button [matMenuTriggerFor]="menu">
     <span *ngIf="!appState.connected">Not connected</span>
     <span *ngIf="appState.connected">{{appState.selectedMam.username}}</span>
     &nbsp; <i class="fa fa-user-circle-o"></i> 
   </button>
-  <md-menu #menu="mdMenu">
-    <button md-menu-item [disabled]="!appState.connected" (click)="logout()">
-      <i class="fa fa-sign-out"></i> 	&nbsp;
-      Logout
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()" class="ws-menu-item">
+      <mat-icon fontSet="fa" fontIcon="fa-info"></mat-icon>
+      <span>Info</span>
     </button>
-  </md-menu>
-</md-toolbar>
+    <button mat-menu-item [disabled]="!appState.connected" (click)="logout()" class="ws-menu-item">
+      <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon> 	
+      <span>Logout</span> 
+    </button>
+  </mat-menu>
+</mat-toolbar>

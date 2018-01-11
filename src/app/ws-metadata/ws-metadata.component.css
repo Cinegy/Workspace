@@ -1,5 +1,5 @@
-md-select, md-option {
-    font-size: smaller;
+mat-select, mat-option, mat-checkbox  {
+    font-size: small;
 }
 .ws-metadata-name {
     width: 40%;
@@ -8,6 +8,6 @@ md-select, md-option {
 .ws-metadata-value {
     width: 50%;
 }
-.ws-metadata-save-button {
+.ws-metadata-indicator-button {
     margin-left: 10px;
 }

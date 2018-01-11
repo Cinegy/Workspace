@@ -6,9 +6,8 @@ import { WsExplorerService } from './ws-explorer.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsExplorerComponent } from './ws-explorer.component';
-import { MdCardModule, MdSelectModule } from '@angular/material';
-import { MdButtonModule } from '@angular/material';
-import { MdListModule, MdTooltipModule, MdInputModule, MdDialogModule } from '@angular/material';
+// tslint:disable-next-line:max-line-length
+import { MatButtonModule, MatCardModule, MatSelectModule, MatListModule, MatTooltipModule, MatInputModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 // tslint:disable-next-line:max-line-length
 import {
@@ -17,23 +16,26 @@ import {
 } from 'primeng/primeng';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MdCardModule,
-    MdButtonModule,
-    MdTooltipModule,
-    MdInputModule,
-    MdListModule,
-    MdSelectModule,
-    MdDialogModule,
+    MatCardModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatListModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatSnackBarModule,
     ContextMenuModule,
     FormsModule,
     ReactiveFormsModule,
     WsNodeImageModule,
     WsDialogsModule,
+    DragulaModule
   ],
   declarations: [WsExplorerComponent],
   providers: [WsExplorerService,

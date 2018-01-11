@@ -1,0 +1,16 @@
+<form #editTextForm="ngForm">
+  <h3 mat-dialog-title>Edit {{data.name}}</h3>
+  <div fxLayout="column">
+    <div mat-dialog-content fxLayout class="mat-typography">
+      <mat-form-field fxFlex >
+        <textarea matInput style="height: 200px; resize: none;" [(ngModel)]="data.value.value" [value]="data.value.value" name="itemText"></textarea>
+      </mat-form-field>
+    </div>
+    <div md-dialog-actions fxFlex="20" fxLayout fxLayoutAlign="center">
+      <button mat-button [mat-dialog-close]="data" [disabled]="data.isReadOnly">
+        <i class="fa fa-save"></i> Save</button>
+      <button mat-button [mat-dialog-close]="null">
+        <i class="fa fa-close"></i> Close</button>
+    </div>
+  </div>
+</form>

@@ -8,15 +8,14 @@ import { Injectable } from '@angular/core';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 
 @Injectable()
-export class WsLoginService { //extends WsBaseMamService {
+export class WsLoginService {
   private connectionInfo: WsMamConnection;
   public loginSubject: Subject<any> = new Subject<any>();
+  public logoutSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
-    protected appState: WsAppStateService) {
-    // super(httpClient, appState);
-  }
+    protected appState: WsAppStateService) { }
 
   public login(connectionInfo: WsMamConnection) {
     this.connectionInfo = connectionInfo;
@@ -26,7 +25,7 @@ export class WsLoginService { //extends WsBaseMamService {
     authRequest.database = connectionInfo.dbName;
     authRequest.server = connectionInfo.dbServer;
     authRequest.product = 'CinegyWorkspace';
-    authRequest.productLicense = '{705EADF7-EAAD-4f7c-8141-862C2C511A61}';
+    authRequest.productLicense = '{6eecc5d8-df37-4ead-b79c-25874fd616a2}';
     authRequest.productVersion = '1.0';
 
     const authHeader = btoa(`${this.connectionInfo.domain}/${this.connectionInfo.username}:${this.connectionInfo.password}`);
@@ -48,6 +47,7 @@ export class WsLoginService { //extends WsBaseMamService {
 
   public logout() {
     this.appState.setConnectionState(false, null);
+    this.logoutSubject.next(true);
     console.log(`${this.connectionInfo.username} logged out`);
   }
 
@@ -79,7 +79,6 @@ export class WsLoginService { //extends WsBaseMamService {
     if (subject) {
       subject.next(mamError);
     }
-
   }
 
 }

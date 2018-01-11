@@ -1,4 +1,4 @@
-import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { WsAppStateService } from './../../ws-app-state.service';
 import { Component, OnInit, Inject } from '@angular/core';
 
@@ -11,8 +11,8 @@ export class WsRenameDialogComponent implements OnInit {
 
   constructor(
     public appState: WsAppStateService,
-    @Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<WsRenameDialogComponent>) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<WsRenameDialogComponent>) { }
 
   ngOnInit() {
   }

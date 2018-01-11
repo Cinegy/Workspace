@@ -1,5 +1,12 @@
+mat-card {
+  width: 100%;
+  max-width: 100%;
+}
 video {
-    height: auto;
-    vertical-align: middle;
-    width: 100%;
-  }
+    width: 90%;
+}
+.player-header {
+  text-align: center; 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}

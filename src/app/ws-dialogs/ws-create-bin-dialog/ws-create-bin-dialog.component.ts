@@ -1,5 +1,5 @@
 import { WsMamError } from './../../shared/services/ws-base-mam/ws-mam-error';
-import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { WsAppManagementService } from './../../ws-app-management.service';
 import { WsAppStateService } from './../../ws-app-state.service';
 import { NewBinParams } from './new-bin-params';
@@ -17,8 +17,8 @@ export class WsCreateBinDialogComponent implements OnInit, OnDestroy {
   constructor(
     public appState: WsAppStateService,
     private management: WsAppManagementService,
-    @Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<WsCreateBinDialogComponent>) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<WsCreateBinDialogComponent>) {
     this.subscribers = [];
   }
 

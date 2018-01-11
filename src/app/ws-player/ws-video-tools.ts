@@ -1,15 +1,17 @@
 import { WsMamConnection } from './../shared/services/ws-base-mam/ws-mam-connection';
+
 export class WsVideoTools {
     public getDuration(clip: any): number {
         return (clip.tapeOut - clip.tapeIn) / 10000000;
     }
 
     public getClipStart(clip: any): number {
-        return (clip.mog.offset + clip.tapeIn - clip.mog.tapeIn) / 10000000;
-    }
-
-    public getMasterclipStart(masterClip: any): number {
-        return masterClip.offset / 10000000;
+        switch (clip.type) {
+            case 'clip':
+                return (clip.mog.offset + clip.tapeIn - clip.mog.tapeIn) / 10000000;
+            case 'masterClip':
+                return clip.offset / 10000000;
+        }
     }
 
     public getClipEnd(clip: any): number {
@@ -18,16 +20,32 @@ export class WsVideoTools {
         return (start + duration);
     }
 
-    public getMasterclipEnd(masterClip: any): number {
-        const duration = this.getDuration(masterClip);
-        const start = this.getMasterclipStart(masterClip);
-        return (start + duration);
-    }
-
     public getFrame(tvFormat: any, position: number) {
         const frequency: number = tvFormat.videoFormat.frameRate.fps;
         const frame: number = Math.round(position * frequency);
         return frame;
+    }
+
+    public getTimecodeHead(tapeStart: number, clipStart: number, position: number) {
+        return tapeStart + (position - clipStart);
+    }
+
+    public getTimecodeStart(clip: any) {
+        switch (clip.type) {
+            case 'clip':
+                return (clip.mog.originalTapeIn + clip.tapeIn - clip.mog.tapeIn) / 10000000;
+            case 'masterClip':
+                return clip.originalTapeIn / 10000000;
+        }
+    }
+
+    public getTimecodeEnd(clip: any) {
+        switch (clip.type) {
+            case 'clip':
+            return ((clip.mog.originalTapeIn + clip.tapeIn - clip.mog.tapeIn) / 10000000) + this.getDuration(clip);
+            case 'masterClip':
+                return (clip.originalTapeIn / 10000000) + this.getDuration(clip);
+        }
     }
 
     public getTimecodeString(tvFormat: any, position: number): string {
@@ -84,7 +102,7 @@ export class WsVideoTools {
     public getMediaUrl(clip: any, mam: WsMamConnection) {
         for (const file of clip.fileSet.files) {
             if (file.auxFileType && file.auxFileType === 'AW1') {
-                return `${mam.mediaServer}${encodeURI(file.fileName)}`;
+                return `${file.url}${encodeURI(file.fileName)}`;
             }
         }
 
@@ -92,39 +110,47 @@ export class WsVideoTools {
     }
 
     public getThumbnailUrl(clip: any, mam: WsMamConnection, tvFormat?: any) {
-        let url: string;
+        let url: string = null;
 
         switch (clip.type) {
             case 'image':
-                url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(clip.path + clip.fileName)}&frame=0&width=160`;
+                if (clip.path && clip.fileName) {
+                    url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(clip.path + clip.fileName)}&frame=0&width=160`;
+                }
+
                 return url;
             case 'masterClip':
             case 'clip':
                 let fileName: string;
 
-                for (const file of clip.fileSet.files) {
-                    if (file.fileType.toLowerCase() === 'fT_Video'.toLowerCase()) {
-                        fileName = `${file.filePath}${file.fileName}`;
-                        break;
+                if (clip.fileSet) {
+
+                    for (const file of clip.fileSet.files) {
+                        if (file.fileType.toLowerCase() === 'fT_Video'.toLowerCase()) {
+                            fileName = `${file.filePath}${file.fileName}`;
+                            break;
+                        }
                     }
+
+                    let thumbnail = clip.thumbnail;
+
+                    if (thumbnail < clip.tapeIn) {
+                        thumbnail = clip.tapeIn;
+                    }
+
+                    if (thumbnail > clip.tapeOut) {
+                        thumbnail = clip.tapeOut;
+                    }
+
+                    const pos = (thumbnail - clip.tapeIn + clip.offset) / 10000000;
+                    const frame = this.getFrame(tvFormat, pos);
+
+                    url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(fileName)}&frame=${frame}&width=160`;
                 }
 
-                let thumbnail = clip.thumbnail;
-
-                if (thumbnail < clip.tapeIn) {
-                    thumbnail = clip.tapeIn;
-                }
-
-                if (thumbnail > clip.tapeOut) {
-                    thumbnail = clip.tapeOut;
-                }
-
-                const pos = (thumbnail - clip.tapeIn + clip.offset) / 10000000;
-                const frame = this.getFrame(tvFormat, pos);
-
-                url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(fileName)}&frame=${frame}&width=160`;
                 return url;
-            default: return null;
+            default:
+                return null;
         }
     }
 

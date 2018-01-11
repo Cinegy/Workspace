@@ -12,9 +12,11 @@ export class WsConfigurationService {
   constructor(private httpClient: HttpClient) {
     this.configuration = new WsConfiguration();
   }
+
   public getVersion() {
-    return `${this.configuration.major}.${this.configuration.minor}.${this.configuration.commit}.${this.configuration.build}`;
+    return `${this.configuration.major}.${this.configuration.minor}.${this.configuration.commit}`;
   }
+
   public getConfig() {
     this.httpClient.get('./assets/configuration/config.json')
       .subscribe(

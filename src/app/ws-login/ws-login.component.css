@@ -4,3 +4,7 @@
 .ws-info-text {
     font-size: x-small;
 }
+.ws-error {
+    font-size: smaller;
+    text-align: center;
+}

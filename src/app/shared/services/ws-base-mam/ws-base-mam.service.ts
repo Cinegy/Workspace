@@ -13,6 +13,14 @@ export class WsBaseMamService {
     protected appState: WsAppStateService) {}
 
   protected get(url: string, subject: Subject<any>, extraSubjectData?: any) {
+    url = this.setProtocol(url);
+    const now = Date.now();
+
+    if (url.indexOf('?') === -1) {
+      url += `?timestamp=${now}`;
+    } else {
+      url += `&timestamp=${now}`;
+    }
 
     this.httpClient
       .get(url)
@@ -36,6 +44,8 @@ export class WsBaseMamService {
   }
 
   protected post(url: string, payload: any, subject: Subject<any>) {
+    url = this.setProtocol(url);
+
     this.httpClient
       .post(url, payload)
       .subscribe(
@@ -51,6 +61,8 @@ export class WsBaseMamService {
   }
 
   protected put(url: string, payload: any, subject: Subject<any>) {
+    url = this.setProtocol(url);
+
     this.httpClient
       .put(url, payload)
       .subscribe(
@@ -65,6 +77,8 @@ export class WsBaseMamService {
   }
 
   protected delete(url: string, subject: Subject<any>) {
+    url = this.setProtocol(url);
+
     this.httpClient
       .delete(url)
       .subscribe(
@@ -86,17 +100,17 @@ export class WsBaseMamService {
       // The response body may contain clues as to what went wrong.
       mamError.msg = `Backend returned code ${err.status}, message was: ${err.message}`;
       mamError.status = err.status;
-      console.log(mamError.msg);
+      // console.log(mamError.msg);
     } else if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       mamError.msg = err.error.message;
-      console.log('An error occurred:', mamError.msg);
+      // console.log('An error occurred:', mamError.msg);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       mamError.msg = `Backend returned code ${err.status}, message was: ${err.error.error}`;
       mamError.status = err.status;
-      console.log(mamError.msg);
+      // console.log(mamError.msg);
     }
 
     if (extraSubjectData) {
@@ -107,6 +121,24 @@ export class WsBaseMamService {
       subject.next(mamError);
     }
 
+    throw new Error(mamError.msg);
+
+  }
+
+  // This is only a hack. MAM service does not support https right now.
+  private setProtocol(url: string) {
+    const isHttps = this.appState.selectedMam.mamEndpoint.startsWith('https');
+
+    if (isHttps) {
+      if (!url.startsWith('https')) {
+        url = url.replace('http', 'https');
+        return url;
+      } else {
+        return url;
+      }
+    } else {
+      return url;
+    }
   }
 
 }
