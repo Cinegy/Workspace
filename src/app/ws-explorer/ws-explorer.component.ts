@@ -25,6 +25,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private notCutable = {};
   private copyable = {};
   private pasteable = {};
+  private openable = {};
   public subscribers: any[];
   public loading = true;
   public selectedNode: any;
@@ -66,6 +67,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.pasteable['production'] = true;
     this.pasteable['programme'] = true;
     this.pasteable['programmeVersion'] = true;
+
+    this.openable['clipBin'] = true;
+    this.openable['documentBin'] = true;
+    this.openable['roll'] = true;
+    this.openable['placeholderMog'] = true;
 
     // dragulaService.setOptions('explorer-bag', {
     //   revertOnSpill: true
@@ -185,8 +191,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!(node.type in this.openable)) {
+      return;
+    }
+
     this.appState.openNode(node);
-    console.log(`Opening Node: ${node.name}`);
   }
 
   /* *** Service responses *** */
