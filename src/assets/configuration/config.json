@@ -7,7 +7,7 @@
             "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
             "dbName": "mam_11_1",
             "dbServer": ".\\sqlexpress",
-            "thumbnailServer": "http://localhost:8000/image.svc/"
+            "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
         },
         {
             "name": "MAM Simon",
@@ -15,7 +15,7 @@
             "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
             "dbName": "mamSimon",
             "dbServer": ".\\sqlexpress",
-            "thumbnailServer": "http://localhost:8000/image.svc/"
+            "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
         },
         {
           "name": "MAM 10",
@@ -23,7 +23,7 @@
           "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
           "dbName": "mam_10",
           "dbServer": ".\\sqlexpress",
-          "thumbnailServer": "http://localhost:8000/image.svc/"
+          "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
       }
 
     ],
