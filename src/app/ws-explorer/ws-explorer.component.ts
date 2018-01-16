@@ -71,7 +71,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['clipBin'] = true;
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
-    this.openable['placeholderMog'] = true;
 
     // dragulaService.setOptions('explorer-bag', {
     //   revertOnSpill: true
@@ -165,7 +164,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
     console.log(`Select Node: ${node.type}, ${typeGroup}`);
 
-    if (this.mainNodeTypes.includes(typeGroup)) {
+    if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
       this.loading = true;
       this.selectedNode = node;
       this.breadcrumbService.add(node);
