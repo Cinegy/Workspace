@@ -4,7 +4,11 @@
 TODO: Write some stuff that is relevant to Workspace here
 ```
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.0-rc.5.
+# Cinegy Workspace
+
+## Development server
+
+Cinegy Workspace will be compiled and deployed through teamcity to an AWS bucket. This bucket can then be accessed via CloudFront URLs. Some pre-created URLs are world-reachable; they are https://workspace<dev/stage/hotfix>.cinegy.net - other branches will deploy into the bucket but will not be reachable via CloudFront.
 
 ## Development server
 
