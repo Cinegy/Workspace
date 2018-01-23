@@ -103,7 +103,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.player.ontimeupdate = () => {
       if (this.player.currentTime >= this.clipEnd) {
         this.pause();
-        console.log(`Video ended: ${event}`);
       }
     };
   }
