@@ -35,7 +35,7 @@
         "Earth",
         "Mars"
     ],
-    "itemsPerPage": 5,
+    "itemsPerPage": 10,
     "useRemoteConfig": false,
     "remoteConfigHost":"https://workspace-configs.s3.amazonaws.com/workspace"
 }
