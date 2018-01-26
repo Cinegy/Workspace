@@ -56,6 +56,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public showMarkerOut = false;
   public markers: number[] = [0, 0];
   private markerClipDescriptors = [];
+  private isSelectedClipMasterclip: boolean;
 
   constructor(
     private timer: SimpleTimer,
@@ -63,6 +64,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     private playerService: WsPlayerService,
     public dialog: MatDialog
   ) {
+    this.isSelectedClipMasterclip = false;
     this.subscribers = [];
 
     let subscriber = this.appState.playClipSubject
@@ -127,9 +129,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
 
     if (this.selectedClip.type !== 'masterClip') {
+      this.isSelectedClipMasterclip = false;
       this.playerService.getMasterclip(this.selectedClip.masterClipId);
     } else {
-      this.loadClip();
+      this.isSelectedClipMasterclip = true;
+      this.playerService.getMasterclip(this.selectedClip.id);
+      // this.loadClip();
     }
   }
 
@@ -139,7 +144,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.masterClip = response;
+    if (this.isSelectedClipMasterclip) {
+      this.selectedClip = response;
+    } else {
+      this.masterClip = response;
+    }
+
     this.loadClip();
   }
 
@@ -202,7 +212,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           mediaUrl = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam);
           break;
         case 'masterClip':
-          this.canCreateSubclip = false;
+          this.canCreateSubclip = this.selectedClip.isEntire;
           this.tvFormat = this.selectedClip.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
@@ -537,17 +547,14 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     switch (this.selectedClip.type) {
       case 'masterClip':
-        this.playerService.createMasterclip(this.selectedClip);
+        this.playerService.createSubclipFromMasterclip(this.selectedClip);
         break;
       default:
-        this.playerService.createSubclip(this.selectedClip);
+        this.playerService.createSubclipFromClip(this.selectedClip);
         break;
     }
-
-    // this.playerService.createSubclip(this.selectedClip);
   }
 
   public previousEvent() {
