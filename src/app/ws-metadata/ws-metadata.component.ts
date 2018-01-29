@@ -125,7 +125,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (this.descriptors === undefined) {
       this.loading = true;
       this.metadataService.getDescriptors(this.selectedNode.type);
-    } else if (this.selectedNode.metadata) {
+    } else {
       this.loading = true;
       this.metadataService.getMetadata(this.selectedNode);
     }
@@ -139,10 +139,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
     this.descriptors = response;
     this.appState.descriptors[this.selectedNode.type] = response;
-
-    if (this.selectedNode.metadata) {
-      this.metadataService.getMetadata(this.selectedNode);
-    }
+    this.metadataService.getMetadata(this.selectedNode);
   }
 
   private getMetadataResponse(response) {
