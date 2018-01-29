@@ -23,7 +23,7 @@ export class WsMetadataService extends WsBaseMamService {
   }
 
   public getMetadata(node: any) {
-    this.get(node.metadata.url, this.getMetadataSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${node.id}`, this.getMetadataSubject);
   }
 
   public setMetadata(id: string, metadata: SaveMetadataRequest) {
