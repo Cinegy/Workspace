@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 export class WsAppStateService {
   private _connected: boolean;
   private _selectedMam: WsMamConnection;
- 
+
   public loggedInSubject: Subject<any> = new Subject<any>();
   public selectNodeSubject: Subject<any> = new Subject<any>();
   public openNodeSubject: Subject<any> = new Subject<any>();

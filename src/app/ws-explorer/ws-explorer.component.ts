@@ -160,18 +160,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   /* *** Public *** */
 
   public selectNode(node: any) {
-    const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
-
-    console.log(`Select Node: ${node.type}, ${typeGroup}`);
-
-    if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
-      this.loading = true;
-      this.selectedNode = node;
-      this.breadcrumbService.add(node);
-      this.childNodes = [];
-      this.explorerService.getNode(this.selectedNode.id);
-    }
-
     this.appState.selectNode(node);
   }
 
@@ -187,6 +175,18 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
   public openNode(node: any) {
     if (node === null) {
+      return;
+    }
+
+    const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
+
+    if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
+      this.loading = true;
+      this.selectedNode = node;
+      this.breadcrumbService.add(node);
+      this.childNodes = [];
+      this.explorerService.getNode(this.selectedNode.id);
+      this.appState.selectNode(node);
       return;
     }
 
@@ -590,6 +590,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
   /* *** Breadcrumbs *** */
   private breadcrumbClicked(node: any) {
-    this.selectNode(node);
+    this.openNode(node);
   }
 }

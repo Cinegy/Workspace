@@ -408,7 +408,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.playClip(selectedNode);
           }
         };
-        this.contextMenuItems.push(menuItem); 
+        this.contextMenuItems.push(menuItem);
         this.contextMenuItems.push({ separator: true });
       }
 
