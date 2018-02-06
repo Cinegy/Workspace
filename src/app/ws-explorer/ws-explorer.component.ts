@@ -160,6 +160,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   /* *** Public *** */
 
   public selectNode(node: any) {
+    if (this.selectedNode != null) {
+      this.selectedNode.isSelected = null;
+    }
+    node.isSelected = true;
+    this.selectedNode = node;
     this.appState.selectNode(node);
   }
 
