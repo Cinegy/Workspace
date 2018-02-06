@@ -20,6 +20,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private videoHelper = new WsVideoTools();
   public subscribers: any[];
   public lastOpenedNode: any;
+  public selectedNode: any;
   public deletedNode = null;
   public tabs: BinNode[];
   public contextMenuItems: MenuItem[];
@@ -154,18 +155,25 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.lastOpenedNode = this.tabs[this.selectedIndex].parent;
   }
 
+  private selectItem(item: any, event) {
+    if (this.selectedNode != null) {
+      this.selectedNode.isSelected = null;
+    }
+
+    this.selectedNode = item;
+    this.selectedNode.isSelected = true;
+    this.appState.selectNode(item);
+    // console.log(`Bin, selected item: ${item.name}, ${event.type}`);
+    // console.log(event);
+  }
+
   public playClip(node: any) {
     if (node === null) {
       return;
     }
 
     this.appState.playClip(node);
-    console.log(`Play Clip: ${node.name}`);
-  }
-
-  private selectItem(item: any, event) {
-    this.appState.selectNode(item);
-    // console.log(event.target);
+    // console.log(`Play Clip: ${node.name}`);
   }
 
   private getThumbnail(node: any) {
