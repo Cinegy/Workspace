@@ -35,6 +35,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private cutable = {};
   private copyable = {};
   private pasteable = {};
+  private openable = {};
   private pasteTypesAllowedInClipBin = {};
   private pasteTypesAllowedInDocumentBin = {};
 
@@ -49,6 +50,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.subscribers = [];
     this.tabs = [];
     this.contextMenuItems = [];
+
+    this.openable['clipBin'] = true;
+    this.openable['documentBin'] = true;
+    this.openable['roll'] = true;
 
     this.playable['clip'] = true;
     this.playable['masterClip'] = true;
@@ -71,7 +76,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.pasteTypesAllowedInDocumentBin['document'] = true;
     this.pasteTypesAllowedInDocumentBin['image'] = true;
 
-    let subscriber = this.appState.openNodeSubject
+    let subscriber = this.appState.selectNodeSubject
+      .subscribe(response => this.selectNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.appState.openNodeSubject
       .subscribe(response => this.openNodeResponse(response));
     this.subscribers.push(subscriber);
 
@@ -196,6 +205,21 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
   }
   /* *** Service Response *** */
+
+  private selectNodeResponse(response: any) {
+    if (response instanceof WsMamError || !(response.type in this.openable)) {
+      return;
+    }
+
+    for (let i = 0; i < this.tabs.length; i++) {
+      const tab = this.tabs[i];
+      if (tab.parent.id === response.id) {
+        this.selectedIndex = i;
+        return;
+      }
+    }
+  }
+
   private openNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       return;
