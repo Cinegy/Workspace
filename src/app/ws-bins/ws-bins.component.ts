@@ -408,7 +408,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   /* *** Dialogs *** */
   private openDeleteNodeDialog(selectedNode: any) {
     const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
-      // width: '400px',
       data: selectedNode.name
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -509,6 +508,24 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           this.contextMenuItems.push(menuItem);
           this.contextMenuItems.push({ separator: true });
         }
+      }
+
+      if (this.tabs.length > 1) {
+        menuItem = {
+          label: 'Close Tabs to the right',
+          icon: 'fa-times-circle',
+          command: (event) => {
+            console.log(`Selected Tab: ${this.selectedIndex}`);
+
+            if ((this.tabs.length - 1) > this.selectedIndex) {
+              for (let i = this.tabs.length - 1; i > this.selectedIndex; i--) {
+                this.closeTab(this.tabs[i]);
+              }
+            }
+          }
+        },
+        this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push({ separator: true });
       }
 
       if (selectedNode.type !== 'searchBin') {
