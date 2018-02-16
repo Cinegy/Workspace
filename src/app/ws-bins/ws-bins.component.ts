@@ -172,8 +172,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.selectedNode = item;
     this.selectedNode.isSelected = true;
     this.appState.selectNode(item);
-    // console.log(`Bin, selected item: ${item.name}, ${event.type}`);
-    // console.log(event);
   }
 
   public playClip(node: any) {
@@ -182,7 +180,26 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
 
     this.appState.playClip(node);
-    // console.log(`Play Clip: ${node.name}`);
+  }
+
+  public openBin(node: any) {
+    if (node === null) {
+      return;
+    }
+
+    console.log(`Node Type: ${node.type}`);
+    if (node.type in this.openable) {
+      let tab: BinNode;
+
+      for (let i = 0; i < this.tabs.length; i++) {
+        tab = this.tabs[i];
+        if (node.id === tab.parent.id) {
+          this.selectedIndex = i;
+          return;
+        }
+      }
+      this.appState.openNode(node);
+    }
   }
 
   private getThumbnail(node: any) {
@@ -208,6 +225,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
   private selectNodeResponse(response: any) {
     if (response instanceof WsMamError || !(response.type in this.openable)) {
+      return;
+    }
+
+    if (this.tabs[this.selectedIndex] && this.tabs[this.selectedIndex].parent.type === 'searchBin') {
       return;
     }
 
@@ -484,6 +505,14 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
 
     if (!isChild) {
+
+      for (let i = 0; i < this.tabs.length; i++) {
+        if (selectedNode.id === this.tabs[i].parent.id) {
+          this.selectedIndex = i;
+          break;
+        }
+      }
+
       if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable) {
         if ((selectedNode.type === 'clipBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInClipBin) ||
           (selectedNode.type === 'documentBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInDocumentBin)) {

@@ -195,11 +195,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!(node.type in this.openable)) {
+    if (node.type in this.openable) {
+      this.appState.openNode(node);
       return;
     }
-
-    this.appState.openNode(node);
   }
 
   /* *** Service responses *** */
