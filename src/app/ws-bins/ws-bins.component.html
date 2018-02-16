@@ -9,7 +9,7 @@
               [imageHeight]="16"></app-ws-node-image>
             <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
             <span *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
-            &nbsp;
+            &nbsp; &nbsp;
             <i class="fa fa-times" (click)="closeTab(tab)"></i>
           </section>
         </ng-template>
@@ -23,7 +23,7 @@
                 <img *ngSwitchCase="'masterClip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
                 <img *ngSwitchCase="'clip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)">
                 <img *ngSwitchCase="'image'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}">
-                <app-ws-node-image *ngSwitchDefault fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64"></app-ws-node-image>
+                <app-ws-node-image *ngSwitchDefault fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64" (dblclick)="openBin(child)"></app-ws-node-image>
               </span>
               <mat-card-content>
                 <div class="ws-card-item-name">{{child.name}}</div>
