@@ -452,6 +452,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
 
     if (isChild) {
+      this.selectItem(selectedNode, null);
+
       if (selectedNode.type in this.playable) {
         menuItem = {
           label: 'Play',
@@ -544,13 +546,23 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           label: 'Close Tabs to the right',
           icon: 'fa-times-circle',
           command: (event) => {
-            console.log(`Selected Tab: ${this.selectedIndex}`);
-
             if ((this.tabs.length - 1) > this.selectedIndex) {
               for (let i = this.tabs.length - 1; i > this.selectedIndex; i--) {
                 this.closeTab(this.tabs[i]);
               }
             }
+          }
+        },
+        this.contextMenuItems.push(menuItem);
+        menuItem = {
+          label: 'Close other Tabs',
+          icon: 'fa-times-circle',
+          command: (event) => {
+              for (let i = this.tabs.length - 1; i >= 0; i--) {
+                if (this.selectedIndex !== i) {
+                  this.closeTab(this.tabs[i]);
+                }
+              }
           }
         },
         this.contextMenuItems.push(menuItem);

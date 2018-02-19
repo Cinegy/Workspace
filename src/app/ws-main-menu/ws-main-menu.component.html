@@ -15,7 +15,7 @@
   <button mat-button [matMenuTriggerFor]="menu">
     <span *ngIf="!appState.connected">Not connected</span>
     <span *ngIf="appState.connected">{{appState.selectedMam.username}}</span>
-    &nbsp; <i class="fa fa-user-circle-o"></i> 
+    &nbsp; <i class="fa fa-user-circle-o"></i>
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()" class="ws-menu-item">
@@ -23,8 +23,8 @@
       <span>Info</span>
     </button>
     <button mat-menu-item [disabled]="!appState.connected" (click)="logout()" class="ws-menu-item">
-      <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon> 	
-      <span>Logout</span> 
+      <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
+      <span>Logout</span>
     </button>
   </mat-menu>
 </mat-toolbar>
