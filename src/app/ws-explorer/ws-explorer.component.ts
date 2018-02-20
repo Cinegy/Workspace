@@ -29,6 +29,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public subscribers: any[];
   public loading = true;
   public selectedNode: any;
+  public selectedChildNode: any;
   public childNodes: any[];
   public contextMenuItems: MenuItem[];
   public childOpenedMenu: boolean;
@@ -160,7 +161,13 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   /* *** Public *** */
 
   public selectNode(node: any) {
-    this.appState.selectNode(node);
+    if (this.selectedChildNode != null) {
+      this.selectedChildNode.isSelected = null;
+    }
+
+    this.selectedChildNode = node;
+    this.selectedChildNode.isSelected = true;
+    this.appState.selectNode(this.selectedChildNode);
   }
 
   public selectParent() {
@@ -190,11 +197,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!(node.type in this.openable)) {
+    if (node.type in this.openable) {
+      this.appState.openNode(node);
       return;
     }
-
-    this.appState.openNode(node);
   }
 
   /* *** Service responses *** */
@@ -456,6 +462,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     menuChildItems = [];
     const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
     const typeGroup = this.appState.nodeTypes[selectedNode.type].typeGroup;
+
+    if (isChild) {
+      this.selectNode(selectedNode);
+    }
 
     if (!this.mainNodeTypes.includes(selectedNodeType.typeGroup)) {
       menuItem = {
