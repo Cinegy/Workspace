@@ -1,3 +1,5 @@
+import { WsUploadStore } from './ws-upload-store';
+
 export class WsMamConnection {
   public name: string;
   public mamVersion: string;
@@ -6,7 +8,7 @@ export class WsMamConnection {
   public dbServer: string;
   public dbName: string;
   public thumbnailServer: string;
-  // public mediaServer: string;
+  public uploadStores: WsUploadStore[];
   public domains: string;
   public username: string;
   public password: string;

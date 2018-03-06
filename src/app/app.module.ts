@@ -23,6 +23,7 @@ import { WsPlayerComponent } from './ws-player/ws-player.component';
 import { WsToggleFullscreenDirective } from './ws-toggle-fullscreen.directive';
 import { MatIconRegistry } from '@angular/material/icon';
 import { WsClipboardService } from './ws-clipboard/ws-clipboard.service';
+import { WsUploadComponent } from './ws-upload/ws-upload.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: WsLoginComponent },

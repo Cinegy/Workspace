@@ -1,41 +1,72 @@
 {
-    "mams":
-    [
+  "mams": [
+    {
+      "name": "MAM 11.1",
+      "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
+      "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
+      "dbName": "mam_11_1",
+      "dbServer": ".\\sqlexpress",
+      "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/",
+      "uploadStores": [
         {
-            "name": "MAM 11.1",
-            "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
-            "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
-            "dbName": "mam_11_1",
-            "dbServer": ".\\sqlexpress",
-            "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
+          "name": "Store 1",
+          "url": "cinegy-internal-content/workspaceUpload01"
         },
         {
-            "name": "MAM Simon",
-            "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
-            "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
-            "dbName": "mamSimon",
-            "dbServer": ".\\sqlexpress",
-            "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
+          "name": "Store 2",
+          "url": "cinegy-internal-content/workspaceUpload02"
         },
         {
-          "name": "MAM 10",
-          "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
-          "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
-          "dbName": "mam_10",
-          "dbServer": ".\\sqlexpress",
-          "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/"
-      }
-
-    ],
-    "domains":
-    [
-        "Moon",
-        "Cloud",
-        "Sun",
-        "Earth",
-        "Mars"
-    ],
-    "itemsPerPage": 10,
-    "useRemoteConfig": false,
-    "remoteConfigHost":"https://workspace-configs.s3.amazonaws.com/workspace"
+          "name": "Store 3",
+          "url": "cinegy-internal-content/workspaceUpload03"
+        },
+        {
+          "name": "Store 4",
+          "url": "cinegy-internal-content/workspaceUpload04"
+        }
+      ]
+    },
+    {
+      "name": "MAM Simon",
+      "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
+      "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
+      "dbName": "mamSimon",
+      "dbServer": ".\\sqlexpress",
+      "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/",
+      "uploadStores": [
+        {
+          "name": "Store 1",
+          "url": "cinegy-internal-content/workspaceUpload01"
+        },
+        {
+          "name": "Store 2",
+          "url": "cinegy-internal-content/workspaceUpload02"
+        }
+      ]
+    },
+    {
+      "name": "MAM 10",
+      "casEndpoint": "http://localhost:8082/ICinegyDataAccessService/",
+      "mamEndpoint": "http://localhost:7601/mams/1.0/api/mam/",
+      "dbName": "mam_10",
+      "dbServer": ".\\sqlexpress",
+      "thumbnailServer": "http://localhost:8000/image_service/1.0/api/thumbnail/",
+      "uploadStores": [
+        {
+          "name": "Store 1",
+          "url": "cinegy-internal-content/workspaceUpload01"
+        }
+      ]
+    }
+  ],
+  "domains": [
+    "Moon",
+    "Cloud",
+    "Sun",
+    "Earth",
+    "Mars"
+  ],
+  "itemsPerPage": 10,
+  "useRemoteConfig": false,
+  "remoteConfigHost": "https://workspace-configs.s3.amazonaws.com/workspace"
 }

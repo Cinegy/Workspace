@@ -1,11 +1,24 @@
 <div fxLayout="column" fxFlex style="overflow: hidden;">
-    <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
-    <div fxLayout fxFlex>
-        <app-ws-explorer fxLayout="column" fxFlex="20"></app-ws-explorer>
-        <app-ws-bins fxLayout="column" fxFlex="45"></app-ws-bins>
-        <div fxLayout="column" fxFlex="35">
-            <app-ws-player fxLayout fxFlex="55" style="min-width: 480px;"></app-ws-player>
-            <app-ws-metadata fxLayout fxFlex style="overflow: hidden;"></app-ws-metadata>
-        </div>
+  <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
+  <div fxLayout fxFlex>
+    <mat-card fxFlex style="overflow-y: auto;">
+      <mat-card-content>
+        <mat-tab-group fxFlex>
+          <mat-tab label="Explorer">
+            <app-ws-explorer></app-ws-explorer>
+          </mat-tab>
+          <mat-tab label="Media Import">
+            <app-ws-upload></app-ws-upload>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+    <!-- <app-ws-explorer fxLayout="column" fxFlex="70"></app-ws-explorer>
+      <app-ws-upload fxLayout="column" fxFlex="30"></app-ws-upload> -->
+    <app-ws-bins fxLayout="column" fxFlex="45"></app-ws-bins>
+    <div fxLayout="column" fxFlex="35">
+      <app-ws-player fxLayout fxFlex="55" style="min-width: 480px;"></app-ws-player>
+      <app-ws-metadata fxLayout fxFlex style="overflow: hidden;"></app-ws-metadata>
     </div>
+  </div>
 </div>
