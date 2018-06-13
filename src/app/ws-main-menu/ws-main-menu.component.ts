@@ -1,10 +1,11 @@
+import { WsLogoutService } from './../ws-logout/ws-logout.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsAppManagementService } from './../ws-app-management.service';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsUserInfoDialogComponent } from './../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
 import { WsBinsService } from './../ws-bins/ws-bins.service';
 import { WsLoginService } from './../ws-login/ws-login.service';
@@ -35,9 +36,11 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     public connectionDialog: MatDialog,
     public errorDialog: MatDialog,
     public loginService: WsLoginService,
+    public logoutService: WsLogoutService,
     public configService: WsConfigurationService,
     private management: WsAppManagementService,
     private timer: SimpleTimer,
+    public snackBar: MatSnackBar,
     private matIconRegistry: MatIconRegistry) {
     this.angularVersion = `Angular v${VERSION.full}`;
     this.matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
@@ -50,13 +53,17 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
       .subscribe(response => this.loginResponse(response));
     this.subscribers.push(subscriber);
 
-    subscriber = this.loginService.logoutSubject
+    subscriber = this.logoutService.logoutSubject
       .subscribe(response => this.logoutResponse(response));
     this.subscribers.push(subscriber);
 
 
     subscriber = this.management.heartbeatSubject
       .subscribe(response => this.heartbeatResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.loginService.reconectSubject
+      .subscribe(response => this.reconnectResponse(response));
     this.subscribers.push(subscriber);
   }
 
@@ -73,9 +80,19 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     });
   }
 
+  public goHome() {
+    this.router.navigate(['/main']);
+  }
+
   public logout() {
-    this.loginService.logout();
-    this.router.navigate(['/login']);
+    this.logoutService.logout();
+
+    if (this.configService.configuration.cis.useCis) {
+      this.router.navigate(['/cislogin']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+
   }
 
   public search() {
@@ -93,8 +110,16 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.timer.newTimer(this.timerName, 30);
+    this.timer.newTimer(this.timerName, 20);
     this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
+  }
+
+  private reconnectResponse(response: any) {
+
+    if (response.error || response instanceof WsMamError) {
+      return;
+    }
+    this.snackBar.open('Successfully reconnected', null, { duration: 5000 });
   }
 
   private logoutResponse(response: any) {
@@ -103,22 +128,20 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
 
   private heartbeatResponse(response: any) {
     if (response instanceof WsMamError) {
-      this.stopTimer();
-
-      const dialogRef = this.errorDialog.open(WsErrorDialogComponent, {
-        width: '600px',
-        data: 'MAM service down or Network failure'
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        this.logout();
-      });
-      return;
+      this.snackBar.open('Cannot connect to Backend. Reconnecting...', null, { duration: 3000 });
+      this.loginService.login(this.appState.selectedMam, true);
     }
   }
 
   private timerCallback() {
     this.management.heartbeat();
     console.log(new Date(Date.now()));
+
+    // if (navigator.onLine) {
+    //   this.isOnline = 'Online';
+    // } else {
+    //   this.isOnline = 'Offline. No Internet connection.';
+    // }
 
     if (this.timerIconIndex === 1) {
       this.timerIconIndex = 2;

@@ -1,8 +1,4 @@
-.mat-button.mat-small {
-  width: 20px;
+.ws-store-btn {
+  overflow: hidden;
+  font-size: smaller;
 }
-.ws-upload-store-name {
-  cursor: pointer;
-}
-
-

@@ -1,4 +1,4 @@
-<mat-card fxFlex>
+<mat-card>
   <mat-card-content #explorerNodes>
     <h5 *ngIf="selectedNode" (click)="selectParent()" (contextmenu)="contextMenuOpen(selectedNode, false)" class="ws-explorer-header">
       <app-ws-node-image mat-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
@@ -25,10 +25,9 @@
         </app-ws-node-image>
         <h4 mat-line>{{child.name}}</h4>
         <p mat-line>{{child.modified | date}}</p>
-        <!-- <i *ngIf="child.lockInfo" class="fa fa-lock"  matTooltip="{{child.lockInfo.locker}}, {{child.lockInfo.type}}"></i> -->
       </mat-list-item>
     </mat-list>
   </mat-card-content>
 </mat-card>
 
-<p-contextMenu [target]="explorerNodes" [model]="contextMenuItems"></p-contextMenu>
+<p-contextMenu [target]="explorerNodes" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

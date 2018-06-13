@@ -1,11 +1,18 @@
-import { WsUploadStore } from './../shared/services/ws-base-mam/ws-upload-store';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
+import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
+import { WsAWSUploadStore, WsAWSUploadStoreSettings } from './../shared/services/ws-base-mam/ws-aws-upload-store';
+import { WsSimpleUploadStore } from './../shared/services/ws-base-mam/ws-simple-upload-store';
+import { IWsUploadStore, WsUploadStoreType } from './../shared/services/ws-base-mam/ws-upload-store';
+import { HttpClient } from '@angular/common/http';
+
 import { WsAppStateService } from './../ws-app-state.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FileUploader, FileSelectDirective, FileDropDirective, FileItem } from 'ng2-file-upload';
 import { UploadModel } from './upload-model';
-import * as AWS from 'aws-sdk';
-import { MatSnackBar } from '@angular/material';
-
+import { MatSnackBar, MatSnackBarConfig, MatDialog } from '@angular/material';
+import { WsUploadStoreModel } from '../shared/services/ws-base-mam/ws-upload-store-model';
+import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
 
 @Component({
   selector: 'app-ws-upload',
@@ -16,45 +23,73 @@ export class WsUploadComponent implements OnInit, OnDestroy {
   private subscribers: any[];
   public uploadModels: UploadModel[];
   public selectedModel: UploadModel;
-  public selectedStoreContent = [];
+  public selectedStoreContent: WsUploadStoreModel;
   public loading = false;
+  public uploadPaused = false;
 
-  constructor(private appState: WsAppStateService, public snackBar: MatSnackBar) {
-    this.subscribers = [];
+  constructor(
+    private appState: WsAppStateService,
+    public snackBar: MatSnackBar,
+    private http: HttpClient,
+    private cis: WsCisService,
+    public dialog: MatDialog,
+    private timer: SimpleTimer) {
     this.uploadModels = [];
-
-    AWS.config.update({
-      region: 'eu-central-1',
-      accessKeyId: 'AKIAIIKJILWAB37G3DOA',
-      secretAccessKey: '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'
-    });
+    this.subscribers = [];
   }
 
   ngOnInit() {
+    if (!this.appState.selectedMam.cis.useCis) {
+      return;
+    }
+
     const stores = this.appState.selectedMam.uploadStores;
-    stores.forEach(item => {
-      const slices = item.url.split('/');
-      item.bucket = new AWS.S3({
-        params: { Bucket: slices[0] }
-      });
-      item.bucketName = slices[0];
 
-      if (slices.length > 1) {
-        if (slices[1].endsWith('/')) {
-          item.bucketFolder = slices[1];
-        } else {
-          item.bucketFolder = `${slices[1]}/`;
-        }
-      }
+    stores.forEach(async item => {
+      let store: IWsUploadStore;
 
-      const uploader = new FileUploader({url: item.url, removeAfterUpload:  true});
-      uploader.onCompleteAll = () => {
-        uploader.clearQueue();
-      };
       const uploadModel = new UploadModel();
       uploadModel.name = item.name;
-      uploadModel.store = item;
-      this.bucketCheck(uploadModel);
+      uploadModel.uploader = new FileUploader({ removeAfterUpload: true });
+
+      switch (item.type) {
+        case WsUploadStoreType.Simple:
+          store = new WsSimpleUploadStore(item.name, item.url, uploadModel.uploader, this.http);
+          break;
+        case WsUploadStoreType.AWS:
+          const settings: WsAWSUploadStoreSettings = {
+            idToken: this.cis.user.id_token,
+            name: item.name,
+            region: item.region,
+            roleArn: item.roleArn,
+            uploader: uploadModel.uploader,
+            url: item.url
+          };
+          store = new WsAWSUploadStore(settings, this.timer, this.cis);
+          store.init()
+            .then(data => {
+              uploadModel.store = store;
+
+              const subscriber = store.uploadCompletedSubject
+                .subscribe(response => this.onUploadCompletedSubject(response));
+              this.subscribers.push(subscriber);
+
+              store.check()
+                .then(
+                  resolve => {
+                    this.uploadModels.push(uploadModel);
+                  },
+                  reject => {
+                    this.openErrorDialog(`Error reading Bucket ${store.name}: ${reject.message}`);
+                  });
+            })
+            .catch(err => {
+              this.openErrorDialog(`Error reading Bucket ${store.name}: ${err.message}`);
+            });
+          break;
+      }
+
+
     });
   }
 
@@ -62,133 +97,71 @@ export class WsUploadComponent implements OnInit, OnDestroy {
     this.subscribers.forEach(element => {
       element.unsubscribe();
     });
-  }
 
-  /* *** S3 *** */
-  private bucketCheck(model: UploadModel) {
-    model.store.bucket.headObject({
-      Bucket: model.store.bucketName,
-      Key: model.store.bucketFolder
-    }, (err, data) => {
-      if (err) {
-        console.log('Error', err);
-        // model.store.bucket.putObject({
-        //   Bucket: model.store.bucketName,
-        //   Key: model.store.bucketFolder
-        // }, (errCreate, dataCreate) => {
-        //   if (err) {
-        //     console.log('Error', errCreate);
-        //   } else {
-        //     console.log('Success', dataCreate);
-        //   }
-        // });
-
-      } else {
-        this.uploadModels.push(model);
-      }
-    });
-  }
-
-  private bucketList(model: UploadModel) {
-    this.loading = true;
-    model.store.bucket.listObjectsV2({
-      Bucket: model.store.bucketName,
-      Delimiter: '/',
-      Prefix: model.store.bucketFolder
-    }, (err, data) => {
-      this.loading = false;
-      if (err) {
-        console.log('Error', err);
-      } else {
-        console.log('Success', data);
-        // this.selectedStoreContent = data.Contents;
-        this.selectedStoreContent = [];
-
-        for (let i = 1; i < data.Contents.length; i++) {
-          const item = data.Contents[i];
-          item.Name = item.Key.replace(model.store.bucketFolder, '');
-          this.selectedStoreContent.push(item);
-        }
-      }
-    });
-  }
-
-  public bucketAddObject(model: UploadModel, file: File) {
-    console.log(`Uploading ${file.name}`);
-    const targetFileName = `${model.store.bucketFolder}${file.name}`;
-    model.upload = model.store.bucket.upload(
-      {
-        Bucket: model.store.bucketName,
-        Key: targetFileName,
-        Body: file,
-        ACL: 'public-read'
-      }, (err, data) => {
-        if (err) {
-          console.log('Error', err);
-        } else {
-          console.log('Success', data);
-        }
-      }
-    );
-
-    model.upload.on('httpUploadProgress', evt => {
-      model.uploadProgress = (evt.loaded * 100) / evt.total;
-    })
-    .send((err, data) => {
-      model.uploadProgress = 0;
-      if (err) {
-        this.snackBar.open(`${file.name} upload canceled. ${err}`, null, { duration: 3000 });
-      } else {
-        console.log('Success', data);
-        this.snackBar.open(`${file.name} uploaded successfully`, null, { duration: 3000 });
-        if (this.selectedModel === model) {
-          this.storeSelected(null, model);
-        }
-
-      }
+    this.uploadModels.forEach(item => {
+      item.store.dispose();
     });
   }
 
   /* *** Upload *** */
-  public fileSelected(e: any, model: UploadModel): void {
-    // uploadModel.uploader.uploadAll();
-
-    // model.uploader.queue.forEach(item => {
-    //   // item.url = model.store.url;
-    //   // item.withCredentials = false;
-    //   this.bucketAddObject(model, item);
-
-    // });
-    // model.uploader.clearQueue();
-    // // model.uploader.uploadAll();
-    if (e == null || e.srcElement.files.length === 0) {
-      return;
-    }
-    this.bucketAddObject(model, e.srcElement.files[0]);
+  public uploadFile(e: any, model: UploadModel): void {
+    this.uploadPaused = false;
+    model.file = model.uploader.queue[0]._file;
+    model.store.upload();
   }
 
   public cancelUpload(model: UploadModel): void {
-    if (model.upload == null) {
-      return;
-    }
+    try {
+      if (model.file == null) {
+        return;
+      }
 
-    model.upload.abort();
-      // .abortMultipartUpload( (err, data) => {
-    //   if (err) {
-    //     console.log('Error', err);
-    //     this.snackBar.open(`Upload cancellation error`, null, { duration: 2000 });
-    //   } else {
-    //     console.log('Success', data);
-    //     this.snackBar.open(`Upload canceled`, null, { duration: 2000 });
-    //   }
-    // });
+      model.store.abort();
+      this.snackBar.open(`${model.file.name} upload canceled`, null, { duration: 3000 });
+      model.file = null;
+      model.uploader.clearQueue();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
+  public onUploadCompletedSubject(result: FileUploader) {
+    this.snackBar.open(`${result.queue[0].file.name} upload completed`, null, { duration: 3000 });
+    result.clearQueue();
+  }
 
   public storeSelected(e: any, model: UploadModel): void {
     this.selectedModel = model;
-    this.bucketList(model);
+    this.loading = true;
+    model.store.list().then(
+      data => {
+        this.loading = false;
+        this.selectedStoreContent = data;
+      },
+      error => {
+        this.loading = false;
+        this.snackBar.open(error, null, { duration: 3000 });
+      }
+    );
   }
 
-  /* *** File List *** */
+  private openErrorDialog(msg: string) {
+    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
+      // width: '300px',
+      data: msg
+    });
+  }
+
+  public normalizeFileSize(fileSize: number): string {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let size = fileSize;
+    let unit = 0;
+
+    while (size >= 1024) {
+      size /= 1024;
+      ++unit;
+    }
+
+    return `${size.toFixed(2)} ${units[unit]}`;
+  }
 }

@@ -101,8 +101,8 @@ export class WsVideoTools {
 
     public getMediaUrl(clip: any, mam: WsMamConnection) {
         for (const file of clip.fileSet.files) {
-            if (file.auxFileType && file.auxFileType === 'AW1') {
-                return `${file.url}${encodeURI(file.fileName)}`;
+            if (file.auxFileType && file.auxFileType === 'aw1') {
+                return `${file.mediaUrl}${encodeURI(file.name)}`;
             }
         }
 
@@ -126,8 +126,8 @@ export class WsVideoTools {
                 if (clip.fileSet) {
 
                     for (const file of clip.fileSet.files) {
-                        if (file.fileType.toLowerCase() === 'fT_Video'.toLowerCase()) {
-                            fileName = `${file.filePath}${file.fileName}`;
+                        if (file.type.toLowerCase() === 'aux' && file.quality.toLowerCase()) {
+                            fileName = `${file.path}${file.name}`;
                             break;
                         }
                     }

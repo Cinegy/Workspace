@@ -61,6 +61,12 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {},
+    "serve": {
+      "sslKey": "./keys/dev.workspace.com.key",
+      "sslCert": "./keys/dev.workspace.com.crt",
+      "host": "dev.workspace.com",
+      "port": 4200
+    }
   }
 }
