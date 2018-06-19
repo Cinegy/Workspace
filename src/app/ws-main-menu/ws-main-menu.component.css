@@ -1,9 +1,3 @@
-.ws-input {
-  font-size: smaller;
-}
-.ws-menu-fill-remaining-space {
+.ws-main-menu-fill-remaining-space {
   flex: 1 1 auto;
-}
-.ws-main-title {
-  cursor: pointer;
 }

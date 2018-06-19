@@ -1,8 +1,8 @@
-<div fxLayout="column" fxFlex>
+<div fxLayout="column" fxFlex class="ws-main-container">
   <p-breadcrumb [model]="breadcrumbService.breadcrumbs"></p-breadcrumb>
   <div fxLayout fxFlex>
-    <mat-card fxFlex="20" style="overflow:auto;">
-      <mat-card-content>
+    <mat-card fxFlex="20">
+      <mat-card-content fxFlexFill class="ws-card-content">
           <mat-tab-group>
               <mat-tab label="Explorer">
                 <app-ws-explorer></app-ws-explorer>

@@ -19,7 +19,7 @@
         [attr.data-id]="child.id"
         [attr.data-index]="i"
         matTooltip="{{child.name}}"
-        matTooltipShowDelay="1000">
+        matTooltipShowDelay="500">
         <app-ws-node-image *ngIf="appState.nodeIcons[child.type] && appState.nodeIcons[child.type].large" mat-list-icon [imageData]="appState.nodeIcons[child.type].large"
           [imageWidth]="32" [imageHeight]="32">
         </app-ws-node-image>
