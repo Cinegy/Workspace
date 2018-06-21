@@ -1,9 +1,9 @@
-<div fxLayout="row" fxLayoutAlign="center center" class="ws-main-container">
+<div fxLayout="row" fxLayoutAlign="center center" class="ws-login-main-container">
   <mat-card fxFlex="40">
-    <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <mat-card-header fxLayout fxLayoutAlign="center">
         <mat-card-title>
-          <h3><i class="fa fa-sign-in"></i> &nbsp; Login</h3>
+          <h3><i class="fa fa-sign-in"></i> &nbsp; MAM Login</h3>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
@@ -33,7 +33,7 @@
             </mat-option>
           </mat-select>
         </p>
-        <p fxLayout fxLayoutAlign="end" class="ws-info-text">
+        <p fxLayout fxLayoutAlign="end" class="ws-login-info-text">
           * = Required Fields
         </p>
         <p-messages [(value)]="errorMsg"></p-messages>

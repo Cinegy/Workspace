@@ -1,8 +1,9 @@
+import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
 import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
-import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
+import { WsMamConnection, WsCisConfiguration } from './shared/services/ws-base-mam/ws-mam-connection';
 import { Injectable } from '@angular/core';
 
 @Injectable()

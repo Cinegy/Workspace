@@ -1,10 +1,6 @@
-.ws-main-container {
+.ws-login-main-container {
     margin-top: 20px;
 }
-.ws-info-text {
+.ws-login-info-text {
     font-size: x-small;
-}
-.ws-error {
-    font-size: smaller;
-    text-align: center;
 }

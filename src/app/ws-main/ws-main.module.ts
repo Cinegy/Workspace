@@ -1,3 +1,4 @@
+import { WsUploadModule } from './../ws-upload/ws-upload.module';
 import { WsPlayerModule } from './../ws-player/ws-player.module';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { WsBinsModule } from './../ws-bins/ws-bins.module';
@@ -10,7 +11,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { WsMainComponent } from './ws-main.component';
 import { BreadcrumbModule, MenuItem, PanelModule } from 'primeng/primeng';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatTabsModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -23,7 +24,9 @@ import { MatCardModule } from '@angular/material';
     WsExplorerModule,
     WsBinsModule,
     WsMetadataModule,
-    WsPlayerModule
+    WsPlayerModule,
+    WsUploadModule,
+    MatTabsModule
   ],
   declarations: [WsMainComponent],
   providers: [WsMainBreadcrumbsService]

@@ -6,20 +6,21 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class WsBaseMamInterceptor implements HttpInterceptor {
 
-    constructor(private appState: WsAppStateService) {}
+  constructor(private appState: WsAppStateService) { }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let authHeaders;
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let newHeaders: HttpHeaders;
+    let newReq = req.clone();
 
-        if (this.appState.authHeader !== undefined && this.appState.authHeader != null) {
-            authHeaders = new HttpHeaders()
-                .append('Content-Type', 'application/json')
-                .append('Authorization', this.appState.authHeader);
-        }
-
-        const authReq = req.clone({
-            headers: authHeaders
-        });
-        return next.handle(authReq);
+    if (!req.headers.has('CIS-Request') && this.appState.authHeader) {
+      newHeaders = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': `application/json`,
+        'Authorization': this.appState.authHeader
+      });
+      newReq = req.clone({ headers: newHeaders });
     }
+
+    return next.handle(newReq);
+  }
 }
