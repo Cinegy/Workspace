@@ -26,7 +26,7 @@
                 <app-ws-node-image *ngSwitchDefault fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64" (dblclick)="openBin(child)" matTooltip="{{child.name}}"></app-ws-node-image>
               </span>
               <mat-card-content>
-                <div class="ws-card-item-name" matTooltip="{{child.name}}">{{child.name}}</div>
+                <div class="ws-card-item-name">{{child.name}}</div>
               </mat-card-content>
             </mat-card>
           </ng-template>
