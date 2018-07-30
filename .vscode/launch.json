@@ -2,27 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Chrome",
+      "name": "Launch Chrome (http)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4200/",
+      "url": "http://localhost:4200",
       "webRoot": "${workspaceRoot}"
     },
     {
+      "name": "Launch Chrome (https)",
       "type": "chrome",
-      "request": "attach",
-      "name": "Attach to Chrome",
-      "port": 9222,
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Launch Edge",
-      "type": "edge",
       "request": "launch",
-      "url": "http://localhost:4200/",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false
+      "url": "https://dev.workspace.com:4200",
+      "webRoot": "${workspaceRoot}"
     }
   ]
 }

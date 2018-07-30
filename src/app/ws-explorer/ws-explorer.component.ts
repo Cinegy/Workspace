@@ -29,6 +29,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public subscribers: any[];
   public loading = true;
   public selectedNode: any;
+  public selectedChildNode: any;
   public childNodes: any[];
   public contextMenuItems: MenuItem[];
   public childOpenedMenu: boolean;
@@ -71,6 +72,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['clipBin'] = true;
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
+    this.openable['jobDropTarget'] = true;
 
     // dragulaService.setOptions('explorer-bag', {
     //   revertOnSpill: true
@@ -160,9 +162,31 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   /* *** Public *** */
 
   public selectNode(node: any) {
-    const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
+    if (this.selectedChildNode != null) {
+      this.selectedChildNode.isSelected = null;
+    }
 
-    console.log(`Select Node: ${node.type}, ${typeGroup}`);
+    this.selectedChildNode = node;
+    this.selectedChildNode.isSelected = true;
+    this.appState.selectNode(this.selectedChildNode);
+  }
+
+  public selectParent(): void {
+    this.appState.selectNode(this.selectedNode);
+  }
+
+  public refreshParent(): void {
+    this.loading = true;
+    this.childNodes = [];
+    this.explorerService.getNode(this.selectedNode.id);
+  }
+
+  public openNode(node: any): void {
+    if (node === null) {
+      return;
+    }
+
+    const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
 
     if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
       this.loading = true;
@@ -170,31 +194,18 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.breadcrumbService.add(node);
       this.childNodes = [];
       this.explorerService.getNode(this.selectedNode.id);
-    }
-
-    this.appState.selectNode(node);
-  }
-
-  public selectParent() {
-    this.appState.selectNode(this.selectedNode);
-  }
-
-  public refreshParent() {
-    this.loading = true;
-    this.childNodes = [];
-    this.explorerService.getNode(this.selectedNode.id);
-  }
-
-  public openNode(node: any) {
-    if (node === null) {
+      this.appState.selectNode(node);
       return;
     }
 
-    if (!(node.type in this.openable)) {
+    if (node.type in this.openable) {
+      if (node.type === 'jobDropTarget') {
+        this.appState.openJdfNode(node);
+      } else {
+        this.appState.openBinNode(node);
+      }
       return;
     }
-
-    this.appState.openNode(node);
   }
 
   /* *** Service responses *** */
@@ -457,6 +468,10 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
     const typeGroup = this.appState.nodeTypes[selectedNode.type].typeGroup;
 
+    if (isChild) {
+      this.selectNode(selectedNode);
+    }
+
     if (!this.mainNodeTypes.includes(selectedNodeType.typeGroup)) {
       menuItem = {
         label: 'Open',
@@ -590,6 +605,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
   /* *** Breadcrumbs *** */
   private breadcrumbClicked(node: any) {
-    this.selectNode(node);
+    this.openNode(node);
   }
 }

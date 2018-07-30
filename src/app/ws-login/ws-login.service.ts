@@ -11,13 +11,13 @@ import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 export class WsLoginService {
   private connectionInfo: WsMamConnection;
   public loginSubject: Subject<any> = new Subject<any>();
-  public logoutSubject: Subject<any> = new Subject<any>();
+  public reconectSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
     protected appState: WsAppStateService) { }
 
-  public login(connectionInfo: WsMamConnection) {
+  public login(connectionInfo: WsMamConnection, reconnect: boolean) {
     this.connectionInfo = connectionInfo;
 
     const authRequest = new WsAuthRequest();
@@ -37,18 +37,20 @@ export class WsLoginService {
       .post(`${this.connectionInfo.mamEndpoint}/authentication`, authRequest, { headers: headers })
       .subscribe(
       data => {
+        if (reconnect) {
+          this.reconectSubject.next(data);
+          return;
+        }
         this.loginSubject.next(data);
       },
       (err: HttpErrorResponse) => {
+        if (reconnect) {
+          this.reconectSubject.next(err);
+          return;
+        }
         this.handleError(err, this.loginSubject);
       }
       );
-  }
-
-  public logout() {
-    this.appState.setConnectionState(false, null);
-    this.logoutSubject.next(true);
-    console.log(`${this.connectionInfo.username} logged out`);
   }
 
   private handleError(err: HttpErrorResponse, subject: Subject<any>, extraSubjectData?: any) {

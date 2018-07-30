@@ -20,6 +20,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private videoHelper = new WsVideoTools();
   public subscribers: any[];
   public lastOpenedNode: any;
+  public selectedNode: any;
   public deletedNode = null;
   public tabs: BinNode[];
   public contextMenuItems: MenuItem[];
@@ -34,6 +35,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private cutable = {};
   private copyable = {};
   private pasteable = {};
+  private openable = {};
   private pasteTypesAllowedInClipBin = {};
   private pasteTypesAllowedInDocumentBin = {};
 
@@ -48,6 +50,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.subscribers = [];
     this.tabs = [];
     this.contextMenuItems = [];
+
+    this.openable['clipBin'] = true;
+    this.openable['documentBin'] = true;
+    this.openable['roll'] = true;
 
     this.playable['clip'] = true;
     this.playable['masterClip'] = true;
@@ -70,7 +76,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.pasteTypesAllowedInDocumentBin['document'] = true;
     this.pasteTypesAllowedInDocumentBin['image'] = true;
 
-    let subscriber = this.appState.openNodeSubject
+    let subscriber = this.appState.selectNodeSubject
+      .subscribe(response => this.selectNodeResponse(response));
+    this.subscribers.push(subscriber);
+
+    subscriber = this.appState.openBinNodeSubject
       .subscribe(response => this.openNodeResponse(response));
     this.subscribers.push(subscriber);
 
@@ -154,18 +164,42 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     this.lastOpenedNode = this.tabs[this.selectedIndex].parent;
   }
 
+  private selectItem(item: any, event) {
+    if (this.selectedNode != null) {
+      this.selectedNode.isSelected = null;
+    }
+
+    this.selectedNode = item;
+    this.selectedNode.isSelected = true;
+    this.appState.selectNode(item);
+  }
+
   public playClip(node: any) {
     if (node === null) {
       return;
     }
 
     this.appState.playClip(node);
-    console.log(`Play Clip: ${node.name}`);
   }
 
-  private selectItem(item: any, event) {
-    this.appState.selectNode(item);
-    // console.log(event.target);
+  public openBin(node: any) {
+    if (node === null) {
+      return;
+    }
+
+    console.log(`Node Type: ${node.type}`);
+    if (node.type in this.openable) {
+      let tab: BinNode;
+
+      for (let i = 0; i < this.tabs.length; i++) {
+        tab = this.tabs[i];
+        if (node.id === tab.parent.id) {
+          this.selectedIndex = i;
+          return;
+        }
+      }
+      this.appState.openBinNode(node);
+    }
   }
 
   private getThumbnail(node: any) {
@@ -188,6 +222,25 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
   }
   /* *** Service Response *** */
+
+  private selectNodeResponse(response: any) {
+    if (response instanceof WsMamError || !(response.type in this.openable)) {
+      return;
+    }
+
+    if (this.tabs[this.selectedIndex] && this.tabs[this.selectedIndex].parent.type === 'searchBin') {
+      return;
+    }
+
+    for (let i = 0; i < this.tabs.length; i++) {
+      const tab = this.tabs[i];
+      if (tab.parent.id === response.id) {
+        this.selectedIndex = i;
+        return;
+      }
+    }
+  }
+
   private openNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       return;
@@ -376,7 +429,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   /* *** Dialogs *** */
   private openDeleteNodeDialog(selectedNode: any) {
     const dialogRef = this.dialog.open(WsDeleteDialogComponent, {
-      // width: '400px',
       data: selectedNode.name
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -400,6 +452,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const selectedNodeType = this.appState.nodeTypes[selectedNode.type];
 
     if (isChild) {
+      this.selectItem(selectedNode, null);
+
       if (selectedNode.type in this.playable) {
         menuItem = {
           label: 'Play',
@@ -408,7 +462,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.playClip(selectedNode);
           }
         };
-        this.contextMenuItems.push(menuItem); 
+        this.contextMenuItems.push(menuItem);
         this.contextMenuItems.push({ separator: true });
       }
 
@@ -453,6 +507,14 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
 
     if (!isChild) {
+
+      for (let i = 0; i < this.tabs.length; i++) {
+        if (selectedNode.id === this.tabs[i].parent.id) {
+          this.selectedIndex = i;
+          break;
+        }
+      }
+
       if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable) {
         if ((selectedNode.type === 'clipBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInClipBin) ||
           (selectedNode.type === 'documentBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInDocumentBin)) {
@@ -477,6 +539,34 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           this.contextMenuItems.push(menuItem);
           this.contextMenuItems.push({ separator: true });
         }
+      }
+
+      if (this.tabs.length > 1) {
+        menuItem = {
+          label: 'Close Tabs to the right',
+          icon: 'fa-times-circle',
+          command: (event) => {
+            if ((this.tabs.length - 1) > this.selectedIndex) {
+              for (let i = this.tabs.length - 1; i > this.selectedIndex; i--) {
+                this.closeTab(this.tabs[i]);
+              }
+            }
+          }
+        },
+        this.contextMenuItems.push(menuItem);
+        menuItem = {
+          label: 'Close other Tabs',
+          icon: 'fa-times-circle',
+          command: (event) => {
+              for (let i = this.tabs.length - 1; i >= 0; i--) {
+                if (this.selectedIndex !== i) {
+                  this.closeTab(this.tabs[i]);
+                }
+              }
+          }
+        },
+        this.contextMenuItems.push(menuItem);
+        this.contextMenuItems.push({ separator: true });
       }
 
       if (selectedNode.type !== 'searchBin') {

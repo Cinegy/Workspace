@@ -1,3 +1,4 @@
+import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
 import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Injectable, ErrorHandler, Injector, NgZone } from '@angular/core';
@@ -12,14 +13,21 @@ export class WsGlobalErrorHandler implements ErrorHandler {
   handleError(error) {
 
     this.ngZone.run(() => {
-      console.log(error.message);
+      console.log(error);
 
-      if (this.dialog == null) {
+      if (this.dialog === null) {
         this.dialog = this.injector.get(MatDialog);
       }
 
       let msg: string;
-      if (error.message) {
+      if (error instanceof WsMamError) {
+        if (error.extMsg === 'heartbeat') {
+          return;
+        }
+        // msg = error.extMsg;
+        msg = error.msg ? error.msg : error.extMsg;
+
+      } else if (error.message) {
         msg = error.message;
       } else {
         msg = error;

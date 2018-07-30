@@ -1,13 +1,14 @@
 import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSlider } from '@angular/material';
 import { WsPlayerService } from './ws-player.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsAppStateService } from './../ws-app-state.service';
 import { WsVideoTools } from './ws-video-tools';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
 import { SimpleTimer } from 'ng2-simple-timer';
 import * as screenfull from 'screenfull';
 import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
+import { Slider } from 'primeng/components/slider/slider';
 
 const DescriptorTypeIn = 1;
 const FieldNumberIn = 5;
@@ -20,8 +21,11 @@ const LastFramSkew = 0.4;
   templateUrl: './ws-player.component.html',
   styleUrls: ['./ws-player.component.css']
 })
-export class WsPlayerComponent implements OnInit, OnDestroy {
+export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('mediaPlayer') mediaPlayer;
+  @ViewChild('markerSlider') markerSlider: Slider;
+  @ViewChild('videoSlider') videoSlider: MatSlider;
+
   public loading = false;
   private subscribers: any[];
   public selectedClip: any;
@@ -56,13 +60,16 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
   public showMarkerOut = false;
   public markers: number[] = [0, 0];
   private markerClipDescriptors = [];
+  private isSelectedClipMasterclip: boolean;
 
   constructor(
     private timer: SimpleTimer,
     private appState: WsAppStateService,
     private playerService: WsPlayerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private renderer: Renderer2
   ) {
+    this.isSelectedClipMasterclip = false;
     this.subscribers = [];
 
     let subscriber = this.appState.playClipSubject
@@ -98,12 +105,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.sliderStep = 0.05;
 
     this.player = this.mediaPlayer.nativeElement;
-    // this.player.poster = './assets/img/noMedia.png';
 
     this.player.ontimeupdate = () => {
       if (this.player.currentTime >= this.clipEnd) {
         this.pause();
-        console.log(`Video ended: ${event}`);
       }
     };
   }
@@ -112,6 +117,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.subscribers.forEach(element => {
       element.unsubscribe();
     });
+  }
+
+  ngAfterViewInit(): void {
+
   }
 
   /* *** Service Responses *** */
@@ -127,9 +136,11 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
 
     if (this.selectedClip.type !== 'masterClip') {
+      this.isSelectedClipMasterclip = false;
       this.playerService.getMasterclip(this.selectedClip.masterClipId);
     } else {
-      this.loadClip();
+      this.isSelectedClipMasterclip = true;
+      this.playerService.getMasterclip(this.selectedClip.id);
     }
   }
 
@@ -139,7 +150,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.masterClip = response;
+    if (this.isSelectedClipMasterclip) {
+      this.selectedClip = response;
+    } else {
+      this.masterClip = response;
+    }
+
     this.loadClip();
   }
 
@@ -163,7 +179,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
   }
-
 
   /* *** Private Methods *** */
   private getThumbnail() {
@@ -202,7 +217,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           mediaUrl = this.videoHelper.getMediaUrl(this.masterClip, this.appState.selectedMam);
           break;
         case 'masterClip':
-          this.canCreateSubclip = false;
+          this.canCreateSubclip = this.selectedClip.isEntire;
           this.tvFormat = this.selectedClip.videoFormat;
           this.clipStart = this.videoHelper.getClipStart(this.selectedClip);
           this.clipEnd = this.videoHelper.getClipEnd(this.selectedClip);
@@ -218,11 +233,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
           break;
       }
 
+      this.markerSlider.disabled = !this.canCreateSubclip;
+
       if (mediaUrl === null) {
         this.player.poster = './assets/img/noMedia.png';
         this.player.src = null;
       } else {
-        // this.player.poster = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.tvFormat);
         this.player.src = mediaUrl + this.setMediaFragment();
         this.player.load();
       }
@@ -273,20 +289,20 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
   // Marker Slider
   public markerSliderChanged(event) {
-    // const markerInTmp = this.markerIn;
-    // this.markerIn = event.values[0] / 10;
-    // this.markerOut = event.values[1] / 10;
-    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
+    this.videoSliderMoved(this.markerSlider.values[this.markerSlider.handleIndex] / 10.0);
+  }
 
-    // if (markerInTmp !== this.markerIn) {
-    //   this.sliderHead = this.markerIn;
-    //   this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart + this.markerIn);
-    //   this.player.currentTime = this.clipStart + this.markerIn;
-    // } else {
-    //   this.sliderHead = this.markerOut;
-    //   this.timmecodeHead = this.videoHelper.getTimecodeString(this.tvFormat, this.clipStart + this.markerOut);
-    //   this.player.currentTime = this.clipStart + this.markerOut;
-    // }
+  public markerSliderEnded(event) {
+    this.videoSliderMoved(this.markerSlider.values[this.markerSlider.handleIndex] / 10.0);
+
+    switch (this.markerSlider.handleIndex) {
+      case 0:
+        this.setMarkIn();
+        break;
+      case 1:
+        this.setMarkOut();
+        break;
+    }
   }
 
   // Video Slider
@@ -333,7 +349,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     if (!this.player.src) {
       return;
     }
-    // console.log(`Key pressed: ${event.key}: ${event.keyCode}`);
+
     switch (event.keyCode) {
       case 32: // space
         if (this.player.paused === true) {
@@ -410,7 +426,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
 
       if (this.player.currentTime >= this.clipEnd) {
         this.pause();
-        console.log(`Video ended`);
         return;
       }
       this.timer.newTimer(this.timerName, 0.1);
@@ -464,8 +479,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.markers = [this.markerIn * 10, this.markerOut * 10];
-    // tslint:disable-next-line:max-line-length
-    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -485,8 +498,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     }
 
     this.markers = [this.markerIn * 10, this.markerOut * 10];
-    // tslint:disable-next-line:max-line-length
-    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn)));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -500,8 +511,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.markerIn = 0;
     this.showMarkerIn = false;
     this.markers = [this.markerIn * 10, this.markerOut * 10];
-    // tslint:disable-next-line:max-line-length
-    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -515,8 +524,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     this.markerOut = this.sliderEnd;
     this.showMarkerOut = false;
     this.markers = [this.markerIn * 10, this.markerOut * 10];
-    // tslint:disable-next-line:max-line-length
-    // this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.videoHelper.getTimecodeHead(this.selectedClip, this.markerOut - this.markerIn));
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
     this.saveMarkers();
@@ -527,7 +534,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
     const markerOut: number = this.markerOut * 10000000;
     this.selectedClip.in = markerIn;
     this.selectedClip.out = markerOut;
-    console.log(this.selectedClip);
     this.playerService.setMarker(this.selectedClip.id, markerIn, markerOut, this.markerClipDescriptors[0], this.markerClipDescriptors[1]);
   }
 
@@ -537,17 +543,14 @@ export class WsPlayerComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     switch (this.selectedClip.type) {
       case 'masterClip':
-        this.playerService.createMasterclip(this.selectedClip);
+        this.playerService.createSubclipFromMasterclip(this.selectedClip);
         break;
       default:
-        this.playerService.createSubclip(this.selectedClip);
+        this.playerService.createSubclipFromClip(this.selectedClip);
         break;
     }
-
-    // this.playerService.createSubclip(this.selectedClip);
   }
 
   public previousEvent() {

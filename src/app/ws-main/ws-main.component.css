@@ -1,0 +1,10 @@
+.ws-main-container {
+  overflow-x: hidden !important;
+  text-overflow: ellipsis;
+}
+.ws-card-content {
+  overflow-y: auto !important;
+  max-height: 100px; /* Hack. Without a max-height overflow setting does not work  */
+
+}
+

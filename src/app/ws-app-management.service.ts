@@ -44,11 +44,11 @@ export class WsAppManagementService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clipBin&scope.type=documentBin`, this.getDescriptorsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=clipBin&type=documentBin&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
   }
 
   public heartbeat() {
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.heartbeatSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.heartbeatSubject, 'heartbeat');
   }
 
   private selectedNodeResponse(response: any) {

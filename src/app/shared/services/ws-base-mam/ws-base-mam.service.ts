@@ -121,7 +121,7 @@ export class WsBaseMamService {
       subject.next(mamError);
     }
 
-    throw new Error(mamError.msg);
+    throw mamError;
 
   }
 

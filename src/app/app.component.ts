@@ -5,6 +5,7 @@ import { WsAppStateService } from './ws-app-state.service';
 import { WsAppManagementService } from './ws-app-management.service';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private appState: WsAppStateService,
     private management: WsAppManagementService,
+    private config: WsConfigurationService,
     private router: Router) {
     this.subscribers = [];
   }
@@ -27,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
     const subscriber = this.appState.loggedInSubject
       .subscribe(response => this.loginResponse(response));
     this.subscribers.push(subscriber);
+
+    this.appState.itemsPerPage = this.config.configuration.itemsPerPage;
   }
 
   ngOnDestroy() {

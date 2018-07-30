@@ -13,7 +13,7 @@ export class WsPlayerService extends WsBaseMamService {
   public setMarkerSubject: Subject<any> = new Subject<any>();
   public createSubclipSubject: Subject<any> = new Subject<any>();
 
-  private internalCreateSubclipSubject: Subject<any> = new Subject<any>();
+  private internalCreateSubclipFromClipSubject: Subject<any> = new Subject<any>();
   private selectedClip: any;
   private clipDescriptors: { [id: string]: any; } = {};
 
@@ -25,18 +25,18 @@ export class WsPlayerService extends WsBaseMamService {
     this.getClipDescriptorSubject
       .subscribe(response => this.getClipDescriptorsResponse(response));
 
-    this.internalCreateSubclipSubject
+    this.internalCreateSubclipFromClipSubject
       .subscribe(response => this.createSubclipResponse(response));
   }
 
   public getClipDescriptors() {
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clip&scope.category=predefined`, this.getClipDescriptorSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=clip&category=predefined`, this.getClipDescriptorSubject);
   }
 
   public getMasterclip(id: string) {
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail`, this.getMasterClipSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail&masterClipScope=general`, this.getMasterClipSubject);
   }
 
   public setMarker(id: string, markIn: number, markOut: number, markInDesc: string, markOutDesc: string) {
@@ -53,16 +53,16 @@ export class WsPlayerService extends WsBaseMamService {
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${id}`, markerMetadata, this.setMarkerSubject);
   }
 
-  public createSubclip(clip: any) {
+  public createSubclipFromClip(clip: any) {
     this.selectedClip = clip;
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clip.id}&parentId=${clip.parent}&dataScope=fullInfo&linksScope=metadata`, null, this.internalCreateSubclipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clip.id}&parentId=${clip.parent}&dataScope=fullInfo&linksScope=metadata`, null, this.internalCreateSubclipFromClipSubject);
   }
 
-  public createMasterclip(clip: any) {
+  public createSubclipFromMasterclip(clip: any) {
     this.selectedClip = clip;
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${clip.id}&clipBinId=${clip.parent}&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.internalCreateSubclipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/createsubclip?masterclipId=${clip.id}&in=${clip.in}&out=${clip.out}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
   }
 
   private createSubclipResponse(response) {
