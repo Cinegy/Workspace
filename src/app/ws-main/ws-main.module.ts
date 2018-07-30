@@ -1,3 +1,4 @@
+import { WsJdfModule } from './../ws-jdf/ws-jdf.module';
 import { WsUploadModule } from './../ws-upload/ws-upload.module';
 import { WsPlayerModule } from './../ws-player/ws-player.module';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
@@ -26,6 +27,7 @@ import { MatCardModule, MatTabsModule } from '@angular/material';
     WsMetadataModule,
     WsPlayerModule,
     WsUploadModule,
+    WsJdfModule,
     MatTabsModule
   ],
   declarations: [WsMainComponent],
