@@ -42,7 +42,7 @@ export class WsExplorerService extends WsBaseMamService {
 
   public getChildren(parentId: string) {
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter.requestType=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
   }
 
   public getNode(id: string) {

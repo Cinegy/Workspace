@@ -72,6 +72,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['clipBin'] = true;
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
+    this.openable['jobDropTarget'] = true;
 
     // dragulaService.setOptions('explorer-bag', {
     //   revertOnSpill: true
@@ -170,17 +171,17 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.appState.selectNode(this.selectedChildNode);
   }
 
-  public selectParent() {
+  public selectParent(): void {
     this.appState.selectNode(this.selectedNode);
   }
 
-  public refreshParent() {
+  public refreshParent(): void {
     this.loading = true;
     this.childNodes = [];
     this.explorerService.getNode(this.selectedNode.id);
   }
 
-  public openNode(node: any) {
+  public openNode(node: any): void {
     if (node === null) {
       return;
     }
@@ -198,7 +199,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     if (node.type in this.openable) {
-      this.appState.openNode(node);
+      if (node.type === 'jobDropTarget') {
+        this.appState.openJdfNode(node);
+      } else {
+        this.appState.openBinNode(node);
+      }
       return;
     }
   }

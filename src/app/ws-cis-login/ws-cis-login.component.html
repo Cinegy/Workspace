@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="ws-main-container">
+  <mat-card fxFlex="40">
+    <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <mat-card-header fxLayout fxLayoutAlign="center">
+        <mat-card-title>
+          <h3><i class="fa fa-sign-in"></i> &nbsp; CIS Login</h3>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content fxLayout="column">
+        <p-messages [(value)]="errorMsg"></p-messages>
+      </mat-card-content>
+      <mat-card-actions fxLayout fxLayoutAlign="center">
+        <button mat-button type="submit" [disabled]="!loginForm.form.valid">Connect &nbsp; <span [hidden]="isConnectionSpinnerHidden"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

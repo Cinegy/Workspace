@@ -1,8 +1,9 @@
+import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
 import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
-import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
+import { WsMamConnection, WsCisConfiguration } from './shared/services/ws-base-mam/ws-mam-connection';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -12,7 +13,8 @@ export class WsAppStateService {
 
   public loggedInSubject: Subject<any> = new Subject<any>();
   public selectNodeSubject: Subject<any> = new Subject<any>();
-  public openNodeSubject: Subject<any> = new Subject<any>();
+  public openBinNodeSubject: Subject<any> = new Subject<any>();
+  public openJdfNodeSubject: Subject<any> = new Subject<any>();
   public updateNodeSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public playClipSubject: Subject<any> = new Subject<any>();
@@ -36,7 +38,7 @@ export class WsAppStateService {
     return this._selectedMam;
   }
 
-  public setConnectionState(connected: boolean, selectedMam: WsMamConnection) {
+  public setConnectionState(connected: boolean, selectedMam: WsMamConnection): void {
     this._connected = connected;
     this._selectedMam = selectedMam;
 
@@ -49,27 +51,31 @@ export class WsAppStateService {
     }
   }
 
-  public setAuthHeader(token: string, tokenType: string, tokenExpiration) {
+  public setAuthHeader(token: string, tokenType: string, tokenExpiration): void {
     this.authHeader = `${tokenType} ${token}`;
   }
 
-  public selectNode(node: any) {
+  public selectNode(node: any): void {
     this.selectNodeSubject.next(node);
   }
 
-  public openNode(node: any) {
-    this.openNodeSubject.next(node);
+  public openBinNode(node: any): void {
+    this.openBinNodeSubject.next(node);
   }
 
-  public updateNode(node: any) {
+  public openJdfNode(node: any): void {
+    this.openJdfNodeSubject.next(node);
+  }
+
+  public updateNode(node: any): void {
     this.updateNodeSubject.next(node);
   }
 
-  public deleteNode(node: any) {
+  public deleteNode(node: any): void {
     this.deleteNodeSubject.next(node);
   }
 
-  public playClip(node: any) {
+  public playClip(node: any): void {
     this.playClipSubject.next(node);
   }
 }
