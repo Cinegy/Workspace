@@ -80,7 +80,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.selectNodeResponse(response));
     this.subscribers.push(subscriber);
 
-    subscriber = this.appState.openNodeSubject
+    subscriber = this.appState.openBinNodeSubject
       .subscribe(response => this.openNodeResponse(response));
     this.subscribers.push(subscriber);
 
@@ -198,7 +198,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           return;
         }
       }
-      this.appState.openNode(node);
+      this.appState.openBinNode(node);
     }
   }
 
