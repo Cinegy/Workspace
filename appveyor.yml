@@ -1,12 +1,11 @@
 version: 11.0.{build}
 stack: node 6
-
 image: Ubuntu
-
 install:
-- npm install
-
+- sh: >-
+    npm install
+    
+    ng build --prod --aot
 test_script:
 - ng build --prod --aot
-
 build: off
