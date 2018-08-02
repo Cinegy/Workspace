@@ -7,6 +7,6 @@ install:
 - npm install
 
 test_script:
-- npm test
+- ng build --prod --aot
 
 build: off
