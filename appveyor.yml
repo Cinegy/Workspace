@@ -1,4 +1,6 @@
-image: ubuntu
+version: 11.0.{build}
+
+image: Ubuntu
 
 install:
 - npm install
