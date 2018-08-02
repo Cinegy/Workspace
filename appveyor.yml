@@ -1,4 +1,5 @@
 version: 11.0.{build}
+stack: node 6
 
 image: Ubuntu
 
