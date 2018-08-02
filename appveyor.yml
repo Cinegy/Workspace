@@ -1,6 +1,9 @@
 version: 11.0.{build}
 stack: node 6
 image: Ubuntu
+environment:
+  APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDb766TQMML5ZEaXO7q/LA0+TUtkdpoxVqMBH3hChGD7bJnjpMLXL90wN3R4iMYpXBjDyzKSJ+pUTTvhKBQCSPJmYXFz+L9LMo/CkyHOmJ9WiK5dWvhdnQMEIhxoPAFpvhWqZt4VR2zV6GkAlJIg7yS6mS/fE6xLPLyZCKwuEuW5G2GsgX/BVOXWRS2uN6eRWgTRCIaxxte2gHAUGF+IjAqEFQFXwJzfC7MZpleg7Dt4PB9ISKVnkF3TrH4SzxhLv2XBt3Qahw7rbcn7j9lBDgq74IzHvGgDffEDfdr229ldgtANJcMj3xrhCAlwmCA/T/8rLOHglmFePOxXgtExLcP
+
 install:
 - sh: >-
     npm install
@@ -9,3 +12,6 @@ install:
 test_script:
 - ng build --prod --aot
 build: off
+on_finish:
+  - sh: export APPVEYOR_SSH_BLOCK=true
+  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
