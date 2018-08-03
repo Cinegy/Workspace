@@ -29,6 +29,7 @@ import { Injectable } from '@angular/core';
 export class WsAppStateService {
   private _connected: boolean;
   private _selectedMam: WsMamConnection;
+  private _jdfRootNode: any;
 
   public loggedInSubject: Subject<any> = new Subject<any>();
   public selectNodeSubject: Subject<any> = new Subject<any>();
@@ -55,6 +56,14 @@ export class WsAppStateService {
 
   public get selectedMam(): WsMamConnection {
     return this._selectedMam;
+  }
+
+  public get jdfRootNode(): any {
+    return this._jdfRootNode;
+  }
+
+  public set jdfRootNode(value: any) {
+    this._jdfRootNode = value;
   }
 
   public setConnectionState(connected: boolean, selectedMam: WsMamConnection): void {
