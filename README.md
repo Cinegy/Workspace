@@ -1,4 +1,4 @@
-# CinegyWorkspace
+# Cinegy Workspace
 
 ```
 TODO: Write some stuff that is relevant to Workspace here
@@ -8,7 +8,7 @@ TODO: Write some stuff that is relevant to Workspace here
 
 ## Development server
 
-Cinegy Workspace will be compiled and deployed through teamcity to an AWS bucket. This bucket can then be accessed via CloudFront URLs. Some pre-created URLs are world-reachable; they are https://workspace<dev/stage/hotfix>.cinegy.net - other branches will deploy into the bucket but will not be reachable via CloudFront.
+Cinegy Workspace will be compiled and deployed through Teamcity to an AWS bucket. This bucket can then be accessed via CloudFront URLs. Some pre-created URLs are world-reachable; they are https://workspace<dev/stage/hotfix>.cinegy.net - other branches will deploy into the bucket but will not be reachable via CloudFront.
 
 ## Development server
 
@@ -42,6 +42,6 @@ Copyright (C) 2018  Cinegy GmbH
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
