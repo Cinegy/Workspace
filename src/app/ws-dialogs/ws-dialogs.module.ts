@@ -11,6 +11,7 @@ import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.com
 import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.component';
 import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin-dialog.component';
 import { WsUserInfoDialogComponent } from './ws-user-info-dialog/ws-user-info-dialog.component';
+import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { WsUserInfoDialogComponent } from './ws-user-info-dialog/ws-user-info-di
     WsRenameDialogComponent,
     WsErrorDialogComponent,
     WsCreateBinDialogComponent,
-    WsUserInfoDialogComponent],
+    WsUserInfoDialogComponent,
+    WsJdfDialogComponent],
   exports: [
     WsCreateFolderDialogComponent,
     WsInfoDialogComponent,

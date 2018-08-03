@@ -5,13 +5,13 @@ html, body {
     padding: 0;
     height: 100%;
     min-height: 100%;
+    max-height: 100%;
+    overflow: hidden;
 }
 app-ws-main {
-  flex: 1 1 auto;
-}
-app-ws-explorer {
-  flex: 1 1 auto;
-  /* flex-direction: column; */
+  flex: auto;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
 .ws-cursor-pointer {
   cursor: pointer;
@@ -19,3 +19,4 @@ app-ws-explorer {
 .ws-font-smaller {
   font-size: smaller;
 }
+

@@ -1,7 +1,7 @@
 /*
 Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
 Copyright (C) 2018  Cinegy GmbH
- 
+
 	This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,25 +14,22 @@ Copyright (C) 2018  Cinegy GmbH
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
+
 */
 
 import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
 import { WsCreateBinDialogComponent } from './../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
-import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
 import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
 import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
 import { WsCreateFolderDialogComponent } from './../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
-import { WsAppManagementService } from './../ws-app-management.service';
-import { MenuItem, ConfirmationService } from 'primeng/primeng';
+import { MenuItem } from 'primeng/primeng';
 import { WsAppStateService } from './../ws-app-state.service';
 import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.service';
 import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
 import { WsExplorerService } from './ws-explorer.service';
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-ws-explorer',
@@ -45,6 +42,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   private copyable = {};
   private pasteable = {};
   private openable = {};
+  private exportable = {};
   public subscribers: any[];
   public loading = true;
   public selectedNode: any;
@@ -62,7 +60,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     private explorerService: WsExplorerService,
     private breadcrumbService: WsMainBreadcrumbsService,
     private clipboard: WsClipboardService,
-    // private dragulaService: DragulaService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog) {
 
@@ -92,35 +89,6 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
     this.openable['jobDropTarget'] = true;
-
-    // dragulaService.setOptions('explorer-bag', {
-    //   revertOnSpill: true
-    // });
-
-    // let subscriber = dragulaService.drag.subscribe((value) => {
-    //   this.onDrag(value);
-    // });
-    // this.subscribers.push(subscriber);
-
-    // subscriber = dragulaService.drop.subscribe((value) => {
-    //   this.onDrop(value);
-    // });
-    // this.subscribers.push(subscriber);
-
-    // subscriber = dragulaService.dropModel.subscribe((value) => {
-    //   this.onDropModel(value);
-    // });
-    // this.subscribers.push(subscriber);
-
-    // subscriber = dragulaService.over.subscribe((value) => {
-    //   this.onOver(value);
-    // });
-    // this.subscribers.push(subscriber);
-
-    // subscriber = dragulaService.out.subscribe((value) => {
-    //   this.onOut(value);
-    // });
-    // this.subscribers.push(subscriber);
 
     let subscriber = this.explorerService.getRootSubject
       .subscribe(response => this.getRootResponse(response));
@@ -366,34 +334,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
   }
 
-  /* *** Dragula *** */
-  private onDrag(args) {
-  }
-
-  private onDrop(args) {
-  }
-
-  private onDropModel(args) {
-  }
-
-  private onOver(args) {
-  }
-
-  private onOut(args) {
-  }
-
   /* *** Dialogs *** */
 
   private openInfoDialog(msg: string) {
     const dialogRef = this.dialog.open(WsInfoDialogComponent, {
       width: '300px',
-      data: msg
-    });
-  }
-
-  private openErrorDialog(msg: string) {
-    const dialogRef = this.dialog.open(WsErrorDialogComponent, {
-      width: '600px',
       data: msg
     });
   }
@@ -615,6 +560,19 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         icon: 'fa-refresh',
         command: (event) => {
           this.refreshParent();
+        }
+      };
+      this.contextMenuItems.push({ separator: true });
+      this.contextMenuItems.push(menuItem);
+    }
+
+    if (this.childOpenedMenu && selectedNode.type in this.exportable) {
+      menuItem = {
+        label: 'Send to job drop folder',
+        icon: 'fa-indent',
+        command: (event) => {
+          this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
+          // this.openDeleteNodeDialog();
         }
       };
       this.contextMenuItems.push({ separator: true });
