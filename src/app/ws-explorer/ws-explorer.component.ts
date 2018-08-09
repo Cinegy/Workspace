@@ -1,3 +1,4 @@
+import { WsJdfDialogComponent } from './../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
 /*
 Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
 Copyright (C) 2018  Cinegy GmbH
@@ -54,6 +55,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   public displayDeleteDialog = false;
   public menuNode: any;
   public menuNodeType: any;
+  private jdfFolderFound: boolean;
 
   constructor(
     public appState: WsAppStateService,
@@ -62,7 +64,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     private clipboard: WsClipboardService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog) {
-
+    this.jdfFolderFound = false;
     this.contextMenuItems = [];
     this.subscribers = [];
 
@@ -89,6 +91,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
     this.openable['jobDropTarget'] = true;
+
+    this.exportable['clipBin'] = true;
+    this.exportable['roll'] = true;
+    this.exportable['documentBin'] = true;
+    this.exportable['sequence'] = true;
 
     let subscriber = this.explorerService.getRootSubject
       .subscribe(response => this.getRootResponse(response));
@@ -235,6 +242,17 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     this.childNodes = response.items;
+
+    if (!this.jdfFolderFound) {
+     for (let i = 0; i < this.childNodes.length; i++) {
+        const node = this.childNodes[i];
+        if (node.type === 'jobDropfolderContainer') {
+          this.appState.jdfRootNode = node;
+          this.jdfFolderFound = true;
+          break;
+        }
+      }
+    }
     console.log(`Get Children: ${this.childNodes.length}`);
   }
 
@@ -418,6 +436,19 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     });
   }
 
+  private openJDFDialog() {
+    const dialogRef = this.dialog.open(WsJdfDialogComponent, {
+      width: '500px',
+      height: '600px',
+      data: this.menuNode
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+    });
+  }
+
   /* *** Conetxt Menu *** */
 
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
@@ -572,7 +603,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         icon: 'fa-indent',
         command: (event) => {
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
-          // this.openDeleteNodeDialog();
+          this.openJDFDialog();
         }
       };
       this.contextMenuItems.push({ separator: true });

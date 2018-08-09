@@ -1,3 +1,4 @@
+import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -12,6 +13,7 @@ import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.compon
 import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin-dialog.component';
 import { WsUserInfoDialogComponent } from './ws-user-info-dialog/ws-user-info-dialog.component';
 import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
+import { TreeModule } from 'angular-tree-component';
 
 @NgModule({
   imports: [
@@ -23,7 +25,8 @@ import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
     MatSelectModule,
     MatDialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TreeModule
   ],
   declarations: [
     WsCreateFolderDialogComponent,
@@ -34,6 +37,9 @@ import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
     WsCreateBinDialogComponent,
     WsUserInfoDialogComponent,
     WsJdfDialogComponent],
+  providers: [
+    WsJdfBrowseService
+  ],
   exports: [
     WsCreateFolderDialogComponent,
     WsInfoDialogComponent,
@@ -47,6 +53,7 @@ import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
     WsDeleteDialogComponent,
     WsRenameDialogComponent,
     WsErrorDialogComponent,
-    WsCreateBinDialogComponent]
+    WsCreateBinDialogComponent,
+    WsJdfDialogComponent]
 })
 export class WsDialogsModule { }

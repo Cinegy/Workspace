@@ -1,7 +1,8 @@
+import { WsJdfDialogComponent } from './../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
 /*
 Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
 Copyright (C) 2018  Cinegy GmbH
- 
+
 	This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +15,7 @@ Copyright (C) 2018  Cinegy GmbH
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
+
 */
 
 import { WsPlayerService } from './../ws-player/ws-player.service';
@@ -55,6 +56,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private copyable = {};
   private pasteable = {};
   private openable = {};
+  private exportable = {};
   private pasteTypesAllowedInClipBin = {};
   private pasteTypesAllowedInDocumentBin = {};
 
@@ -88,6 +90,14 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     this.pasteable['clipBin'] = true;
     this.pasteable['documentBin'] = true;
+
+    this.exportable['masterClip'] = true;
+    this.exportable['clip'] = true;
+    this.exportable['document'] = true;
+    this.exportable['clipBin'] = true;
+    this.exportable['documentBin'] = true;
+    this.exportable['roll'] = true;
+    this.exportable['sequence'] = true;
 
     this.pasteTypesAllowedInClipBin['clip'] = true;
     this.pasteTypesAllowedInClipBin['masterClip'] = true;
@@ -461,6 +471,19 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private openJDFDialog() {
+    const dialogRef = this.dialog.open(WsJdfDialogComponent, {
+      width: '500px',
+      height: '600px',
+      data: this.menuNode
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+    });
+  }
+
   /* *** Context Menu *** */
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
     let menuItem: any;
@@ -521,6 +544,18 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.openDeleteNodeDialog(selectedNode);
           }
         };
+        this.contextMenuItems.push(menuItem);
+      }
+
+      if (this.childOpenedMenu && selectedNode.type in this.exportable) {
+        menuItem = {
+          label: 'Send to job drop folder',
+          icon: 'fa-indent',
+          command: (event) => {
+            this.openJDFDialog();
+          }
+        };
+        this.contextMenuItems.push({ separator: true });
         this.contextMenuItems.push(menuItem);
       }
     }

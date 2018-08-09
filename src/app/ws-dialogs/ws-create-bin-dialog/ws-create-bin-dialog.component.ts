@@ -1,4 +1,3 @@
-import { WsMamError } from './../../shared/services/ws-base-mam/ws-mam-error';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { WsAppManagementService } from './../../ws-app-management.service';
 import { WsAppStateService } from './../../ws-app-state.service';
