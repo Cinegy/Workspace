@@ -2,9 +2,9 @@ version: 11.0.{build}
 image: Visual Studio 2017
 init:
 - ps: >-
-  Install-Product node 6 x64
+    Install-Product node 6 x64
 
-  iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
 - cmd: npm install
 build_script:
