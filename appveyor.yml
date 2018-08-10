@@ -5,10 +5,11 @@ init:
     Install-Product node 8 x64
 
     iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
-    npm install -g @angular/cli
 install:
-- cmd: npm install
+- cmd: >-
+    npm install -g @angular/cli
+
+    npm install
 build_script:
 - cmd: ng build --prod --aot
 test: off
