@@ -1,11 +1,16 @@
 version: 11.0.{build}
-stack: node 6
-image: Ubuntu
-environment:
-  APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDX+FHm+RtyxZ38iRGHLihL55uEOU5ulHzLAuj+CGo0PqhL7EnDH3NBKOv3FnQZyzUjQCPzi4Ihj3qF+lV+pwNAhyET40JvK5tglb361kkTUoiLIjMQ1+4bxNYggy7JOm5imJsYf97sP7HzsG2YiCHrb1g/M5JL/PWhHRGHYY8VTeb4j2kzucVeT458RpupbkzcOzibB1F7VkarF0seBPmDbOKWaQKZN3SrBd0LZ/4oyRu2E5M2AEe7HJd2NMHe+zn/tUHPb3RsDgD9/Vf8fKv8AaoqjbdlvVYm1pk5RWoiRSwTXKPX/ikR1kabETqHzQZ90QAvMjiKIhPsWYpQqH45XjX4sjdVgbLbnHXSzj0L3cCtV+FLbA9sOp3aBBoyO+OPKD8faxnfY7rgUcMXyMoBrfAVcZpde+gSbHiLUeLA4WUVyGlqmMfsDtj/oUL60+7ALRilz7c+NdIR9KjU3kzibEJDuaY0hLLJosLl3/QGmcq0B09BEbnTm9T9KJ1gUd33fADrSfNUGrLkIb+Gg/Lqyg3v+3iwOMCSAmNWx/JNjKz/x+qvvVv0/TtdAeC5RQ/0sBktWKMaeN4mnzUGRmYFK3RuHEVnTKXKZy0nhriBphWXzglCG1MfmaJHdJrmeFRNKlsoVoy87cA1roYK32hPeZ5EjvM+Hcczqw8yHfzz1Q==
+image: Visual Studio 2017
+init:
+- ps: Install-Product node 8 x64
 install:
-#- sh: npm install
-#- sh: ng build --prod --aot
-- sh: export APPVEYOR_SSH_BLOCK=true
-- sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-build: off
+- cmd: >-
+    npm install -g @angular/cli
+
+    npm install
+build_script:
+- cmd: ng build --prod --aot
+test: off
+artifacts:
+- path: ./dist/
+  name: Workspace-%APPVEYOR_REPO_BRANCH%-%APPVEYOR_BUILD_VERSION%
+deploy: off
