@@ -3,12 +3,15 @@ image: Visual Studio 2017
 init:
 - ps: Install-Product node 8 x64
 install:
-- cmd: >-
+- ps: >-   
     npm install -g @angular/cli
 
     npm install
 build_script:
-- cmd: ng build --prod --aot
+- ps: >-
+    patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
+
+    ng build --prod --aot
 test: off
 artifacts:
 - path: ./dist/
