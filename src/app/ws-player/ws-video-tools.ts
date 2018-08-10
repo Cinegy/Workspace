@@ -118,7 +118,7 @@ export class WsVideoTools {
       case 'image':
         if (clip.thumbnailUrl) {
           urlParams = this.getUrlParams(clip.thumbnailUrl);
-          url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(urlParams.get('file'))}&frame=0&width=160`;
+          url = `${mam.thumbnailServer}${clip.id}.png?file=${(urlParams.get('file'))}&frame=0&width=160`;
         }
 
         return url;
@@ -127,7 +127,7 @@ export class WsVideoTools {
         if (clip.thumbnailUrl) {
           urlParams = this.getUrlParams(clip.thumbnailUrl);
           // tslint:disable-next-line:max-line-length
-          url = `${mam.thumbnailServer}${clip.id}.png?file=${encodeURIComponent(urlParams.get('file'))}&frame=${urlParams.get('frame')}&width=160`;
+          url = `${mam.thumbnailServer}${clip.id}.png?file=${(urlParams.get('file'))}&frame=${urlParams.get('frame')}&width=160`;
         }
         return url;
       default:
