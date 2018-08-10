@@ -1,10 +1,7 @@
 version: 11.0.{build}
 image: Visual Studio 2017
 init:
-- ps: >-
-    Install-Product node 8 x64
-
-    iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+- ps: Install-Product node 8 x64
 install:
 - cmd: >-
     npm install -g @angular/cli
@@ -15,7 +12,5 @@ build_script:
 test: off
 artifacts:
 - path: ./dist/
-  name: Workspace
+  name: Workspace-%APPVEYOR_REPO_BRANCH%-%APPVEYOR_BUILD_VERSION%
 deploy: off
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
