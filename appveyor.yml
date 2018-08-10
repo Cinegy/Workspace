@@ -1,11 +1,11 @@
 version: 11.0.{build}
 image: Visual Studio 2017
 init:
-- sh: Install-Product node 6 x64
+- ps: Install-Product node 6 x64
 install:
-- sh: npm install
+- cmd: npm install
 build_script:
-- sh: ng build --prod --aot
+- cmd: ng build --prod --aot
 test: off
 artifacts:
 - path: ./dist/
