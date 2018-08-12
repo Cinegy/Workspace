@@ -9,9 +9,9 @@ install:
     npm install
 build_script:
 - ps: >-
-    patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
+    ./patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
 
-    ng build --prod --aot
+    ng build --prod --aot > log.txt
 test: off
 artifacts:
 - path: ./dist/
