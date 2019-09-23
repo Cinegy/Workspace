@@ -1,13 +1,14 @@
-import { Router } from '@angular/router';
-import { WsCisService } from './../shared/services/ws-cis/ws-cis.service';
-import { WsAppStateService } from './../ws-app-state.service';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsLoginService } from './ws-login.service';
-import { WsMamConnection, WsCisConfiguration } from './../shared/services/ws-base-mam/ws-mam-connection';
-import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WsConfiguration } from '../ws-configuration/ws-configuration';
+import { WsMamConnection } from '../shared/services/ws-base-mam/ws-mam-connection';
+import { Router } from '@angular/router';
+import { WsLoginService } from './ws-login.service';
+import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';
+
 import { LocalStorageService } from 'angular-2-local-storage';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
+import { WsAppStateService } from '../ws-app-state.service';
 
 @Component({
   selector: 'app-ws-login',
@@ -25,14 +26,14 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   public username: string;
   public password: string;
 
-  constructor(
-    private appState: WsAppStateService,
+  constructor(private appState: WsAppStateService,
     private configService: WsConfigurationService,
     private loginService: WsLoginService,
     private cisService: WsCisService,
-    private storageService: LocalStorageService,
+    //private storageService: LocalStorageService,
     private router: Router) {
     this.subscribers = [];
+
   }
 
   ngOnInit() {
@@ -41,24 +42,27 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.subscribers.push(subscriber);
 
     this.init(this.configService.configuration);
+    
+if(this.configService.configuration.cis.useCis && !this.cisService.isLoggedIn()){
+  const success:Promise<boolean>=this.cisService.completeAuthentication();
+  success.then(result=>{
+    if(!result){
 
-    if (this.configService.configuration.cis.useCis && !this.cisService.isLoggedIn()) {
-      const success: Promise<boolean> = this.cisService.completeAuthentication();
-      success
-        .then(result => {
-          if (!result) {
-            this.router.navigate(['/cislogin']);
-          }
-        });
+      this.router.navigate(['/cisLogin']);
     }
-  }
+  });
 
+
+}
+
+
+  }
   ngOnDestroy() {
     this.subscribers.forEach(element => {
       element.unsubscribe();
     });
-  }
 
+  }
   public onSubmit() {
     this.errorMsg = [];
     this.appState.setConnectionState(false, null);
@@ -68,26 +72,32 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.selectedMam.domain = this.selectedDomain;
     this.selectedMam.cis = this.configuration.cis;
     this.loginService.login(this.selectedMam, false);
-  }
 
-  private init(config: WsConfiguration) {
+  }
+  public init(config: WsConfiguration) {
     this.configuration = config;
     this.selectedDomain = this.configuration.domains[0];
     this.selectedMam = this.configuration.mams[0];
-  }
 
-  private loginResponse(response: any) {
+  }
+  public loginResponse(response: any) {
     this.isConnectionSpinnerHidden = true;
 
     if (response instanceof WsMamError) {
       const error: WsMamError = response;
       this.appState.setConnectionState(false, null);
-      console.log(`Error: ${error.msg}`);
+      console.log('Error: ${error.msg}');
       this.errorMsg.push({ severity: 'error', detail: error.msg });
-    } else {
+    }
+    else {
       this.appState.setAuthHeader(response.access_token, response.token_type, response.expires_in);
+
       this.appState.setConnectionState(true, this.selectedMam);
       console.log(`${this.selectedMam.username} logged in`);
+      console.log("toke :"+response.access_token);
+
     }
+
   }
+
 }

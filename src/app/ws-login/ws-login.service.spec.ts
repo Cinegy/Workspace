@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { WsLoginService } from './ws-login.service';
+import { EgsWebLoginService } from './ws-login.service';
 
-describe('WsLoginService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsLoginService]
-    });
-  });
+describe('EgsWebLoginService', () => {
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsLoginService], (service: WsLoginService) => {
+  it('should be created', () => {
+    const service: EgsWebLoginService = TestBed.get(EgsWebLoginService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

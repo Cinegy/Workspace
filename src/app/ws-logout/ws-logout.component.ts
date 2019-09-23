@@ -1,12 +1,12 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ws-logout',
   templateUrl: './ws-logout.component.html',
   styleUrls: ['./ws-logout.component.css']
 })
-export class WsLogoutComponent implements OnInit {
+export class WsLogoutComponent implements  OnInit {
 
   constructor(private router: Router) { }
 
@@ -18,3 +18,4 @@ export class WsLogoutComponent implements OnInit {
   }
 
 }
+

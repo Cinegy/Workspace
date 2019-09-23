@@ -1,5 +1,5 @@
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-ws-info-dialog',
@@ -16,3 +16,4 @@ export class WsInfoDialogComponent implements OnInit {
   }
 
 }
+

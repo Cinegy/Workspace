@@ -1,19 +1,19 @@
-import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatInputModule, MatSelectModule, MatDialogModule } from '@angular/material';
-import { NgModule } from '@angular/core';
+import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.component';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule, MatInputModule, MatSelectModule, MatDialogModule, MatFormFieldModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TreeModule } from 'angular-tree-component';
+import { NgModule } from '@angular/core';
+import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin-dialog.component';
 import { WsCreateFolderDialogComponent } from './ws-create-folder-dialog/ws-create-folder-dialog.component';
 import { WsInfoDialogComponent } from './ws-info-dialog/ws-info-dialog.component';
+import { WsNodeImageModule } from '../ws-node-image/ws-node-image.module';
 import { WsDeleteDialogComponent } from './ws-delete-dialog/ws-delete-dialog.component';
-import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.component';
-import { WsErrorDialogComponent } from './ws-error-dialog/ws-error-dialog.component';
-import { WsCreateBinDialogComponent } from './ws-create-bin-dialog/ws-create-bin-dialog.component';
-import { WsUserInfoDialogComponent } from './ws-user-info-dialog/ws-user-info-dialog.component';
 import { WsJdfDialogComponent } from './ws-jdf-dialog/ws-jdf-dialog.component';
-import { TreeModule } from 'angular-tree-component';
+import { WsRenameDialogComponent } from './ws-rename-dialog/ws-rename-dialog.component';
+import { WsUserInfoDialogComponent } from './ws-user-info-dialog/ws-user-info-dialog.component';
+import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
 
 @NgModule({
   imports: [
@@ -25,8 +25,9 @@ import { TreeModule } from 'angular-tree-component';
     MatSelectModule,
     MatDialogModule,
     FormsModule,
-    ReactiveFormsModule,
-    TreeModule
+    ReactiveFormsModule, 
+    TreeModule,
+   MatFormFieldModule
   ],
   declarations: [
     WsCreateFolderDialogComponent,
@@ -35,8 +36,15 @@ import { TreeModule } from 'angular-tree-component';
     WsRenameDialogComponent,
     WsErrorDialogComponent,
     WsCreateBinDialogComponent,
+    WsCreateFolderDialogComponent,
+    WsInfoDialogComponent,
+    WsDeleteDialogComponent,
+    WsJdfDialogComponent,
+    WsRenameDialogComponent,
     WsUserInfoDialogComponent,
-    WsJdfDialogComponent],
+    WsCreateBinDialogComponent,
+    WsJdfDialogComponent
+  ],
   providers: [
     WsJdfBrowseService
   ],
@@ -46,7 +54,8 @@ import { TreeModule } from 'angular-tree-component';
     WsDeleteDialogComponent,
     WsRenameDialogComponent,
     WsErrorDialogComponent,
-    WsCreateBinDialogComponent],
+    WsCreateBinDialogComponent
+  ],
   entryComponents: [
     WsCreateFolderDialogComponent,
     WsInfoDialogComponent,
@@ -54,6 +63,7 @@ import { TreeModule } from 'angular-tree-component';
     WsRenameDialogComponent,
     WsErrorDialogComponent,
     WsCreateBinDialogComponent,
-    WsJdfDialogComponent]
+    WsJdfDialogComponent
+  ]
 })
 export class WsDialogsModule { }

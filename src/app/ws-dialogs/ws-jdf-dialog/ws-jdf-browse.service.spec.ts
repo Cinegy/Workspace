@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsJdfBrowseService } from './ws-jdf-browse.service';
 
 describe('WsJdfBrowseService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsJdfBrowseService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsJdfBrowseService], (service: WsJdfBrowseService) => {
+  it('should be created', () => {
+    const service: WsJdfBrowseService = TestBed.get(WsJdfBrowseService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

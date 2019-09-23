@@ -15,8 +15,8 @@
     font-size: x-small;
     text-align: center;
     text-overflow: ellipsis;
-    overflow-wrap: break-word;
-    overflow: hidden;
+    overflow-wrap: break-word; 
+ overflow: hidden;
     height: 40px;
 }
 .ws-bin-item-container .ws-card-item:hover,.ws-card-item-selected{
@@ -25,5 +25,6 @@
   background: #4C6494;
 }
 .ws-tab {
-    overflow-y: auto;
+    
+    overflow-y: auto; 
 }

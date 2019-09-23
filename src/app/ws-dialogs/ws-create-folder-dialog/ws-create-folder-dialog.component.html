@@ -3,9 +3,9 @@
     <app-ws-node-image mat-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
     Create {{data.name}}</h3>
   <div mat-dialog-content fxLayout class="mat-typography">
-    <mat-input-container fxFlex>
-      <input matInput required placeholder="New {{data.name}}" [(ngModel)]="result" name="result">
-    </mat-input-container>
+    <mat-form-field fxFlex> 
+      <input matInput required placeholder="New {{data.name}}" [(ngModel)]="result" name="result"></mat-form-field>
+
   </div>
   <div mat-dialog-actions fxLayout fxLayoutAlign="center">
     <button mat-button [mat-dialog-close]="result" [disabled]="!createFolderForm.form.valid"><i class="fa fa-check"></i> Create</button>

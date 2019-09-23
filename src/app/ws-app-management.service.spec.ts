@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsAppManagementService } from './ws-app-management.service';
 
 describe('WsAppManagementService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsAppManagementService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsAppManagementService], (service: WsAppManagementService) => {
+  it('should be created', () => {
+    const service: WsAppManagementService = TestBed.get(WsAppManagementService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

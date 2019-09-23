@@ -1,57 +1,39 @@
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
- 
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-*/
-
-import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
-import { WsCisLoginComponent } from './ws-cis-login/ws-cis-login.component';
-import { WsCisLoginModule } from './ws-cis-login/ws-cis-login.module';
-import { WsLogoutComponent } from './ws-logout/ws-logout.component';
-import { WsLogoutModule } from './ws-logout/ws-logout.module';
-import { MatSnackBar, MatSnackBarModule, MatNativeDateModule } from '@angular/material';
-import { WsDialogsModule } from './ws-dialogs/ws-dialogs.module';
-import { WsGlobalErrorHandler } from './ws-global-error-handler';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { WsBaseMamInterceptor } from './shared/services/ws-base-mam/ws-base-mam-interceptor';
-import 'hammerjs';
-import 'crypto';
-import 'webcrypto';
-import { WsAppManagementService } from './ws-app-management.service';
-import { WsAuthGuardService } from './ws-login/ws-auth-guard.service';
-import { WsMainComponent } from './ws-main/ws-main.component';
-import { WsMainModule } from './ws-main/ws-main.module';
-import { WsAppStateService } from './ws-app-state.service';
-import { WsLoginComponent } from './ws-login/ws-login.component';
-import { WsConfigurationModule } from './ws-configuration/ws-configuration.module';
-import { WsLoginModule } from './ws-login/ws-login.module';
-import { WsMainMenuModule } from './ws-main-menu/ws-main-menu.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { WsLoginComponent } from './ws-login/ws-login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule, MatInputModule, MatSelectModule, MatCardModule, MatSnackBarModule, MatNativeDateModule, MatIconRegistry, MatDialogModule, MatTabsModule, MatListModule, MatTooltipModule, MatMenuModule, MatIconModule, MatToolbarModule } from '@angular/material';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { WsAppStateService } from './ws-app-state.service';
+import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
 import { RouterModule, Routes } from '@angular/router';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { WsPlayerComponent } from './ws-player/ws-player.component';
-import { WsToggleFullscreenDirective } from './ws-toggle-fullscreen.directive';
-import { MatIconRegistry } from '@angular/material/icon';
-import { WsClipboardService } from './ws-clipboard/ws-clipboard.service';
-import { WsUploadComponent } from './ws-upload/ws-upload.component';
 import { CookieService } from 'ngx-cookie-service';
+import { WsGlobalErrorHandler } from './ws-global-error-handler';
+import { WsBaseMamInterceptor } from './shared/services/ws-base-mam/ws-base-mam-interceptor';
+import { WsClipboardService } from './ws-clipboard/ws-clipboard.service';
+import { WsAppManagementService } from './ws-app-management.service';
+import { WsDialogsModule } from './ws-dialogs/ws-dialogs.module';
+import { WsCisLoginComponent } from './ws-cis-login/ws-cis-login.component';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { WsMainComponent } from './ws-main/ws-main.component';
+import { DragulaModule, DragulaService } from 'ng2-dragula';
+import { WsMainBreadcrumbsService } from './ws-main/ws-main-breadcrumbs.service';
+import { WsExplorerService } from './ws-explorer/ws-explorer.service';
+import { WsAuthGuardService } from './ws-login/ws-auth-guard.service';
+import { WsMainModule } from './ws-main/ws-main.module';
+import { WsLogoutComponent } from './ws-logout/ws-logout.component';
+import { WsCisLoginModule } from './ws-cis-login/ws-cis-login.module';
+import { WsLogoutModule } from './ws-logout/ws-logout.module';
+import { WsLoginModule } from './ws-login/ws-login.module';
+import { WsMainMenuModule } from './ws-main-menu/ws-main-menu.module';
+import { WsNewsComponent } from './ws-news/ws-news.component';
+import { WsRundownComponent } from './ws-news/ws-rundown/ws-rundown.component';
+import { WsStoryPoolComponent } from './ws-news/ws-story-pool/ws-story-pool.component';
+import { WsStoryComponent } from './ws-story/ws-story.component';
+
+
 
 const appRoutes: Routes = [
   { path: 'cislogin', component: WsCisLoginComponent },
@@ -74,31 +56,36 @@ const appRoutes: Routes = [
   }
 ];
 
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
+   
+ 
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      { useHash: false }
+    { useHash: false },
+     
     ),
-    LocalStorageModule.withConfig({
+    LocalStorageModule.forRoot({
       prefix: 'cinegy-workspace',
       storageType: 'localStorage'
     }),
     BrowserModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     WsDialogsModule,
-    MatSnackBarModule,
-    MatNativeDateModule,
+    DragulaModule,
     WsMainModule,
-    WsConfigurationModule,
-    WsMainMenuModule,
-    WsLoginModule,
+    WsCisLoginModule,
     WsLogoutModule,
-    WsCisLoginModule
+    WsLoginModule,
+    WsMainMenuModule
+
+  ],
+  exports: [RouterModule
   ],
   providers: [
     WsAppStateService,
@@ -106,6 +93,9 @@ const appRoutes: Routes = [
     WsClipboardService,
     CookieService,
     MatIconRegistry,
+    WsMainBreadcrumbsService,
+    WsExplorerService,
+    DragulaService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: WsBaseMamInterceptor,
@@ -113,13 +103,13 @@ const appRoutes: Routes = [
     },
     {
       provide: ErrorHandler,
-      useClass: WsGlobalErrorHandler
+      useClass:WsGlobalErrorHandler
     },
     WsConfigurationService,
     // tslint:disable-next-line:max-line-length
     { provide: APP_INITIALIZER, useFactory: (config: WsConfigurationService) => () => config.getConfig(), deps: [WsConfigurationService], multi: true }
   ],
-  exports: [RouterModule],
+
   entryComponents: [],
   bootstrap: [AppComponent]
 })

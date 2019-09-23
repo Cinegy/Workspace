@@ -8,14 +8,15 @@
       </mat-card-header>
       <mat-card-content fxLayout="column">
         <div>
-          <mat-input-container fxFlex="100">
+         
+            <mat-form-field fxFlex="100">
             <input matInput required placeholder="Username" [(ngModel)]="username" name="username" #localUsername="ngModel">
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div>
-          <mat-input-container fxFlex="100">
+          <mat-form-field fxFlex="100">
             <input matInput required type="password" placeholder="Password" [(ngModel)]="password" name="password" #localPassword="ngModel">
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <p>
           <mat-select *ngIf="configuration && configuration.domains" required placeholder="Select Domain" [(ngModel)]="selectedDomain"

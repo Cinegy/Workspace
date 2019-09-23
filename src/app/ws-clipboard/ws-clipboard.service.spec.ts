@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsClipboardService } from './ws-clipboard.service';
 
 describe('WsClipboardService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsClipboardService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsClipboardService], (service: WsClipboardService) => {
+  it('should be created', () => {
+    const service: WsClipboardService = TestBed.get(WsClipboardService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

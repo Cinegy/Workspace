@@ -1,12 +1,12 @@
-import { WsAppStateService } from './../../../ws-app-state.service';
-import { WsMamConnection } from './ws-mam-connection';
-import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
+import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { WsMamError } from './ws-mam-error';
+import { Subject } from 'rxjs/Subject';
+import { WsAppStateService } from 'src/app/ws-app-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsBaseMamService {
   constructor(
     protected httpClient: HttpClient,

@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsMainBreadcrumbsService } from './ws-main-breadcrumbs.service';
 
 describe('WsMainBreadcrumbsService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsMainBreadcrumbsService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsMainBreadcrumbsService], (service: WsMainBreadcrumbsService) => {
+  it('should be created', () => {
+    const service: WsMainBreadcrumbsService = TestBed.get(WsMainBreadcrumbsService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

@@ -1,10 +1,12 @@
-import { Subject } from 'rxjs/Subject';
-import { WsBaseMamService } from './../shared/services/ws-base-mam/ws-base-mam.service';
-import { WsAppStateService } from './../ws-app-state.service';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.service';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { WsAppStateService } from '../ws-app-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsJdfService extends WsBaseMamService {
   public getJdfSubject: Subject<any> = new Subject<any>();
 

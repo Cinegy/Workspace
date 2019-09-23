@@ -1,5 +1,5 @@
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-ws-error-dialog',
@@ -14,5 +14,4 @@ export class WsErrorDialogComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

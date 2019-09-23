@@ -1,6 +1,6 @@
-import { WsMainBreadcrumbsService } from './ws-main-breadcrumbs.service';
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/components/common/menuitem';
+import { WsMainBreadcrumbsService } from './ws-main-breadcrumbs.service';
+import { WsAppStateService } from '../ws-app-state.service';
 
 @Component({
   selector: 'app-ws-main',
@@ -8,10 +8,14 @@ import { MenuItem } from 'primeng/components/common/menuitem';
   styleUrls: ['./ws-main.component.css']
 })
 export class WsMainComponent implements OnInit {
+  public showMode:string;
 
   constructor(
-    public breadcrumbService: WsMainBreadcrumbsService
-  ) { }
+    public breadcrumbService:WsMainBreadcrumbsService,
+    public appState: WsAppStateService
+    ) { 
+      this.showMode = appState.showMode;
+    }
 
   ngOnInit() {
     this.breadcrumbService.reset();

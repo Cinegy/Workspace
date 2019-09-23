@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsBinsService } from './ws-bins.service';
 
 describe('WsBinsService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsBinsService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsBinsService], (service: WsBinsService) => {
+  it('should be created', () => {
+    const service: WsBinsService = TestBed.get(WsBinsService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

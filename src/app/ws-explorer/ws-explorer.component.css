@@ -1,5 +1,6 @@
 mat-list-item {
     cursor: pointer;
+   
 }
 .ws-explorer-header {
     cursor: pointer;
@@ -7,6 +8,7 @@ mat-list-item {
 }
 .ws-explorer-item-container .ws-explorer-item:hover, .ws-explorer-item-selected {
   border-color:#4C6494;
-  background: #4C6494;
+  background: #4C6494; 
+  
 }
 

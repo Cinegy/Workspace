@@ -1,15 +1,14 @@
-<mat-card>
+  <mat-card>
   <mat-card-content #explorerNodes>
     <h5 *ngIf="selectedNode" (click)="selectParent()" (contextmenu)="contextMenuOpen(selectedNode, false)" class="ws-explorer-header">
-      <app-ws-node-image mat-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+      <app-ws-node-image class="mat-card-avatar" *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
         [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
       </app-ws-node-image>
       {{selectedNode.name}} <span *ngIf="childNodes">({{childNodes.length}})</span>
     </h5>
-    <mat-divider></mat-divider>
     <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
     <mat-list dense *ngIf="childNodes" [dragula]='"explorer-bag"' [dragulaModel]='childNodes' class="ws-explorer-item-container">
-      <mat-list-item
+      <mat-list-item 
         class="ws-explorer-item ws-card-item-selected"
         [class.ws-explorer-item-selected]="child.isSelected"
         *ngFor="let child of childNodes; let i = index"

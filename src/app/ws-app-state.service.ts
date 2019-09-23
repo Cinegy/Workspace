@@ -1,31 +1,10 @@
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
- 
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-*/
-
-import { WsConfigurationService } from './ws-configuration/ws-configuration.service';
-import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
-import { Router } from '@angular/router';
-import { WsMamConnection, WsCisConfiguration } from './shared/services/ws-base-mam/ws-mam-connection';
 import { Injectable } from '@angular/core';
+import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
+import { Subject } from 'rxjs/Subject';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsAppStateService {
   private _connected: boolean;
   private _selectedMam: WsMamConnection;
@@ -38,6 +17,8 @@ export class WsAppStateService {
   public updateNodeSubject: Subject<any> = new Subject<any>();
   public deleteNodeSubject: Subject<any> = new Subject<any>();
   public playClipSubject: Subject<any> = new Subject<any>();
+  public openNewsNodeSubject: Subject<any> = new Subject<any>();
+  public openStoryNodeSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
   public itemsPerPage: number;
@@ -45,7 +26,7 @@ export class WsAppStateService {
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};
   public descriptors: {[type: string]: any } = {};
-
+  public showMode:string = 'bins';
   constructor() {
     this._connected = false;
   }
@@ -55,6 +36,7 @@ export class WsAppStateService {
   }
 
   public get selectedMam(): WsMamConnection {
+    console.log(this._selectedMam);
     return this._selectedMam;
   }
 
@@ -67,6 +49,7 @@ export class WsAppStateService {
   }
 
   public setConnectionState(connected: boolean, selectedMam: WsMamConnection): void {
+  
     this._connected = connected;
     this._selectedMam = selectedMam;
 
@@ -105,5 +88,12 @@ export class WsAppStateService {
 
   public playClip(node: any): void {
     this.playClipSubject.next(node);
+  }
+  public openNewsNode(node:any) :void{
+    this.openNewsNodeSubject.next(node);
+  }
+
+  public openStoryNode(node:any): void{
+    this.openStoryNodeSubject.next(node);
   }
 }

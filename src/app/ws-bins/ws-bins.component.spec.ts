@@ -19,7 +19,7 @@ describe('WsBinsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs/Subject';
 
 import { HttpClient } from '@angular/common/http';
-import { resolve } from 'path';
+
 import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
 import { FileUploader } from 'ng2-file-upload';
 

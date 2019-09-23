@@ -1,14 +1,12 @@
+import { WsGenericUploadStore, IWsUploadStore, StoreState, WsUploadStoreType } from './ws-upload-store';
 import { Subject } from 'rxjs/Subject';
-import { SimpleTimer } from 'ng2-simple-timer';
-import { UUID } from 'angular2-uuid';
-import { WsMamError } from './ws-mam-error';
-import { WsCisService } from './../ws-cis/ws-cis.service';
-import { WsMamConnection } from './ws-mam-connection';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
 import { FileUploader } from 'ng2-file-upload';
-import { WsGenericUploadStore, IWsUploadStore, WsUploadStoreType, StoreState } from './ws-upload-store';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { WsCisService } from '../ws-cis/ws-cis.service';
+import { UUID } from 'angular2-uuid';
 import * as AWS from 'aws-sdk';
+import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
+
 
 export class WsAWSUploadStore extends WsGenericUploadStore implements IWsUploadStore, IDisposable {
   public subscribers: any[];

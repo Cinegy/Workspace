@@ -17,12 +17,13 @@ Copyright (C) 2018  Cinegy GmbH
 	
 */
 
-import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
-import { Subject } from 'rxjs/Subject';
-import { WsAppStateService } from './ws-app-state.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
+
 import { Injectable } from '@angular/core';
+import { WsBaseMamService } from './shared/services/ws-base-mam/ws-base-mam.service';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { WsAppStateService } from './ws-app-state.service';
+import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
 
 @Injectable()
 export class WsAppManagementService extends WsBaseMamService {
@@ -60,17 +61,21 @@ export class WsAppManagementService extends WsBaseMamService {
 
     this.get(`${this.appState.selectedMam.mamEndpoint}management/version`, this.mamVersionSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
-    this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
+   // this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?scope.type=png&scope=large`, this.getIconsSubject);
+   
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=clipBin&type=documentBin&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
+   // this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=clipBin&type=documentBin&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=clipBin&type=documentBin&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
   }
 
   public heartbeat() {
     this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.heartbeatSubject, 'heartbeat');
   }
+ // private selectedNodeResponse(response: any) {
 
-  private selectedNodeResponse(response: any) {
+  public selectedNodeResponse(response: any) {
     if (response instanceof WsMamError) {
       return;
     }
@@ -104,6 +109,7 @@ export class WsAppManagementService extends WsBaseMamService {
 
     nodeTypes.forEach(nodeType => {
       this.appState.nodeTypes[nodeType.type] = nodeType;
+    
     });
   }
 
