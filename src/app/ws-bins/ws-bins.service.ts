@@ -1,11 +1,12 @@
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsAppStateService } from './../ws-app-state.service';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
 import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.service';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { WsAppStateService } from '../ws-app-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsBinsService extends WsBaseMamService {
   private clipboardItem: any;
   public getChildrenSubject: Subject<any> = new Subject<any>();
@@ -19,6 +20,7 @@ export class WsBinsService extends WsBaseMamService {
   public copyNodeSubject: Subject<any> = new Subject<any>();
   // public internalCutClipSubject: Subject<any> = new Subject<any>();
   public cutNodeSubject: Subject<any> = new Subject<any>();
+  public getMetadataSubject: Subject<any> = new Subject<any>();
 
   constructor(
     protected httpClient: HttpClient,
@@ -80,7 +82,8 @@ export class WsBinsService extends WsBaseMamService {
     }
 
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
+ 
   }
 
   public search(keywords: string, take?: number, skip?: number) {
@@ -125,13 +128,8 @@ export class WsBinsService extends WsBaseMamService {
       null,
       this.cutNodeSubject);
   }
-
-  // private internalCutClipResponse(response) {
-  //   if (response instanceof WsMamError) {
-  //     return;
-  //   }
-
-  //   this.copyClipSubject.next(response);
-  //   this.delete(`${this.appState.selectedMam.mamEndpoint}node?id=${this.clipboardItem.id}`, this.cutClipSubject);
+  // public getMetadata(node: any) {
+  
+  //   this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${node.id}`, this.getMetadataSubject);
   // }
 }

@@ -3,9 +3,9 @@
     <app-ws-node-image mat-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
     Rename {{data.name}}</h3>
   <div mat-dialog-content fxLayout class="mat-typography">
-    <mat-input-container fxFlex>
+    <mat-form-field  fxFlex> 
       <input matInput required placeholder="Rename {{data.name}}" [(ngModel)]="data.name" name="data.name" [value]="data.name">
-    </mat-input-container>
+   </mat-form-field>
   </div>
   <div mat-dialog-actions fxLayout fxLayoutAlign="center">
     <button mat-button [mat-dialog-close]="data.name" [disabled]="!renameNodeForm.form.valid"><i class="fa fa-check"></i> Rename</button>

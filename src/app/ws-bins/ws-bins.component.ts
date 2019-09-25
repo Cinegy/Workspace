@@ -1,35 +1,20 @@
-import { WsJdfDialogComponent } from './../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
-
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-
-import { WsPlayerService } from './../ws-player/ws-player.service';
-import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
-import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { MatDialog, PageEvent, MatSnackBar } from '@angular/material';
-import { MenuItem } from 'primeng/primeng';
-import { WsVideoTools } from './../ws-player/ws-video-tools';
-import { BinNode } from './bin-node';
-import { WsBinsService } from './ws-bins.service';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsAppManagementService } from './../ws-app-management.service';
-import { WsAppStateService } from './../ws-app-state.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BinNode } from './bin-node';
+import { MenuItem } from 'primeng/primeng';
+import { WsAppStateService } from '../ws-app-state.service';
+import { MatDialog, MatSnackBar, PageEvent } from '@angular/material';
+import { WsClipboardService, ClipboardAction } from '../ws-clipboard/ws-clipboard.service';
+import { WsBinsService } from './ws-bins.service';
+import { WsAppManagementService } from '../ws-app-management.service';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { WsVideoTools } from '../ws-player/ws-video-tools';
+import { WsPlayerService } from '../ws-player/ws-player.service';
+import { WsDeleteDialogComponent } from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
+import { WsJdfDialogComponent } from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
+import { SaveMetadataRequest } from '../ws-metadata/save-metadata-request';
+import { WsMetadataService } from '../ws-metadata/ws-metadata.service';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ws-bins',
@@ -37,7 +22,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./ws-bins.component.css']
 })
 export class WsBinsComponent implements OnInit, OnDestroy {
+
+  public getRollSubject: Subject<any> = new Subject<any>();
   private videoHelper = new WsVideoTools();
+
+
   public subscribers: any[];
   public lastOpenedNode: any;
   public selectedNode: any;
@@ -59,8 +48,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private exportable = {};
   private pasteTypesAllowedInClipBin = {};
   private pasteTypesAllowedInDocumentBin = {};
+  private speechtotext_descriptionID;
 
   constructor(
+    private httpClient: HttpClient,
+    public metadataService: WsMetadataService,
     public appState: WsAppStateService,
     public management: WsAppManagementService,
     private binService: WsBinsService,
@@ -165,6 +157,9 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.createSubclipResponse(response));
     this.subscribers.push(subscriber);
 
+    // subscriber = this.binService.getMetadataSubject
+    //   .subscribe(response => this.getMetadataResponse(response));
+    // this.subscribers.push(subscriber);
   }
 
   ngOnInit() {
@@ -194,11 +189,13 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   }
 
   private selectItem(item: any, event) {
+
     if (this.selectedNode != null) {
       this.selectedNode.isSelected = null;
     }
 
     this.selectedNode = item;
+    // this.binService.getMetadata(this.selectedNode);
     this.selectedNode.isSelected = true;
     this.appState.selectNode(item);
   }
@@ -298,7 +295,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       this.lastOpenedNode = null;
       return;
     }
-
     for (let i = 0; i < this.tabs.length; i++) {
       const tab = this.tabs[i];
       if (
@@ -306,6 +302,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
         tab.children = response.items;
         tab.childCount = response.totalCount;
+       // alert("tab.children  " + tab.parent.type + " tab.childCount " + tab.childCount);
 
         if (this.selectedIndex !== i) {
           this.selectedIndex = i;
@@ -414,6 +411,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   }
 
   private createSubclipResponse(response) {
+
     if (response instanceof WsMamError) {
       return;
     }
@@ -607,19 +605,19 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             }
           }
         },
-        this.contextMenuItems.push(menuItem);
+          this.contextMenuItems.push(menuItem);
         menuItem = {
           label: 'Close other Tabs',
           icon: 'fa-times-circle',
           command: (event) => {
-              for (let i = this.tabs.length - 1; i >= 0; i--) {
-                if (this.selectedIndex !== i) {
-                  this.closeTab(this.tabs[i]);
-                }
+            for (let i = this.tabs.length - 1; i >= 0; i--) {
+              if (this.selectedIndex !== i) {
+                this.closeTab(this.tabs[i]);
               }
+            }
           }
         },
-        this.contextMenuItems.push(menuItem);
+          this.contextMenuItems.push(menuItem);
         this.contextMenuItems.push({ separator: true });
       }
 
@@ -644,4 +642,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+ 
 }

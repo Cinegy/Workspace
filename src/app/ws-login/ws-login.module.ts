@@ -1,39 +1,39 @@
-import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
-import { WsAuthGuardService } from './ws-auth-guard.service';
-import { WsLoginService } from './ws-login.service';
-import { WsConfigurationModule } from './../ws-configuration/ws-configuration.module';
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
-import { WsLoginComponent } from './ws-login.component';
-import { MatInputModule } from '@angular/material';
-import { MatCardModule } from '@angular/material';
-import { MatButtonModule } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatSelectModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MessagesModule } from 'primeng/primeng';
+import { WsLoginComponent } from './ws-login.component';
+import { WsLoginService } from './ws-login.service';
 import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
-
+import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';
+import { WsConfigurationModule } from '../ws-configuration/ws-configuration.module';
+import { WsAuthGuardService } from './ws-auth-guard.service';
+import { MatSelectModule, MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatCardTitle } from '@angular/material';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    WsConfigurationModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FlexLayoutModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MessagesModule
-  ],
-  providers: [
-    WsLoginService,
-    WsCisService,
-    WsAuthGuardService,
-    WsConfigurationService
-  ],
-  declarations: [WsLoginComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FlexLayoutModule,
+        MessagesModule,
+        WsConfigurationModule,//WsConfigurationModule    
+        MatFormFieldModule,
+        MatCardModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+    ],
+    providers: [
+        WsLoginService, //WsLoginService
+        WsCisService, //WsCisService
+        WsAuthGuardService, //WsAuthGuardService
+        WsConfigurationService //WsConfigurationService
+    ],
+    declarations: [WsLoginComponent]
+
 })
-export class WsLoginModule { }
+export class WsLoginModule {
+
+}

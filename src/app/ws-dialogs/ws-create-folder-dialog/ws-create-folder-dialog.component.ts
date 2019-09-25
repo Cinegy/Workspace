@@ -1,5 +1,5 @@
-import { WsAppStateService } from './../../ws-app-state.service';
 import { Component, OnInit, Inject } from '@angular/core';
+import { WsAppStateService } from 'src/app/ws-app-state.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({

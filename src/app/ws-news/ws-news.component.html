@@ -1,0 +1,21 @@
+<mat-form-field style="width:150px; padding-left:10px">
+  <input matInput [matDatepicker]="myDatepicker" (dateInput)="pickDateEvent('change' , $event)">
+  <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+  <mat-datepicker #myDatepicker></mat-datepicker>
+</mat-form-field>
+<mat-card fxFlex >
+  <mat-card-content fxFlexFill class="ws-card-content">
+      <mat-card fxFlexFill fxFlex="20" dense style="overflow-y: auto">
+          <h3>Story Pool</h3>
+          <mat-divider></mat-divider>
+        <mat-card-content style="height: 200px">
+          <app-ws-story-pool></app-ws-story-pool>
+        
+        </mat-card-content>
+      </mat-card>
+      <mat-card fxFlex="80">
+        <h3>Rundowns</h3>
+        <app-ws-rundown></app-ws-rundown>
+      </mat-card>
+  </mat-card-content>
+</mat-card>

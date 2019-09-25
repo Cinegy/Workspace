@@ -1,23 +1,20 @@
-import { WsBaseMamInterceptor } from './../shared/services/ws-base-mam/ws-base-mam-interceptor';
-import { WsDialogsModule } from './../ws-dialogs/ws-dialogs.module';
-import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
-import { WsNodeImageComponent } from './../ws-node-image/ws-node-image.component';
-import { WsExplorerService } from './ws-explorer.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WsExplorerComponent } from './ws-explorer.component';
-// tslint:disable-next-line:max-line-length
-import { MatButtonModule, MatCardModule, MatSelectModule, MatListModule, MatTooltipModule, MatInputModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-// tslint:disable-next-line:max-line-length
-import {
-  ContextMenuModule,
-  MenuItem
-} from 'primeng/primeng';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WsExplorerComponent } from './ws-explorer.component';
+import { WsExplorerService } from './ws-explorer.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { DragulaModule } from 'ng2-dragula';
-
+import { WsBaseMamInterceptor } from '../shared/services/ws-base-mam/ws-base-mam-interceptor';
+import { WsDialogsModule } from '../ws-dialogs/ws-dialogs.module';
+import {
+  MatCardModule, MatButtonModule, MatTooltipModule, MatInputModule,
+  MatSelectModule, MatDialogModule, MatSnackBarModule
+} from '@angular/material';
+import { ContextMenuModule } from 'primeng/primeng';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DragulaModule, DragulaService } from 'ng2-dragula';
+import { MatListModule } from '@angular/material/list'
+import { WsNodeImageModule } from '../ws-node-image/ws-node-image.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,15 +32,16 @@ import { DragulaModule } from 'ng2-dragula';
     ReactiveFormsModule,
     WsNodeImageModule,
     WsDialogsModule,
-    DragulaModule
+    DragulaModule,
+    MatListModule
   ],
   declarations: [WsExplorerComponent],
-  providers: [WsExplorerService,
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: WsBaseMamInterceptor,
-    multi: true
-  }],
+  providers: [WsExplorerService, DragulaService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: WsBaseMamInterceptor,
+      multi: true
+    }],
   exports: [WsExplorerComponent]
 })
 export class WsExplorerModule { }

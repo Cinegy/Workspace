@@ -1,17 +1,15 @@
-import { WsLogoutService } from './../ws-logout/ws-logout.service';
-import { MatIconRegistry } from '@angular/material/icon';
-import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { WsAppManagementService } from './../ws-app-management.service';
+import { Component, OnInit, OnDestroy, VERSION } from '@angular/core';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { MatIconRegistry, MatSnackBar, MatDialog } from '@angular/material';
 import { SimpleTimer } from 'ng2-simple-timer';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsUserInfoDialogComponent } from './../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
-import { WsBinsService } from './../ws-bins/ws-bins.service';
-import { WsLoginService } from './../ws-login/ws-login.service';
-import { WsAppStateService } from './../ws-app-state.service';
-import { Component, OnInit, VERSION, OnDestroy } from '@angular/core';
+import { WsAppManagementService } from '../ws-app-management.service';
+import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';
+import { WsLoginService } from '../ws-login/ws-login.service';
+import { WsAppStateService } from '../ws-app-state.service';
 import { Router } from '@angular/router';
+import { WsBinsService } from '../ws-bins/ws-bins.service';
+import { WsLogoutService } from '../ws-logout/ws-logout.service';
+import { WsUserInfoDialogComponent } from '../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
 
 @Component({
   selector: 'app-ws-main-menu',
@@ -62,7 +60,7 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
       .subscribe(response => this.heartbeatResponse(response));
     this.subscribers.push(subscriber);
 
-    subscriber = this.loginService.reconectSubject
+    subscriber = this.loginService.reconnectSubject
       .subscribe(response => this.reconnectResponse(response));
     this.subscribers.push(subscriber);
   }
@@ -150,12 +148,14 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     }
 
     this.timerIconName = this.timerIconNames[this.timerIconIndex];
+   
   }
 
   private stopTimer() {
     this.timer.unsubscribe(this.timerId);
     this.timer.delTimer(this.timerName);
     this.timerIconName = this.timerIconNames[0];
+  
   }
 
 }

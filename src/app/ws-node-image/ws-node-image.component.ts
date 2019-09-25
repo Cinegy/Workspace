@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-ws-node-image',
+
   templateUrl: './ws-node-image.component.html',
   styleUrls: ['./ws-node-image.component.css']
 })

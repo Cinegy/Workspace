@@ -3,9 +3,10 @@
     <app-ws-node-image mat-list-icon [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24" [imageHeight]="24"></app-ws-node-image>
     Create {{data.name}}</h3>
   <div mat-dialog-content fxLayout="column" class="mat-typography">
-    <mat-input-container fxFlex fxFlexFill>
+  <mat-form-field fxFlex fxFlexFill> 
       <input matInput required placeholder="New {{data.name}}" [(ngModel)]="result.name" name="result.name" #localName >
-    </mat-input-container>
+  </mat-form-field>
+  
     <mat-form-field fxFlex fxFlexFill >
       <mat-select *ngIf="result.descriptor" placeholder="Select Media Group" [(ngModel)]="result.mediaGroup" name="result.mediaGroup"
         required #localMediaGroups>

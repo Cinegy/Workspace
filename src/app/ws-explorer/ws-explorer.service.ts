@@ -1,14 +1,14 @@
-import { NewBinParams } from './../ws-dialogs/ws-create-bin-dialog/new-bin-params';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { WsAppStateService } from './../ws-app-state.service';
-import { HttpClient } from '@angular/common/http';
-import { WsBaseMamService } from './../shared/services/ws-base-mam/ws-base-mam.service';
 import { Injectable } from '@angular/core';
+import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.service';
+import { NewBinParams } from '../ws-dialogs/ws-create-bin-dialog/new-bin-params';
+import { Subject } from 'rxjs';
+
+import { WsAppStateService } from '../ws-app-state.service';
+import { HttpClient } from '@angular/common/http';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 
 @Injectable()
-export class WsExplorerService extends WsBaseMamService {
+export class WsExplorerService  extends WsBaseMamService{
   private binParams: NewBinParams;
 
   public getRootSubject: Subject<any> = new Subject<any>();
@@ -24,30 +24,39 @@ export class WsExplorerService extends WsBaseMamService {
   public copyNodeSubject: Subject<any> = new Subject<any>();
   public cutNodeSubject: Subject<any> = new Subject<any>();
 
-  constructor(
-    protected httpClient: HttpClient,
-    protected appState: WsAppStateService) {
-    super(httpClient, appState);
-
-    this.createDocumentBinInternalSubject
-      .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
+  constructor( 
+    protected httpClient:HttpClient,
+    protected appState:WsAppStateService
+  ) {
+    super(httpClient,appState);
+    this.createClipBinInternalSubject
+    .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
   }
 
   public getRoot() {
     // tslint:disable-next-line:max-line-length
+    
+
     this.get(`${this.appState.selectedMam.mamEndpoint}node/root`, this.getRootSubject);
+   
+
   }
 
   public getChildren(parentId: string) {
+
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter.requestType=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
+
+  
   }
 
   public getNode(id: string) {
     // tslint:disable-next-line:max-line-length
     this.get(`${this.appState.selectedMam.mamEndpoint}node?id=${id}&linksScope=children&linksScope=metadata`, this.getNodeSubject);
+   
+ 
   }
 
   public createNode(parentId: string, nodeType: string, name: string) {

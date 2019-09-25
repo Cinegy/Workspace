@@ -1,10 +1,12 @@
-import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
-import { WsBaseMamService } from '../../shared/services/ws-base-mam/ws-base-mam.service';
-import { WsAppStateService } from '../../ws-app-state.service';
+import { WsBaseMamService } from 'src/app/shared/services/ws-base-mam/ws-base-mam.service';
+import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { WsAppStateService } from 'src/app/ws-app-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsJdfBrowseService extends WsBaseMamService {
   public getChildrenSubject: Subject<any> = new Subject<any>();
   public createJobSubject: Subject<any> = new Subject<any>();
@@ -18,7 +20,8 @@ export class WsJdfBrowseService extends WsBaseMamService {
 
   public getChildren(parentId: string) {
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}node/list?parentId=${parentId}&filter.requestType=notDeleted&linksScope=self&linksScope=children&linksScope=metadata&take=10000&skip=0`, this.getChildrenSubject);
+  console.log("parentID : "+ parentId);
   }
 
   public createJob(jobDropTarget: string, sourceNode: any, jobState: any) {

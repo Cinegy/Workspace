@@ -1,16 +1,16 @@
-import { WsDialogsModule } from './../ws-dialogs/ws-dialogs.module';
-import { WsToggleFullscreenDirective } from './../ws-toggle-fullscreen.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatListModule, MatDialogModule } from '@angular/material';
-import { WsNodeImageModule } from './../ws-node-image/ws-node-image.module';
-import { WsPlayerService } from './ws-player.service';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { SimpleTimer } from 'ng2-simple-timer';
-import { MatCardModule, MatButtonModule, MatSliderModule, MatTooltipModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { WsPlayerService } from './ws-player.service';
 import { WsPlayerComponent } from './ws-player.component';
-import { SliderModule } from 'primeng/components/slider/slider';
+import { MatDialogModule, MatTooltipModule, MatSliderModule, MatButtonModule, MatCardModule, MatListModule  } from '@angular/material';
+import {MatIconModule}  from '@angular/material/icon';
+import { WsDialogsModule } from '../ws-dialogs/ws-dialogs.module';
+import { SliderModule } from 'primeng/primeng';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { WsNodeImageModule } from '../ws-node-image/ws-node-image.module';
+import { WsToggleFullscreenDirective } from '../ws-toggle-fullscreen.directive';
 
 @NgModule({
   imports: [
@@ -26,10 +26,11 @@ import { SliderModule } from 'primeng/components/slider/slider';
     MatSliderModule,
     MatTooltipModule,
     MatDialogModule,
-    WsDialogsModule
+    WsDialogsModule,
+    MatIconModule
   ],
   declarations: [WsPlayerComponent, WsToggleFullscreenDirective],
   exports: [WsPlayerComponent],
-  providers: [SimpleTimer, WsPlayerService, WsToggleFullscreenDirective]
+  providers: [SimpleTimer,WsPlayerService, WsToggleFullscreenDirective]
 })
 export class WsPlayerModule { }

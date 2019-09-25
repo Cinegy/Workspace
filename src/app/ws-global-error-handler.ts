@@ -17,10 +17,11 @@ Copyright (C) 2018  Cinegy GmbH
 	
 */
 
-import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
-import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';
+
 import { MatDialog } from '@angular/material';
 import { Injectable, ErrorHandler, Injector, NgZone } from '@angular/core';
+import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
+import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 
 @Injectable()
 export class WsGlobalErrorHandler implements ErrorHandler {

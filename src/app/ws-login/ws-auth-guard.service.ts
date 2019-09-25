@@ -1,10 +1,12 @@
-import { WsConfigurationService } from './../ws-configuration/ws-configuration.service';
-import { WsAppStateService } from './../ws-app-state.service';
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
+import { WsAppStateService } from '../ws-app-state.service';
+import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsAuthGuardService implements CanActivate {
 
   constructor(
@@ -33,3 +35,4 @@ export class WsAuthGuardService implements CanActivate {
   }
 
 }
+

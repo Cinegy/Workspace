@@ -9,13 +9,14 @@ export class WsMamConnection {
   public dbServer: string;
   public dbName: string;
   public thumbnailServer: string;
-  public uploadStores: IWsUploadStore[];
+  public uploadStores:IWsUploadStore[];// IWsUploadStore[];
   public domains: string;
   public username: string;
   public password: string;
   public domain: string;
   public loginTime: Date;
   public cis: WsCisConfiguration;
+
 }
 
 export class WsCisConfiguration {

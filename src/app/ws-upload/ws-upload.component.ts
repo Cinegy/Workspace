@@ -1,25 +1,23 @@
-import { SimpleTimer } from 'ng2-simple-timer';
-import { WsErrorDialogComponent } from './../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsAWSUploadStore, WsAWSUploadStoreSettings } from './../shared/services/ws-base-mam/ws-aws-upload-store';
-import { WsSimpleUploadStore } from './../shared/services/ws-base-mam/ws-simple-upload-store';
-import { IWsUploadStore, WsUploadStoreType } from './../shared/services/ws-base-mam/ws-upload-store';
-import { HttpClient } from '@angular/common/http';
-
-import { WsAppStateService } from './../ws-app-state.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FileUploader, FileSelectDirective, FileDropDirective, FileItem } from 'ng2-file-upload';
+import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import { UploadModel } from './upload-model';
-import { MatSnackBar, MatSnackBarConfig, MatDialog } from '@angular/material';
-import { WsUploadStoreModel } from '../shared/services/ws-base-mam/ws-upload-store-model';
+import { FileUploader } from 'ng2-file-upload';
+import { WsUploadStoreType, IWsUploadStore } from '../shared/services/ws-base-mam/ws-upload-store';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
+import { HttpClient } from '@angular/common/http';
+import { WsAppStateService } from '../ws-app-state.service';
+import { WsUploadStoreModel } from '../shared/services/ws-base-mam/ws-upload-store-model';
+import { WsAWSUploadStoreSettings, WsAWSUploadStore } from '../shared/services/ws-base-mam/ws-aws-upload-store';
+import { WsSimpleUploadStore } from '../shared/services/ws-base-mam/ws-simple-upload-store';
 
 @Component({
   selector: 'app-ws-upload',
   templateUrl: './ws-upload.component.html',
   styleUrls: ['./ws-upload.component.css']
 })
-export class WsUploadComponent implements OnInit, OnDestroy {
+export class WsUploadComponent implements  OnInit, OnDestroy {
   private subscribers: any[];
   public uploadModels: UploadModel[];
   public selectedModel: UploadModel;

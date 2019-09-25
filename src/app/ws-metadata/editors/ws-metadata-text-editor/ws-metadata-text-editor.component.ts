@@ -1,5 +1,5 @@
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-ws-metadata-text-editor',
@@ -7,11 +7,13 @@ import { Component, OnInit, Inject } from '@angular/core';
   styleUrls: ['./ws-metadata-text-editor.component.css']
 })
 export class WsMetadataTextEditorComponent implements OnInit {
+
   public result: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<WsMetadataTextEditorComponent>) { }
+
 
   ngOnInit() {
   }

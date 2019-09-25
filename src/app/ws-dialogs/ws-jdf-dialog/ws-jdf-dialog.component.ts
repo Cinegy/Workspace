@@ -1,10 +1,11 @@
-import { WsMamError } from './../../shared/services/ws-base-mam/ws-mam-error';
+import { Component, OnInit, Inject, OnDestroy, ViewChild } from '@angular/core';
+import { WsMamError } from 'src/app/shared/services/ws-base-mam/ws-mam-error';
 import { WsJdfBrowseService } from './ws-jdf-browse.service';
-import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { WsAppStateService } from '../../ws-app-state.service';
-import { WsAppManagementService } from '../../ws-app-management.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { WsAppManagementService } from 'src/app/ws-app-management.service';
+import { WsAppStateService } from 'src/app/ws-app-state.service';
 import { TreeComponent, ITreeOptions, TREE_ACTIONS, KEYS } from 'angular-tree-component';
+
 
 @Component({
   selector: 'app-ws-jdf-dialog',
@@ -17,7 +18,7 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
   public nodes: any[];
   public selectedNode: any;
   public infoText = '';
-  @ViewChild(TreeComponent)
+  @ViewChild(TreeComponent,{static:false})
   private jdfTree: TreeComponent;
   public options: ITreeOptions = {};
 
@@ -97,9 +98,11 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
 
   public onActivate(event) {
     this.selectedNode = event.node.data;
-
+console.log("heyyyyyyyyyyyyyyyyyy");
     if (this.selectedNode.hasChildren) {
+      console.log("111111111111");
       this.jdfService.getChildren(this.selectedNode.id);
+      console.log("22222222222");
     }
   }
 

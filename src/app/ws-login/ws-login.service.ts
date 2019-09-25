@@ -1,26 +1,28 @@
-import { WsAppStateService } from './../ws-app-state.service';
-import { WsAuthRequest } from './ws-auth-request';
-import { Subject } from 'rxjs/Subject';
-import { WsMamConnection } from './../shared/services/ws-base-mam/ws-mam-connection';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { WsBaseMamService } from './../shared/services/ws-base-mam/ws-base-mam.service';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { WsAuthRequest } from './ws-auth-request';
+import { WsMamConnection } from '../shared/services/ws-base-mam/ws-mam-connection';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { WsAppStateService } from '../ws-app-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsLoginService {
-  private connectionInfo: WsMamConnection;
-  public loginSubject: Subject<any> = new Subject<any>();
-  public reconectSubject: Subject<any> = new Subject<any>();
+  private connectionInfo:WsMamConnection;
+  public loginSubject:Subject<any>=new Subject<any>();
+  public reconnectSubject:Subject<any>=new Subject<any>();
 
   constructor(
-    protected httpClient: HttpClient,
-    protected appState: WsAppStateService) { }
-
-  public login(connectionInfo: WsMamConnection, reconnect: boolean) {
-    this.connectionInfo = connectionInfo;
-
-    const authRequest = new WsAuthRequest();
+    protected httpClient:HttpClient,
+    protected appState:WsAppStateService
+    ) { }
+  
+  public login(connectionInfo: WsMamConnection, reconnect: boolean){
+    this.connectionInfo=connectionInfo;
+  
+    const authRequest=new WsAuthRequest();
     authRequest.casEndpoint = connectionInfo.casEndpoint;
     authRequest.database = connectionInfo.dbName;
     authRequest.server = connectionInfo.dbServer;
@@ -38,14 +40,14 @@ export class WsLoginService {
       .subscribe(
       data => {
         if (reconnect) {
-          this.reconectSubject.next(data);
+          this.reconnectSubject.next(data);
           return;
         }
         this.loginSubject.next(data);
       },
       (err: HttpErrorResponse) => {
         if (reconnect) {
-          this.reconectSubject.next(err);
+          this.reconnectSubject.next(err);
           return;
         }
         this.handleError(err, this.loginSubject);

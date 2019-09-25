@@ -1,43 +1,24 @@
-import { WsJdfDialogComponent } from './../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
-
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-
-import { WsClipboardService, ClipboardAction } from './../ws-clipboard/ws-clipboard.service';
-import { WsCreateBinDialogComponent } from './../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
-import { WsRenameDialogComponent } from './../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
-import { WsDeleteDialogComponent } from './../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
-import { WsCreateFolderDialogComponent } from './../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
-import { MenuItem } from 'primeng/primeng';
-import { WsAppStateService } from './../ws-app-state.service';
-import { WsMainBreadcrumbsService } from './../ws-main/ws-main-breadcrumbs.service';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsExplorerService } from './ws-explorer.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { ClipboardAction, WsClipboardService } from '../ws-clipboard/ws-clipboard.service';
+import { WsCreateBinDialogComponent } from '../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { WsMainBreadcrumbsService } from '../ws-main/ws-main-breadcrumbs.service';
+import { WsAppStateService } from '../ws-app-state.service';
+import { WsExplorerService } from './ws-explorer.service';
+import { MenuItem } from 'primeng/primeng';
+import { WsCreateFolderDialogComponent } from '../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
+import { WsInfoDialogComponent } from '../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
+import { WsRenameDialogComponent } from '../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
+import { WsDeleteDialogComponent } from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
+import { WsJdfDialogComponent } from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
 
 @Component({
   selector: 'app-ws-explorer',
   templateUrl: './ws-explorer.component.html',
   styleUrls: ['./ws-explorer.component.css']
 })
-export class WsExplorerComponent implements OnInit, OnDestroy {
+export class WsExplorerComponent implements OnInit , OnDestroy {
   private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
   private notCutable = {};
   private copyable = {};
@@ -91,6 +72,8 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
     this.openable['jobDropTarget'] = true;
+    this.openable['newsProgram'] = true;
+    this.openable['story'] = true;
 
     this.exportable['clipBin'] = true;
     this.exportable['roll'] = true;
@@ -143,8 +126,11 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+  
     this.loading = true;
+  
     this.explorerService.getRoot();
+   
   }
 
   ngOnDestroy() {
@@ -154,11 +140,23 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   }
 
   /* *** Public *** */
+  
 
   public selectNode(node: any) {
     if (this.selectedChildNode != null) {
       this.selectedChildNode.isSelected = null;
     }
+
+     //EKLEME//
+     if(node.type=='newsProgram'){
+      this.appState.showMode = 'news';
+    }else if(node.type=='roll'||node.type=='clipBin'||node.type=='documentBin'){
+      this.appState.showMode = 'bins';
+    }
+    else if(node.type=='story'){
+      this.appState.showMode = 'story';
+    }
+    //EKLEME//
 
     this.selectedChildNode = node;
     this.selectedChildNode.isSelected = true;
@@ -166,6 +164,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   }
 
   public selectParent(): void {
+    //alert("select parent");
     this.appState.selectNode(this.selectedNode);
   }
 
@@ -181,8 +180,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
-
+    //alert("typeGroup "+typeGroup);
     if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
+     // alert("heyyy");
       this.loading = true;
       this.selectedNode = node;
       this.breadcrumbService.add(node);
@@ -192,14 +192,38 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (node.type in this.openable) {
+    // if (node.type in this.openable) {
+    //  // alert("node.type "+node.type)
+    //   if (node.type === 'jobDropTarget') {
+    //   //  alert("jobDropTarget "+this.appState)
+    //     this.appState.openJdfNode(node);
+    //   } else {
+    //   //  alert("openBinNode "+this.appState)
+
+    //     this.appState.openBinNode(node);
+    //   }
+    //   return;
+    // }
+    // else{
+     
+    // }
+     //EKLEME//
+     if (node.type in this.openable) {
       if (node.type === 'jobDropTarget') {
         this.appState.openJdfNode(node);
-      } else {
+      }
+      else if(node.type==='newsProgram'){
+        this.appState.openNewsNode(node);
+      }else if(node.type==='story'){
+        this.appState.openStoryNode(node);
+      }
+      else {
         this.appState.openBinNode(node);
       }
+      //EKLEME//
       return;
     }
+  
   }
 
   /* *** Service responses *** */
@@ -253,7 +277,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
         }
       }
     }
-    console.log(`Get Children: ${this.childNodes.length}`);
+    console.log(`getChildrenResponse Get Children: ${this.childNodes.length}`);
   }
 
   private createNodeResponse(response: any) {
@@ -269,6 +293,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     }
 
     this.snackBar.open(`${response.name} created`, null, { duration: 1000 });
+    console.log(`createNodeResponse Get createNodeResponse: `);
 
   }
 
@@ -452,6 +477,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
   /* *** Conetxt Menu *** */
 
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
+    console.log("contextt menüü canımsss");
     let menuItem: any;
     let menuChildItems: any;
     let menuChildItem: any;
@@ -613,6 +639,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
 
   /* *** Breadcrumbs *** */
   private breadcrumbClicked(node: any) {
+   // alert("breadclick");
     this.openNode(node);
   }
 }

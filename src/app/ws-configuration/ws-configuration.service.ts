@@ -1,19 +1,22 @@
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { WsConfiguration } from './ws-configuration';
-import { WsMamConnection } from './../shared/services/ws-base-mam/ws-mam-connection';
 import { Injectable } from '@angular/core';
+import { WsConfiguration } from './ws-configuration';
+import { Subject } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { HttpClient } from '@angular/common/http';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WsConfigurationService {
+
   public configuration: WsConfiguration;
   public getConfigSubject: Subject<any> = new Subject<any>();
 
   constructor(private httpClient: HttpClient) {
     this.configuration = new WsConfiguration();
   }
+  
 
   public getVersion() {
     return `${this.configuration.major}.${this.configuration.minor}.${this.configuration.commit}`;
@@ -33,8 +36,7 @@ export class WsConfigurationService {
         });
     });
   }
-
-  private getLocalConfig(response: any) {
+   private getLocalConfig(response: any) {
     return new Promise((resolve, reject) => {
       if (response.useRemoteConfig) {
         this.setConfig(response);
@@ -58,7 +60,6 @@ export class WsConfigurationService {
       }
     });
   }
-
   private getRemoteConfig(response: any) {
     this.setConfig(response);
   }
@@ -75,4 +76,5 @@ export class WsConfigurationService {
   private errorRemoteConfig(error: any) {
     console.log(`Configuration error: ${error.statusText}, ${error.status}`);
   }
+
 }

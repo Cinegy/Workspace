@@ -1,14 +1,10 @@
-import { SimpleTimer } from 'ng2-simple-timer';
-import { WsUserInfoDialogComponent } from './../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
-import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatToolbarModule, MatMenuModule, MatButtonModule, MatInputModule, MatSnackBarModule, MatIconModule, MatFormFieldModule } from '@angular/material';
 import { WsMainMenuComponent } from './ws-main-menu.component';
-import { MatToolbarModule, MatInputModule, MatSnackBarModule } from '@angular/material';
-import { MatMenuModule } from '@angular/material';
-import { MatButtonModule } from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
-
+import { SimpleTimer } from 'ng2-simple-timer';
+import { WsUserInfoDialogComponent } from '../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,15 +14,17 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatInputModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule
+
   ],
   exports: [
-    WsMainMenuComponent
+   WsMainMenuComponent
   ],
   providers: [SimpleTimer],
   declarations: [WsMainMenuComponent],
   entryComponents: [
-    WsUserInfoDialogComponent
+  WsUserInfoDialogComponent
   ]
 })
 export class WsMainMenuModule { }

@@ -1,49 +1,29 @@
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
- 
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-*/
-
-import { WsInfoDialogComponent } from './../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
+import { Component, OnInit, Renderer2, OnDestroy, AfterViewInit } from '@angular/core';
+import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 import { MatDialog, MatSlider } from '@angular/material';
 import { WsPlayerService } from './ws-player.service';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsAppStateService } from './../ws-app-state.service';
-import { WsVideoTools } from './ws-video-tools';
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
+import { WsAppStateService } from '../ws-app-state.service';
 import { SimpleTimer } from 'ng2-simple-timer';
-import * as screenfull from 'screenfull';
-import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { Slider } from 'primeng/components/slider/slider';
-
+import { WsVideoTools } from './ws-video-tools';
+import { Slider } from 'primeng/primeng';
+import * as screenfull from 'screenfull'
+import {Screenfull} from "screenfull";
+import {ViewChild} from  '@angular/core'
 const DescriptorTypeIn = 1;
 const FieldNumberIn = 5;
 const DescriptorTypeOut = 1;
 const FieldNumberOut = 6;
 const LastFramSkew = 0.4;
-
 @Component({
   selector: 'app-ws-player',
   templateUrl: './ws-player.component.html',
   styleUrls: ['./ws-player.component.css']
 })
 export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('mediaPlayer') mediaPlayer;
-  @ViewChild('markerSlider') markerSlider: Slider;
-  @ViewChild('videoSlider') videoSlider: MatSlider;
+  @ViewChild('mediaPlayer',{static:true}) mediaPlayer:any;
+  @ViewChild('markerSlider',{static:true}) markerSlider: Slider;
+  @ViewChild('videoSlider',{static:true}) videoSlider: MatSlider;
 
   public loading = false;
   private subscribers: any[];
@@ -123,13 +103,15 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sliderMarkers = [{ start: 0, end: 0 }];
     this.sliderStep = 0.05;
 
-    this.player = this.mediaPlayer.nativeElement;
+    //alert(this.mediaPlayer.nativeElement);
 
+    this.player = this.mediaPlayer.nativeElement;
     this.player.ontimeupdate = () => {
       if (this.player.currentTime >= this.clipEnd) {
         this.pause();
       }
     };
+    
   }
 
   ngOnDestroy() {
@@ -149,8 +131,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (response instanceof WsMamError) {
       return;
     }
-
     this.selectedClip = response;
+
+
+    //alert(response.id);
     // tslint:disable-next-line:max-line-length
     this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
 
@@ -259,7 +243,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.player.src = null;
       } else {
         this.player.src = mediaUrl + this.setMediaFragment();
+       
         this.player.load();
+        
       }
 
       this.sliderHead = 0;
@@ -455,6 +441,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       throw new Error(e.message);
     }
   }
+  public create_subclick(){
+    
+  }
 
   public pause() {
     if (!this.player.src) {
@@ -475,9 +464,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public toggleFullscreen() {
     const videoContainer: any = document.getElementById('playerComponent');
-
-    if (screenfull.enabled) {
-      screenfull.toggle(videoContainer);
+    let sf = <Screenfull>screenfull;
+    if (sf.enabled) {
+      sf.toggle(videoContainer);
     }
 
     this.player.focus();
@@ -557,10 +546,13 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public createSubClip() {
+   // alert(this.selectedClip.type);
+
     if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
       this.openErrorDialog('Markers not set');
       return;
     }
+    //alert(this.selectedClip.type);
 
     switch (this.selectedClip.type) {
       case 'masterClip':
@@ -571,6 +563,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
     }
   }
+  
 
   public previousEvent() {
     if (!this.player.src) {

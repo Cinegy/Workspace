@@ -1,15 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { WsLogoutService } from './ws-logout.service';
 
 describe('WsLogoutService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [WsLogoutService]
-    });
-  });
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', inject([WsLogoutService], (service: WsLogoutService) => {
+  it('should be created', () => {
+    const service: WsLogoutService = TestBed.get(WsLogoutService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

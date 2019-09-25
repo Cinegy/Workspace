@@ -1,39 +1,16 @@
-/*
-Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
-Copyright (C) 2018  Cinegy GmbH
- 
-	This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-*/
-
-import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor/ws-metadata-text-editor.component';
-import { WsVideoTools } from './../ws-player/ws-video-tools';
-import { SaveMetadataRequest } from './save-metadata-request';
-import { WsMetadataService } from './ws-metadata.service';
-import { WsMamError } from './../shared/services/ws-base-mam/ws-mam-error';
-import { WsAppManagementService } from './../ws-app-management.service';
-import { WsAppStateService } from './../ws-app-state.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter, MatDatepickerInputEvent, MatSnackBar, MatDialog } from '@angular/material';
+import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor/ws-metadata-text-editor.component';
+import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
+import { SaveMetadataRequest } from './save-metadata-request';
+import { WsAppStateService } from '../ws-app-state.service';
+import { WsAppManagementService } from '../ws-app-management.service';
+import { WsMetadataService } from './ws-metadata.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { WsVideoTools } from '../ws-player/ws-video-tools';
+import { LayoutDirective } from '@angular/flex-layout';
 @Component({
   selector: 'app-ws-metadata',
   templateUrl: './ws-metadata.component.html',
@@ -84,6 +61,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       .subscribe(response => this.getMetadataResponse(response));
     this.subscribers.push(subscriber);
 
+
     subscriber = this.metadataService.setMetadataSubject
       .subscribe(response => this.setMetadataResponse(response));
     this.subscribers.push(subscriber);
@@ -91,9 +69,11 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     subscriber = this.metadataService.undoSetMetadataSubject
     .subscribe(response => this.undoSetMetadataResponse(response));
   this.subscribers.push(subscriber);
+ 
   }
 
   ngOnInit() {
+    
   }
 
   ngOnDestroy() {
@@ -103,7 +83,9 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public saveMetadata(item, undo: boolean) {
+   
     const metadata = new SaveMetadataRequest();
+    // alert("savemetadata "+ item.id);
 
     metadata.descriptorId = item.id;
 
@@ -112,6 +94,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
         metadata.value = item.value.value.format();
         break;
       default:
+       
         metadata.value = item.value.value;
         break;
     }
@@ -121,6 +104,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (undo) {
       this.metadataService.undoSetMetadata(this.selectedNode.id, metadata);
     } else {
+   
       this.metadataService.setMetadata(this.selectedNode.id, metadata);
     }
   }
@@ -140,7 +124,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.selectedNode = response;
     this.descriptorGroups = [];
     this.descriptors = this.appState.descriptors[this.selectedNode.type];
-
+    //alert("selectedNodeResponse");
     if (this.descriptors === undefined) {
       this.loading = true;
       this.metadataService.getDescriptors(this.selectedNode.type);
@@ -151,17 +135,22 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private getDescriptorsResponse(response) {
+   
     this.loading = false;
     if (response instanceof WsMamError) {
       return;
     }
 
     this.descriptors = response;
+    //alert("getDescriptorsResponse");
+
     this.appState.descriptors[this.selectedNode.type] = response;
     this.metadataService.getMetadata(this.selectedNode);
   }
 
   private getMetadataResponse(response) {
+   
+    
     this.loading = false;
     if (response instanceof WsMamError) {
       return;
@@ -217,9 +206,12 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     const tmpGroups = {};
     let durationDescriptorCreated = false;
 
+
     for (const descriptor of descriptors) {
       descriptor.value = { name: null, value: null };
+     
       const group = tmpGroups[descriptor.group.id];
+    
 
       // tslint:disable-next-line:max-line-length
       if (!durationDescriptorCreated && group && group[0] && group[0].group.name.toLowerCase() === 'clip' && this.selectedNode.videoFormat) {
@@ -280,11 +272,14 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       }
 
       tmpGroups[descriptor.group.id].push(descriptor);
+     // alert(descriptor.group.name);
     }
 
     // tslint:disable-next-line:forin
     for (const key in tmpGroups) {
+    
       const value = tmpGroups[key];
+  
       this.descriptorGroups.push(value);
     }
 
@@ -325,10 +320,13 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public inputLostFocus(item) {
+//alert( "inputLostFocus "+item.name+"   "+item.backup.value);
+
     console.log(`Metadata lost focus: ${item.name}`);
   }
 
   public textClicked(item) {
+    //alert("item "+item);
     this.openEditTextDialog(item);
   }
 
@@ -344,6 +342,8 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
           item.value.value = null;
           return;
         }
+//alert("openEditTextDialog "+ item.value.name+"   "+item.backup.value);
+
         item.value.name = item.backup.name;
         item.value.value = item.backup.value;
         return;
@@ -353,6 +353,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public dateClicked(picker, item) {
+    //alert("dateClicked "+item);
     if (item.isReadOnly) {
       return;
     }
@@ -361,15 +362,18 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public addDateEvent(type: string, event: MatDatepickerInputEvent<Date>, item) {
+   // alert("addDateEvent");
     item.value.value = moment(event.value);
     this.saveMetadata(item, false);
   }
 
   public selectValueChanged(item, event) {
+//alert("selectValueChanged");
    this.saveMetadata(item, false);
   }
 
   public checkBoxValueChanged(item, event) {
+  //  alert("checkBoxValueChanged");
     this.saveMetadata(item, false);
   }
 
@@ -378,7 +382,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       this.snackBar.open('Nothing to undo - there are no changes', null, { duration: 2000 });
       return;
     }
-
+//alert("undoMetadata "+ item.value.name+"   "+item.backup.value);
     item.value.name = item.backup.name;
     item.value.value = item.backup.value;
     this.saveMetadata(item, true);
