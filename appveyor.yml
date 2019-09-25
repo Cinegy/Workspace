@@ -1,7 +1,7 @@
 version: 11.0.{build}
 image: Visual Studio 2017
 init:
-- ps: Install-Product node 8 x64
+- ps: Install-Product node 12 x64
 install:
 - cmd: >-
     npm install -g @angular/cli
