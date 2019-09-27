@@ -5,14 +5,13 @@ init:
 install:
 - cmd: >-
     npm install -g @angular/cli
-    npm install @angular/cli
-    
+    npm install @angular/cli    
     npm install
 build_script:
 - ps: >-
     ./patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
 
-    ng build --prod --aot > log.txt
+    ng build > log.txt
 test: off
 artifacts:
 - path: ./dist/
