@@ -5,7 +5,8 @@ init:
 install:
 - cmd: >-
     npm install -g @angular/cli
-
+    npm install @angular/cli
+    
     npm install
 build_script:
 - ps: >-
