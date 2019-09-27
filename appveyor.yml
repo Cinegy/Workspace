@@ -5,6 +5,7 @@ init:
 install:
 - cmd: >-    
     npm install
+    npm install --dev
 build_script:
 - ps: >-
     ./patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
