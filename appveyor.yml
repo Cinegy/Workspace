@@ -3,10 +3,7 @@ image: Visual Studio 2017
 init:
 - ps: Install-Product node 12 x64
 install:
-- cmd: >-
-    npm install -g @angular/cli
-    npm install @angular/cli
-    
+- cmd: >-    
     npm install
 build_script:
 - ps: >-
