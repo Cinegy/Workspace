@@ -9,7 +9,7 @@ build_script:
 - ps: >-
     npm install -g @angular/cli
 
-    ng build --prod --aot > log.txt
+    ng build --aot > log.txt
 test: off
 artifacts:
 - path: ./dist/
