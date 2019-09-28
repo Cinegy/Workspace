@@ -11,8 +11,6 @@ install:
     npm install
 build_script:
 - ps: >-
-    ./patch-version.ps1 %APPVEYOR_BUILD_NUMBER%
-
     ng version
     
     ng build > log.txt
