@@ -6,14 +6,14 @@ init:
     
     Install-Product node 12 x64
 install:
-- ps: >-    
-    ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
-
+- cmd: >-
     npm install @angular/cli   
 
     npm install
 build_script:
 - ps: >-    
+    ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
+
     ng version
     
     ng build --prod --aot > log.txt
