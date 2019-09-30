@@ -27,14 +27,14 @@ export class  WsSimpleUploadStore extends WsGenericUploadStore implements IWsUpl
   
     }
   
-    public upload(): void {
-      // return new Promise((resolve, reject) => {
-      //   this.uploader.queue[0].url = `${this.url}api/upload`;
-      //   this.uploader.onCompleteAll = () => {
-      //     resolve();
-      //   };
-      //   this.uploader.uploadAll();
-      // });
+    public upload(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        this.uploader.queue[0].url = `${this.url}api/upload`;
+        this.uploader.onCompleteAll = () => {
+          resolve();
+        };
+        this.uploader.uploadAll();
+      });
     }
   
     public abort(): void {

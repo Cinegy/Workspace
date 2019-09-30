@@ -19,6 +19,7 @@ export class WsAppStateService {
   public playClipSubject: Subject<any> = new Subject<any>();
   public openNewsNodeSubject: Subject<any> = new Subject<any>();
   public openStoryNodeSubject: Subject<any> = new Subject<any>();
+  public resetModuleSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
   public itemsPerPage: number;
@@ -36,7 +37,7 @@ export class WsAppStateService {
   }
 
   public get selectedMam(): WsMamConnection {
-    console.log(this._selectedMam);
+    // console.log(this._selectedMam);
     return this._selectedMam;
   }
 
@@ -52,6 +53,8 @@ export class WsAppStateService {
   
     this._connected = connected;
     this._selectedMam = selectedMam;
+
+    console.log(this._selectedMam)
 
     if (this._connected === false) {
       this.authHeader = null;
@@ -71,6 +74,7 @@ export class WsAppStateService {
   }
 
   public openBinNode(node: any): void {
+    this.resetModuleSubject.next();
     this.openBinNodeSubject.next(node);
   }
 
@@ -90,10 +94,12 @@ export class WsAppStateService {
     this.playClipSubject.next(node);
   }
   public openNewsNode(node:any) :void{
+    this.resetModuleSubject.next();
     this.openNewsNodeSubject.next(node);
   }
 
   public openStoryNode(node:any): void{
+    this.resetModuleSubject.next();
     this.openStoryNodeSubject.next(node);
   }
 }
