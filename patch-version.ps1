@@ -36,12 +36,12 @@ $SoftwareVersion = "$majorVer.$minorVer.$buildCounter.$sourceAsDecimal"
 #make appveyor update with this new version number
 if($Env:APPVEYOR_REPO_BRANCH -ne "master") {
     #remove any prefix on branch, in case of pull requests
-    $lastSlash = $($Env:APPVEYOR_REPO_NAME).LastIndexOf('/')
+    $lastSlash = $($Env:APPVEYOR_REPO_BRANCH).LastIndexOf('/')
     if($lastSlash -gt 0) {
-        $branchName = $($Env:APPVEYOR_REPO_NAME).Substring($lastSlash + 1)
+        $branchName = $($Env:APPVEYOR_REPO_BRANCH).Substring($lastSlash + 1)
     }
     else {
-        $branchName = $Env:APPVEYOR_REPO_NAME
+        $branchName = $Env:APPVEYOR_REPO_BRANCH
     }
     Update-AppveyorBuild -Version "$SoftwareVersion-$branchName"
 }
