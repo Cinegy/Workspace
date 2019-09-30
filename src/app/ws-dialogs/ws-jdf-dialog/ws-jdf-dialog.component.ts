@@ -98,11 +98,11 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
 
   public onActivate(event) {
     this.selectedNode = event.node.data;
-console.log("heyyyyyyyyyyyyyyyyyy");
+
     if (this.selectedNode.hasChildren) {
-      console.log("111111111111");
+     
       this.jdfService.getChildren(this.selectedNode.id);
-      console.log("22222222222");
+  
     }
   }
 

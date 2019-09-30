@@ -6,11 +6,12 @@ import { WsUploadStoreType, IWsUploadStore } from '../shared/services/ws-base-ma
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WsAppStateService } from '../ws-app-state.service';
 import { WsUploadStoreModel } from '../shared/services/ws-base-mam/ws-upload-store-model';
 import { WsAWSUploadStoreSettings, WsAWSUploadStore } from '../shared/services/ws-base-mam/ws-aws-upload-store';
 import { WsSimpleUploadStore } from '../shared/services/ws-base-mam/ws-simple-upload-store';
+import { HttpHeader } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
 @Component({
   selector: 'app-ws-upload',
@@ -24,6 +25,8 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
   public selectedStoreContent: WsUploadStoreModel;
   public loading = false;
   public uploadPaused = false;
+  
+  
 
   constructor(
     private appState: WsAppStateService,
@@ -34,14 +37,18 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
     private timer: SimpleTimer) {
     this.uploadModels = [];
     this.subscribers = [];
+    
   }
 
   ngOnInit() {
-    if (!this.appState.selectedMam.cis.useCis) {
-      return;
-    }
 
     const stores = this.appState.selectedMam.uploadStores;
+    console.log(stores);
+
+    // if (!this.appState.selectedMam.cis.useCis) {
+    //   return;
+    // }
+    
 
     stores.forEach(async item => {
       let store: IWsUploadStore;
@@ -53,6 +60,26 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
       switch (item.type) {
         case WsUploadStoreType.Simple:
           store = new WsSimpleUploadStore(item.name, item.url, uploadModel.uploader, this.http);
+          store.init()
+            .then(data=> {
+              uploadModel.store = store;
+
+              const subscriber = store.uploadCompletedSubject
+              .subscribe(response => this.onUploadCompletedSubject(response));
+              this.subscribers.push(subscriber);
+
+              store.check()
+                .then(
+                  resolve => {
+                    this.uploadModels.push(uploadModel);
+                  },
+                  reject => {
+                    this.openErrorDialog(`Error reading simple store: ${store.name}: ${reject.message}`);
+                  });
+            }).catch(err => {
+              this.openErrorDialog(`Error getting simple store: ${store.name}: ${err.message}`);
+            })
+          console.log("Simple store here");
           break;
         case WsUploadStoreType.AWS:
           const settings: WsAWSUploadStoreSettings = {

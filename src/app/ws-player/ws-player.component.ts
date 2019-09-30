@@ -103,7 +103,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sliderMarkers = [{ start: 0, end: 0 }];
     this.sliderStep = 0.05;
 
-    //alert(this.mediaPlayer.nativeElement);
+
 
     this.player = this.mediaPlayer.nativeElement;
     this.player.ontimeupdate = () => {

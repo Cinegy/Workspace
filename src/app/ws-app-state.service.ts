@@ -19,6 +19,7 @@ export class WsAppStateService {
   public playClipSubject: Subject<any> = new Subject<any>();
   public openNewsNodeSubject: Subject<any> = new Subject<any>();
   public openStoryNodeSubject: Subject<any> = new Subject<any>();
+  public resetModuleSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
   public itemsPerPage: number;
@@ -71,6 +72,7 @@ export class WsAppStateService {
   }
 
   public openBinNode(node: any): void {
+    this.resetModuleSubject.next();
     this.openBinNodeSubject.next(node);
   }
 
@@ -90,10 +92,12 @@ export class WsAppStateService {
     this.playClipSubject.next(node);
   }
   public openNewsNode(node:any) :void{
+    this.resetModuleSubject.next();
     this.openNewsNodeSubject.next(node);
   }
 
   public openStoryNode(node:any): void{
+    this.resetModuleSubject.next();
     this.openStoryNodeSubject.next(node);
   }
 }
