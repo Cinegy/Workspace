@@ -5,6 +5,8 @@ init:
     # iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
     
     Install-Product node 12 x64
+    
+    ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
 install:
 - cmd: >-
     npm install -g @angular/cli
@@ -13,9 +15,7 @@ install:
 
     npm install
 build_script:
-- ps: >-
-    ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
-    
+- ps: >-    
     ng version
     
     ng build --prod --aot > log.txt
