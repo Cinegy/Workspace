@@ -26,6 +26,11 @@ if($OverrideMinorVersion)
 $shortRev = $SourceRevisionValue.Substring(0,4)
 $sourceAsDecimal = [System.Convert]::ToUInt16($shortRev, 16)
 
+$SoftwareVersion = "$majorVer.$minorVer.$buildCounter.$sourceAsDecimal"
+
+#make appveyor update with this new version number
+Update-AppveyorBuild -Version $SoftwareVersion
+
 #find TS configuration files and update versions
 $MajorRegex = "(^\s*public readonly major\s*=\s*')(.*)(';)"
 $MinorRegex = "(^\s*public readonly minor\s*=\s*')(.*)(';)"
