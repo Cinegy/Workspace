@@ -14,7 +14,7 @@ install:
     npm install
 build_script:
 - ps: >-
-    patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
+    ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
     
     ng version
     
