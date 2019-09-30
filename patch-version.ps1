@@ -7,7 +7,7 @@ $majorVer=99
 $minorVer=99
 
 #if this is a build triggered via AppVeyor on branch other than master, force minor to 99
-if($Env:APPVEYOR_REPO_NAME -ne "Cinegy/master") {
+if($Env:APPVEYOR_REPO_BRANCH -ne "master") {
     $OverrideMinorVersion = 99
 }
 
@@ -34,8 +34,16 @@ $sourceAsDecimal = [System.Convert]::ToUInt16($shortRev, 16)
 $SoftwareVersion = "$majorVer.$minorVer.$buildCounter.$sourceAsDecimal"
 
 #make appveyor update with this new version number
-if($Env:APPVEYOR_REPO_NAME -ne "Cinegy/master") {
-    Update-AppveyorBuild -Version "$SoftwareVersion-$Env:APPVEYOR_REPO_NAME"
+if($Env:APPVEYOR_REPO_BRANCH -ne "master") {
+    #remove any prefix on branch, in case of pull requests
+    $lastSlash = $($Env:APPVEYOR_REPO_BRANCH).LastIndexOf('/')
+    if($lastSlash -gt 0) {
+        $branchName = $($Env:APPVEYOR_REPO_BRANCH).Substring($lastSlash + 1)
+    }
+    else {
+        $branchName = $Env:APPVEYOR_REPO_BRANCH
+    }
+    Update-AppveyorBuild -Version "$SoftwareVersion-$branchName"
 }
 else {
     Update-AppveyorBuild -Version $SoftwareVersion

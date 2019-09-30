@@ -7,23 +7,20 @@ init:
     Install-Product node 12 x64
 install:
 - cmd: >-
-    npm install -g @angular/cli
-
-    npm install @angular/cli   
+    npm install -g @angular/cli   
 
     npm install
 build_script:
-- ps: >-
+- ps: >-    
     ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
-    
+
     ng version
     
     ng build --prod --aot > log.txt
 test: off
 artifacts:
 - path: ./dist/
-  name: Workspace-%APPVEYOR_REPO_BRANCH%-%APPVEYOR_BUILD_VERSION%
+  name: Workspace-%APPVEYOR_BUILD_VERSION%
 deploy: off
-on_finish:
-- ps: >-
-    # $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
