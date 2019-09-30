@@ -46,5 +46,5 @@ Get-ChildItem -Path "./src/app/*/ws-configuration.ts" -Recurse | ForEach-Object 
         $FileLines[$i] = $FileLines[$i] -Replace $CommitRegex, "`${1}$sourceAsDecimal`$3"
     }
 
-    $FileLines | Out-File $fileName.FullName
+    $FileLines | Out-File -Encoding utf8 $fileName.FullName
 }
