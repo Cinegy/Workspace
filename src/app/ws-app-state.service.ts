@@ -37,7 +37,7 @@ export class WsAppStateService {
   }
 
   public get selectedMam(): WsMamConnection {
-    // console.log(this._selectedMam);
+    console.log(this._selectedMam);
     return this._selectedMam;
   }
 
@@ -53,8 +53,6 @@ export class WsAppStateService {
   
     this._connected = connected;
     this._selectedMam = selectedMam;
-
-    console.log(this._selectedMam)
 
     if (this._connected === false) {
       this.authHeader = null;

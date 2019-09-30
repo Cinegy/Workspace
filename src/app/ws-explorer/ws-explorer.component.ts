@@ -164,7 +164,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   }
 
   public selectParent(): void {
-    //alert("select parent");
+  
     this.appState.selectNode(this.selectedNode);
   }
 
