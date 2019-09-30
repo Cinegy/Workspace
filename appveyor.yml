@@ -7,7 +7,7 @@ init:
     Install-Product node 12 x64
 install:
 - cmd: >-
-    npm install @angular/cli   
+    npm install -g @angular/cli   
 
     npm install
 build_script:
