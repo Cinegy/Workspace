@@ -18,7 +18,7 @@ build_script:
     
     ng version
     
-    ng build > log.txt
+    ng build --prod --aot > log.txt
 test: off
 artifacts:
 - path: ./dist/
