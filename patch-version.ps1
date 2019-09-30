@@ -6,6 +6,11 @@ Param([string]$BuildCounter=0,[string]$SourceRevisionValue="FFFFFF",[string]$Ove
 $majorVer=99
 $minorVer=99
 
+#if this is a build triggered via AppVeyor on branch other than master, force minor to 99
+if($Env:APPVEYOR_REPO_NAME -ne "Cinegy/master") {
+    $OverrideMinorVersion = 99
+}
+
 #define various regular expressions to be used when hunting in files
 $versionSniffingRegex = "(\s*#define\s+(\S+)\s+)(\d+)"
 
@@ -29,7 +34,12 @@ $sourceAsDecimal = [System.Convert]::ToUInt16($shortRev, 16)
 $SoftwareVersion = "$majorVer.$minorVer.$buildCounter.$sourceAsDecimal"
 
 #make appveyor update with this new version number
-Update-AppveyorBuild -Version $SoftwareVersion
+if($Env:APPVEYOR_REPO_NAME -ne "Cinegy/master") {
+    Update-AppveyorBuild -Version "$SoftwareVersion-$Env:APPVEYOR_REPO_NAME"
+}
+else {
+    Update-AppveyorBuild -Version $SoftwareVersion
+}
 
 #find TS configuration files and update versions
 $MajorRegex = "(^\s*public readonly major\s*=\s*')(.*)(';)"
