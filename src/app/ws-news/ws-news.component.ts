@@ -50,6 +50,12 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       this.subscribers.push(subscriber);
 
       subscriber =this.newsService.getMetaDataSubject.subscribe()
+      this.subscribers.push(subscriber);
+
+      subscriber = this.appState.resetModuleSubject
+      .subscribe(
+        ()=>this.resetModule()
+      )
   }
   
   ngOnInit() {
@@ -152,14 +158,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     }
   }
 
-  private resetModule(type:string){
-    if(type=='news'){
+  private resetModule(){
       this.dictionary.splice(0);
       this.resetComponents();
-    }else{
-      this.dictionary.splice(0);
-      this.resetComponents();
-    }
   }
 
   private resetComponents(){

@@ -44,7 +44,7 @@ export class WsNewsService extends WsBaseMamService {
     }
 
     let fragment: string;
-    // console.log(id);
+ 
     switch(type){
       case 'newsProgram':
         fragment = `node/list?parentId=${id}`;
