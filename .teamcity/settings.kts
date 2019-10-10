@@ -74,6 +74,7 @@ object Build : BuildType({
             name = "(build) Workspace Build"
             scriptContent = """
                 #!/bin/bash
+                npm install @angular/cli
                 ng version    
                 ng build > log.txt
             """.trimIndent()
