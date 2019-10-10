@@ -59,7 +59,7 @@ object Build : BuildType({
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node10ruby2.5:19.6"
             dockerPull = true
-        },
+        }
         script {
             name = "(build) NPM Install"
             scriptContent = """
@@ -69,7 +69,7 @@ object Build : BuildType({
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node10ruby2.5:19.6"
             dockerPull = true
-        },
+        }
         script {
             name = "(build) Workspace Build"
             scriptContent = """
