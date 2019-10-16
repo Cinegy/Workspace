@@ -136,4 +136,12 @@ object Deploy : BuildType({
             }
         }
     }
+    
+    features {
+        dockerSupport {
+            loginToRegistry = on {
+                dockerRegistryId = "CinegyRegistry"
+            }
+        }
+    }
 })
