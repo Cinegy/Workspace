@@ -50,35 +50,23 @@ object Build : BuildType({
 
     steps { 
         script {
-            name = "(build) Install Angular Cli"
-            scriptContent = """
-                #!/bin/bash
-                npm set registry https://registry.npmjs.org
-                npm install -g @angular/cli
-                npm install @angular/cli
-            """.trimIndent()
-            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node10ruby2.5:19.6"
-            dockerPull = true
-        }
-        script {
             name = "(build) NPM Install"
             scriptContent = """
                 #!/bin/bash
                 npm set registry https://registry.npmjs.org
                 npm install
             """.trimIndent()
-            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node10ruby2.5:19.6"
+            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
             dockerPull = true
         }
         script {
             name = "(build) Workspace Build"
             scriptContent = """
                 #!/bin/bash
-                npm install @angular/cli
                 ng version    
                 ng build > log.txt
             """.trimIndent()
-            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node10ruby2.5:19.6"
+            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
             dockerPull = true
         }
     }
