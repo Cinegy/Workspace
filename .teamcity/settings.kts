@@ -9,6 +9,7 @@ import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.retryBuild
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.schedule
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.exec
 
 version = "2019.1"
 
