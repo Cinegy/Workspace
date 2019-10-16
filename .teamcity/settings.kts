@@ -120,7 +120,7 @@ object Deploy : BuildType({
         exec {
             name = "S3 Upload"
             path = "aws"
-            arguments = "s3 sync publish s3://%Static_Bucket_Name%/%dep.Build.teamcity.build.branch% --delete"
+            arguments = "s3 sync publish s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V11x_Build.teamcity.build.branch% --delete"
             dockerImage = "teamcity-awscli:latest"
         }
     }
