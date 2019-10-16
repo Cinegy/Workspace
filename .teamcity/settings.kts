@@ -17,12 +17,13 @@ project {
     description = "Branches of Cinegy Workspace from public GitHub"
 
     buildType(Build)
-    
-    buildTypesOrder = arrayListOf(Build)
+    buildType(Deploy)
+
+    buildTypesOrder = arrayListOf(Build, Deploy)
 
     features {
         dockerRegistry {
-            id = "PROJECT_EXT_26"
+            id = "CinegyRegistry"
             name = "Cinegy Docker Registry"
             url = "https://registry.cinegy.com"
             userName = "teamcity_service"
@@ -93,7 +94,44 @@ object Build : BuildType({
     features {
         dockerSupport {
             loginToRegistry = on {
-                dockerRegistryId = "PROJECT_EXT_26"
+                dockerRegistryId = "CinegyRegistry"
+            }
+        }
+    }
+})
+
+
+object Deploy : BuildType({
+    name = "deploy"
+    description = "Push to S3 static buckets"
+
+    enablePersonalBuilds = false
+    type = BuildTypeSettings.Type.DEPLOYMENT
+    buildNumberPattern = "${BuildVueCliImage.depParamRefs.buildNumber}-%build.counter%"
+    maxRunningBuilds = 1
+
+    params {
+        select("Static_Bucket_Name", "cinegyqaworkspace-staticbucket-blue-teamcity", label = "Target Bucket",
+                options = listOf("cinegyqaworkspace-staticbucket-blue-teamcity", "cinegyqaworkspace-staticbucket-green-teamcity"))
+    }
+
+    steps {
+        exec {
+            name = "S3 Upload"
+            path = "aws"
+            arguments = "s3 sync publish s3://%Static_Bucket_Name%/%teamcity.build.branch% --delete"
+            dockerImage = "teamcity-awscli:latest"
+        }
+    }
+
+    dependencies {
+        dependency(Build) {
+            snapshot {
+            }
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "Cinegy_Workspace_*.zip!**=>./publish"
             }
         }
     }
