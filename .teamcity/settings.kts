@@ -107,7 +107,7 @@ object Deploy : BuildType({
 
     enablePersonalBuilds = false
     type = BuildTypeSettings.Type.DEPLOYMENT
-    buildNumberPattern = "${BuildVueCliImage.depParamRefs.buildNumber}-%build.counter%"
+    buildNumberPattern = "${Build.depParamRefs.buildNumber}-%build.counter%"
     maxRunningBuilds = 1
 
     params {
