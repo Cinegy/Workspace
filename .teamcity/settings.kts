@@ -121,7 +121,7 @@ object Deploy : BuildType({
             name = "S3 Upload"
             path = "aws"
             arguments = "s3 sync publish s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V11x_Build.teamcity.build.branch% --delete"
-            dockerImage = "teamcity-awscli:latest"
+            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/terraform0.12:latest"
         }
     }
     
@@ -136,7 +136,7 @@ object Deploy : BuildType({
             }
         }
     }
-    
+
     features {
         dockerSupport {
             loginToRegistry = on {
