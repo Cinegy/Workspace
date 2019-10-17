@@ -38,6 +38,6 @@
 	}
 	
 ],
-	"remoteConfigHost": "https://workspace-configs.s3.amazonaws.com/workspace",
-	"useRemoteConfig": false
+	"remoteConfigHost": "https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
+	"useRemoteConfig": true
 }
