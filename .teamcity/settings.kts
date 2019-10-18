@@ -40,6 +40,9 @@ project {
 
 object Build : BuildType({
     name = "Build"
+    
+    // check if the build is from master (until integration builds are implemented)
+    val isIntegrationBuild = "%teamcity.build.branch%" != "master"
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%teamcity.build.branch%_%build.number%.zip"
@@ -51,6 +54,19 @@ object Build : BuildType({
     }
 
     steps { 
+        powerShell {
+            name = "(patch) Generate Version Number"
+            scriptMode = file {
+                path = "set_version.ps1"
+            }
+            // Integration Builds: set version to X.99.Y.Z
+            if (isIntegrationBuild) {
+                param("jetbrains_powershell_scriptArguments", "-buildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99")
+            } 
+            else {
+                param("jetbrains_powershell_scriptArguments", "-buildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%")
+            }
+        }
         script {
             name = "(build) NPM Install"
             scriptContent = """
@@ -60,7 +76,7 @@ object Build : BuildType({
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
             dockerPull = true
-        }
+        }./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
         script {
             name = "(build) Workspace Build"
             scriptContent = """
