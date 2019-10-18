@@ -40,7 +40,8 @@ object Build : BuildType({
     name = "Build"
     
     // check if the build is from master (until integration builds are implemented)
-    val isIntegrationBuild = "%teamcity.build.branch%" != "master"
+    val branchName = "%teamcity.build.branch%"
+    val isMasterBranch = (branchName.compareTo("master") == 0);
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%teamcity.build.branch%_%build.number%.zip"
@@ -55,11 +56,11 @@ object Build : BuildType({
         exec {
             name = "(patch) Generate Version Number"
             path = "pwsh"
-            if (isIntegrationBuild) {
-                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99"
+            if (isMasterBranch) {
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
             } 
             else {
-                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99"
             }   
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
             dockerPull = true
