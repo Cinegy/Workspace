@@ -13,7 +13,9 @@ install:
 build_script:
 - ps: >-    
     ./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
-
+    
+    ng config -g cli.warnings.versionMismatch false
+    
     ng version
     
     ng build --prod --aot > log.txt
