@@ -76,7 +76,7 @@ object Build : BuildType({
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
             dockerPull = true
-        }./patch-version.ps1 -BuildCounter $ENV:APPVEYOR_BUILD_NUMBER -SourceRevisionValue $ENV:APPVEYOR_REPO_COMMIT
+        }
         script {
             name = "(build) Workspace Build"
             scriptContent = """
