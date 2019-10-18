@@ -41,7 +41,10 @@ object Build : BuildType({
     
     // check if the build is from master (until integration builds are implemented)
     val branchName = "%teamcity.build.branch%"
-    val isMasterBranch = (branchName.compareTo("master") == 0);
+    val isMasterBranch = false
+    if(branchName.compareTo("master") == 0){
+        isMasterBranch = true
+    }
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%teamcity.build.branch%_%build.number%.zip"
