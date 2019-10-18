@@ -74,21 +74,10 @@ object Build : BuildType({
     }
 
     triggers {
-        schedule {
-            enabled = false
-            schedulingPolicy = daily {
-                hour = 23
-            }
-            branchFilter = ""
-            triggerBuild = always()
-        }
         vcs {
-            enabled = false
+            enabled = true
             quietPeriodMode = VcsTrigger.QuietPeriodMode.USE_CUSTOM
             quietPeriod = 60
-        }
-        retryBuild {
-            enabled = false
         }
     }
 
@@ -125,9 +114,18 @@ object Deploy : BuildType({
         }
     }
     
+    triggers {
+        finishBuildTrigger {
+            buildType = "${Build.id}"
+            successfulOnly = true
+            branchFilter = ""
+        }
+    }
+
     dependencies {
         dependency(Build) {
             snapshot {
+                onDependencyCancel = FailureAction.CANCEL
             }
 
             artifacts {
