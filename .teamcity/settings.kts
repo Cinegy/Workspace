@@ -65,7 +65,9 @@ object Build : BuildType({
             } 
             else {
                 param("jetbrains_powershell_scriptArguments", "-buildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%")
-            }
+            }    
+            dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
+            dockerPull = true   
         }
         script {
             name = "(build) NPM Install"
