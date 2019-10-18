@@ -41,7 +41,7 @@ object Build : BuildType({
     
     // check if the build is from master (until integration builds are implemented)
     val branchName = "%teamcity.build.branch%"
-    val isMasterBranch = false
+    var isMasterBranch = false
     if(branchName.compareTo("master") == 0){
         isMasterBranch = true
     }
