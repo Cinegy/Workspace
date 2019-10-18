@@ -1,7 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.v2018_2.*
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildFeatures.dockerSupport
-import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.PowerShellStep
-import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.powerShell
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2018_2.projectFeatures.dockerRegistry
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.VcsTrigger
@@ -54,20 +52,17 @@ object Build : BuildType({
     }
 
     steps {
-        powerShell {
+        exec {
             name = "(patch) Generate Version Number"
-            scriptMode = file {
-                path = "patch-version.ps1"
-            }
-            // Integration Builds: set version to X.99.Y.Z
+            path = "pwsh"
             if (isIntegrationBuild) {
-                param("jetbrains_powershell_scriptArguments", "-BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99")
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99"
             } 
             else {
-                param("jetbrains_powershell_scriptArguments", "-BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%")
-            }    
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
+            }   
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
-            dockerPull = true   
+            dockerPull = true
         }
         script {
             name = "(build) NPM Install"
