@@ -60,7 +60,7 @@ object Build : BuildType({
                 arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
             } 
             else {
-                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion " + branchName
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion " + isMasterBranch
             }   
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
             dockerPull = true
@@ -132,7 +132,7 @@ object Deploy : BuildType({
         finishBuildTrigger {
             buildType = "${Build.id}"
             successfulOnly = true
-            branchFilter = ""
+            branchFilter = "+:*"
         }
     }
 
