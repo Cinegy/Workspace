@@ -53,18 +53,18 @@ object Build : BuildType({
         cleanCheckout = true
     }
 
-    steps { 
+    steps {
         powerShell {
             name = "(patch) Generate Version Number"
             scriptMode = file {
-                path = "set_version.ps1"
+                path = "patch-version.ps1"
             }
             // Integration Builds: set version to X.99.Y.Z
             if (isIntegrationBuild) {
-                param("jetbrains_powershell_scriptArguments", "-buildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99")
+                param("jetbrains_powershell_scriptArguments", "-BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion 99")
             } 
             else {
-                param("jetbrains_powershell_scriptArguments", "-buildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%")
+                param("jetbrains_powershell_scriptArguments", "-BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%")
             }    
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
             dockerPull = true   
