@@ -18,26 +18,19 @@
 			{
 				"name": "Video Upload",
 				"type":"Simple",
-				"url":"http://localhost/upload/"
+				"url":"http://orsatekdemo01:4000/"
 			},
 			{
-			"name": "Store 1",
-			"region": "eu-central-1",
-			"roleArn": "arn:aws:iam::138136086619:role/workspace_user_s3_upload_access",
-			"type": "AWS",
-			"url": "cinegy-internal-content/wsupload01"
-		},
-		{
-			"name": "Store 2",
-			"region": "eu-central-1",
-			"roleArn": "arn:aws:iam::138136086619:role/workspace_user_s3_upload_access",
-			"type": "AWS",
-			"url": "cinegy-internal-content/wsupload02"
-		}
-	]
+				"name": "Photo Upload",
+				"type":"Simple",
+				"url":"http://orsatekdemo01:4000/"
+			}
+		]
 	}
 	
 ],
 	"remoteConfigHost": "https://workspace-configs.s3.amazonaws.com/workspace",
 	"useRemoteConfig": false
 }
+
+

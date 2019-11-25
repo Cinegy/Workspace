@@ -81,40 +81,7 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
             })
           console.log("Simple store here");
           break;
-        case WsUploadStoreType.AWS:
-          const settings: WsAWSUploadStoreSettings = {
-            idToken: this.cis.user.id_token,
-            name: item.name,
-            region: item.region,
-            roleArn: item.roleArn,
-            uploader: uploadModel.uploader,
-            url: item.url
-          };
-          store = new WsAWSUploadStore(settings, this.timer, this.cis);
-          store.init()
-            .then(data => {
-              uploadModel.store = store;
-
-              const subscriber = store.uploadCompletedSubject
-                .subscribe(response => this.onUploadCompletedSubject(response));
-              this.subscribers.push(subscriber);
-
-              store.check()
-                .then(
-                  resolve => {
-                    this.uploadModels.push(uploadModel);
-                  },
-                  reject => {
-                    this.openErrorDialog(`Error reading Bucket ${store.name}: ${reject.message}`);
-                  });
-            })
-            .catch(err => {
-              this.openErrorDialog(`Error reading Bucket ${store.name}: ${err.message}`);
-            });
-          break;
       }
-
-
     });
   }
 
