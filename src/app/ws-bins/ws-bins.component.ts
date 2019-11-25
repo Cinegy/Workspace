@@ -302,8 +302,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
         tab.children = response.items;
         tab.childCount = response.totalCount;
-       // alert("tab.children  " + tab.parent.type + " tab.childCount " + tab.childCount);
-
+      
         if (this.selectedIndex !== i) {
           this.selectedIndex = i;
         }

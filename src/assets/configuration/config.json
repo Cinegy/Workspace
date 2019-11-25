@@ -1,7 +1,7 @@
 
 {
 	"cis": {
-		"cisEndpoint": "https://identitydev.cinegy.net",
+		"cisEndpoint": "http://orsatekdemo01:7602/",
 		"clientId": "360c5e0c9ed44cae8263b6b90e7087c5ed1b2812f55a4b0e89049e336681c1aa",
 		"useCis": false
 	},
@@ -14,7 +14,13 @@
 		"mamEndpoint": "http://orsatekdemo01:7601/mams/1.0/api/mam/",
 		"name": "MAM 12",
 		"thumbnailServer": "http://orsatekdemo01:8000/image_service/1.0/api/thumbnail/",
-		"uploadStores": [{
+		"uploadStores": [
+			{
+				"name": "Video Upload",
+				"type":"Simple",
+				"url":"http://localhost/upload/"
+			},
+			{
 			"name": "Store 1",
 			"region": "eu-central-1",
 			"roleArn": "arn:aws:iam::138136086619:role/workspace_user_s3_upload_access",
@@ -27,7 +33,8 @@
 			"roleArn": "arn:aws:iam::138136086619:role/workspace_user_s3_upload_access",
 			"type": "AWS",
 			"url": "cinegy-internal-content/wsupload02"
-		}]
+		}
+	]
 	}
 	
 ],
