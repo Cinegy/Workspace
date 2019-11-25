@@ -1,0 +1,16 @@
+.ws-main-container {
+   overflow: hidden !important;
+   text-overflow: ellipsis; 
+  
+
+ }
+ .ws-card-content {
+      overflow-y: auto !important;  
+      flex-direction: column;
+       box-sizing: border-box;
+        display: flex; flex: 1 1 0%;
+         max-height:90%; 
+     
+ }
+ 
+ 

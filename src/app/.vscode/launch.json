@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PowerShell: Launch Current File",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "${file}",
+      "cwd": "${file}"
+    },
+    {
+      "name": "Launch Chrome (http)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "name": "Launch Chrome (https)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://dev.workspace.com:4200",
+      "webRoot": "${workspaceRoot}"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+.ws-main-container {
+    margin-top: 20px;
+  }
+  .ws-info-text {
+    font-size: x-small;
+  }
+  .ws-error {
+    font-size: smaller;
+    text-align: center;
+  }
+  

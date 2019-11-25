@@ -1,0 +1,10 @@
+.ws-jdf-dialog-header {
+    height: 40px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ws-jdf-dialog-content {
+    height: 430px !important;
+    overflow: auto;
+  }

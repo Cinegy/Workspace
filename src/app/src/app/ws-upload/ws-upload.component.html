@@ -1,0 +1,49 @@
+<mat-card>
+    <mat-card-content>
+      <h5>Media import locations</h5>
+      <mat-divider></mat-divider>
+      <div fxLayout="column">
+        <mat-list dense fxFlex>
+          <mat-list-item *ngFor="let model of uploadModels; let i= index">
+            <input ng2FileSelect [uploader]="model.uploader" hidden
+              [id]="model.id" multiple type="file" #mediaFileInput
+              (change)="uploadFile($event, model)" />
+            <div fxLayout="row" fxLayoutGap="10px" style="width: 100%;">
+              <button mat-button xFlex="50px" class="ws-store-btn"
+                (click)="storeSelected($event, model)"
+                [matTooltip]="'Show content of ' + model.store.name">{{model.store.name}}
+              </button>
+              <mat-progress-bar fxFlex="40" fxFlexAlign="center"
+                mode="determinate"
+                [value]="model.uploader.progress"
+                [matTooltip]="model.uploader.progress.toFixed(2) + '%'"
+                color="warn"></mat-progress-bar>
+              <button mat-icon-button fxFlex="10" fxFlexAlign="end"
+                (click)="mediaFileInput.click()"
+                matTooltip="Select file">...</button>
+              <button mat-icon-button fxFlex="10" fxFlexAlign="end"
+                (click)="cancelUpload(model)"
+                matTooltip="Cancel upload">
+                <i class="fa fa-ban"></i>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+        <div fxFlex>
+          <mat-divider></mat-divider>
+          <mat-list dense>
+            <h5 mat-subheader>{{selectedModel?.store.name}}</h5>
+            <div *ngIf="loading" style="text-align: left;">
+              <i class="fa fa-spinner fa-pulse fa-2x"></i>
+            </div>
+            <mat-list-item *ngFor="let item of selectedStoreContent?.content">
+              <mat-icon mat-list-icon class="fa fa-file"></mat-icon>
+              <h5 mat-line [matTooltip]="item.name +', '
+                +normalizeFileSize(item.size)">{{item.name}}</h5>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

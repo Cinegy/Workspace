@@ -1,0 +1,47 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="ws-login-main-container">
+  <mat-card fxFlex="40">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <mat-card-header fxLayout fxLayoutAlign="center">
+        <mat-card-title>
+          <h3><i class="fa fa-sign-in"></i> &nbsp; MAM Login</h3>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content fxLayout="column">
+        <div>
+         
+            <mat-form-field fxFlex="100">
+            <input matInput required placeholder="Username" [(ngModel)]="username" name="username" #localUsername="ngModel">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field fxFlex="100">
+            <input matInput required type="password" placeholder="Password" [(ngModel)]="password" name="password" #localPassword="ngModel">
+          </mat-form-field>
+        </div>
+        <p>
+          <mat-select *ngIf="configuration && configuration.domains" required placeholder="Select Domain" [(ngModel)]="selectedDomain"
+            name="selectedDomain" fxFlex="100">
+            <mat-option *ngFor="let domain of configuration.domains" [value]="domain">
+              {{domain}}
+            </mat-option>
+          </mat-select>
+        </p>
+        <p>
+          <mat-select *ngIf="configuration && configuration.mams" required placeholder="Select MAM" [(ngModel)]="selectedMam" name="selectedMam"
+            fxFlex="100">
+            <mat-option *ngFor="let mam of configuration.mams" [value]="mam">
+              {{mam.name}}
+            </mat-option>
+          </mat-select>
+        </p>
+        <p fxLayout fxLayoutAlign="end" class="ws-login-info-text">
+          * = Required Fields
+        </p>
+        <p-messages [(value)]="errorMsg"></p-messages>
+      </mat-card-content>
+      <mat-card-actions fxLayout fxLayoutAlign="center">
+        <button mat-button type="submit" [disabled]="!loginForm.form.valid">Connect &nbsp; <span [hidden]="isConnectionSpinnerHidden"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

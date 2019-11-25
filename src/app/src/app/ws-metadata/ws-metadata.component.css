@@ -1,0 +1,13 @@
+mat-select, mat-option, mat-checkbox  {
+    font-size: small;
+}
+.ws-metadata-name {
+    width: 40%;
+    margin-left: 10px;
+}
+.ws-metadata-value {
+    width: 50%;
+}
+.ws-metadata-indicator-button {
+    margin-left: 10px;
+}
