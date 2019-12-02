@@ -5,8 +5,8 @@
             <span *ngIf="tab.parent.name.length <= 15">{{tab.parent.name}}</span>
             <span *ngIf="tab.parent.name.length > 15">{{tab.parent.name.substring(0, 15)}}...</span>
       </ng-template>
-      <mat-list-item [dragula]='"explorer-bag"' [dragulaModel]='childNodes' *ngFor="let story of tab.children" style="font-size: 15px">
-        <span *ngIf="story.name.length > 15">{{story.name.substring(0,15)}}...</span>
+     <mat-list-item  *ngFor="let story of tab.children" style="font-size: 15px"> <!-- [dragulaModel]='childNodes' -->
+        <span *ngIf="story.name.length > 15">{{story.name.substring(0,15)}}...</span> <!--[dragula]='"explorer-bag"'  -->
         <span *ngIf="story.name.length <= 15">{{story.name}}</span>
       </mat-list-item>
     </mat-tab>  

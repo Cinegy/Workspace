@@ -5,6 +5,7 @@ import { WsAppStateService } from '../ws-app-state.service';
 import { WsNewsService } from './ws-news.service';
 import { MatDatepickerInputEvent } from '@angular/material';
 import { Moment } from 'moment';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-ws-news',
@@ -17,6 +18,8 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   public loading = false;
   public dates: any[] = [];
   public dayBulletinPair: [any, any] [] = [];
+  datevaluepicker=new FormControl(new Date());
+ 
   // public dict : Dictionary<[any,any]>;
   public stories: any[] =[]
   
@@ -59,7 +62,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   }
   
   ngOnInit() {
-    
+   
   }
 
   ngOnDestroy(): void {
@@ -129,6 +132,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
         this.pushRundownSubject.next(element);
       }
       else{
+
         console.log(element);
       }
     });
@@ -171,6 +175,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   /* Page events*/
   public pickDateEvent(type:string, event:MatDatepickerInputEvent<Moment>){
     let mom:Moment = event.value;
+   
     let currentDate:string =`${mom.date()}.${mom.month()+1}.${mom.year()}`; 
     console.log(`${mom.date()}.${mom.month()+1}.${mom.year()}`);
     

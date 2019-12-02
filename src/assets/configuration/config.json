@@ -19,12 +19,8 @@
 				"name": "Video Upload",
 				"type":"Simple",
 				"url":"http://orsatekdemo01:4000/"
-			},
-			{
-				"name": "Photo Upload",
-				"type":"Simple",
-				"url":"http://orsatekdemo01:4000/"
 			}
+		
 		]
 	}
 	

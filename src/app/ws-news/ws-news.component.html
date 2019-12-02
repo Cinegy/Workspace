@@ -1,5 +1,5 @@
-<mat-form-field style="width:150px; padding-left:10px">
-  <input matInput [matDatepicker]="myDatepicker" (dateInput)="pickDateEvent('change' , $event)">
+<mat-form-field style="width:300px; padding-left:20px">
+  <input matInput [matDatepicker]="myDatepicker"  (dateInput)="pickDateEvent('change' , $event)" [value]="datevaluepicker.value" >
   <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
   <mat-datepicker #myDatepicker></mat-datepicker>
 </mat-form-field>

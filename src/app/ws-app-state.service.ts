@@ -37,6 +37,7 @@ export class WsAppStateService {
   }
 
   public get selectedMam(): WsMamConnection {
+    console.log(this._selectedMam);
     return this._selectedMam;
   }
 
