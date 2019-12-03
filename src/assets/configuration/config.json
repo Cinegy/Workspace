@@ -1,0 +1,32 @@
+
+{
+	"cis": {
+		"cisEndpoint": "http://orsatekdemo01:7602/",
+		"clientId": "360c5e0c9ed44cae8263b6b90e7087c5ed1b2812f55a4b0e89049e336681c1aa",
+		"useCis": false
+	},
+	"domains": ["workgroup"],
+	"itemsPerPage": 10,
+	"mams": [{
+		"casEndpoint": "http://orsatekdemo01:8082/ICinegyDataAccessService",
+		"dbName": "mam12",
+		"dbServer": "orsatekdemo01",
+		"mamEndpoint": "http://orsatekdemo01:7601/mams/1.0/api/mam/",
+		"name": "MAM 12",
+		"thumbnailServer": "http://orsatekdemo01:8000/image_service/1.0/api/thumbnail/",
+		"uploadStores": [
+			{
+				"name": "Video Upload",
+				"type":"Simple",
+				"url":"http://orsatekdemo01:4000/"
+			}
+		
+		]
+	}
+	
+],
+	"remoteConfigHost": "https://workspace-configs.s3.amazonaws.com/workspace",
+	"useRemoteConfig": false
+}
+
+

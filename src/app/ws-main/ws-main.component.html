@@ -1,0 +1,47 @@
+<div fxLayout="column" fxFlexFill class="ws-main-container vh-100 " style="overflow: hidden !important; ">
+  <p-breadcrumb [model]="breadcrumbService.breadcrumbs"> </p-breadcrumb>
+  <div fxFlexFill class="ws-main-container" style="overflow: hidden !important;">
+   
+    <mat-card fxFlex="20">
+      <mat-card-content fxFlex class="ws-card-content">
+        <mat-tab-group>
+          <mat-tab label="Explorer">
+            <app-ws-explorer fxflex style="flex: 1 1 0px; box-sizing: border-box;"></app-ws-explorer>
+          </mat-tab>
+          <mat-tab label="Media Import">
+            <app-ws-upload></app-ws-upload>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container [ngSwitch]="this.appState.showMode">
+      <app-ws-bins *ngSwitchCase="'bins'" fxLayout="column" fxFlex="60"></app-ws-bins>
+      <app-ws-news *ngSwitchCase="'news'" fxLayout="column" fxFlex="60"></app-ws-news>
+      <app-ws-story *ngSwitchCase="'story'" fxLayout="column" fxFlex="60"></app-ws-story>
+      <div *ngSwitchDefault></div>
+    </ng-container>
+
+
+
+
+    <div fxFlex="30" fxLayout="column">
+      <app-ws-player fxFlex="45" fxLayout
+        style="flex-direction: row; box-sizing: border-box; display: flex; flex: 1 1 100%; max-height: 45%;">
+      </app-ws-player>
+
+      <mat-card fxLayout fxFlex="45">
+        <mat-card-content fxFlexFill class="ws-card-content">
+          <mat-tab-group #lowerRightTabGroup>
+            <mat-tab label="Metadata">
+              <app-ws-metadata></app-ws-metadata>
+            </mat-tab>
+            <mat-tab label="JDF">
+              <app-ws-jdf [tabGroup]="lowerRightTabGroup"></app-ws-jdf>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

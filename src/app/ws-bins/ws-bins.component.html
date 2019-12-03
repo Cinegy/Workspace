@@ -1,0 +1,43 @@
+<mat-card fxFlex style="overflow-y: auto;">
+    <mat-card-content #binNodes>
+      <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
+        <mat-tab *ngFor="let tab of tabs">
+          <ng-template mat-tab-label>
+            <section matTooltip="{{tab.parent.name}}" (contextmenu)="contextMenuOpen(tab.parent, false)">
+              <app-ws-node-image *ngIf="tab.parent.type" mat-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
+                [imageHeight]="16"></app-ws-node-image>
+              <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
+              <span *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
+              &nbsp; &nbsp;
+              <i class="fa fa-times" (click)="closeTab(tab)"></i>
+            </section>
+          </ng-template>
+          <mat-paginator fxFlex [length]="tab.childCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageEvent($event)">
+          </mat-paginator>
+          <div class="ws-bin-item-container" fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
+            <ng-template [ngIf]="tab.children">
+              <mat-card class="ws-card-item ws-card-item-selected" [class.ws-card-item-selected]="child.isSelected" *ngFor="let child of tab.children" fxFlex fxFlexFill fxLayout="column" tabindex="0" (click)="selectItem(child, $event)"
+                (contextmenu)="contextMenuOpen(child, true)">
+                <span [ngSwitch]="child.type">
+                  <img *ngSwitchCase="'masterClip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)" matTooltip="{{child.name}}">
+                  <img *ngSwitchCase="'clip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (dblclick)="playClip(child)" matTooltip="{{child.name}}">
+                  <img *ngSwitchCase="'image'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" matTooltip="{{child.name}}">
+                  <app-ws-node-image *ngSwitchDefault fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64" (dblclick)="openBin(child)" matTooltip="{{child.name}}"></app-ws-node-image>
+                </span>
+                <mat-card-content>
+                  <div class="ws-card-item-name">{{child.name}}</div>
+                </mat-card-content>
+              </mat-card>
+            </ng-template>
+          
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+  
+  <p-contextMenu [target]="binNodes" [model]="contextMenuItems"></p-contextMenu>
+ 
+  
+  

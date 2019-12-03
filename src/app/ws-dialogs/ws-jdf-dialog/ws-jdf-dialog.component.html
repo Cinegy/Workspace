@@ -1,0 +1,26 @@
+<form #createJDFForm="ngForm">
+  <h3 mat-dialog-title class="ws-jdf-dialog-header">
+    <app-ws-node-image mat-list-icon
+      [imageData]="appState.nodeIcons[data.type].large" [imageWidth]="24"
+      [imageHeight]="24"></app-ws-node-image>
+    {{data.name}}</h3>
+  <div mat-dialog-content class="mat-typography ws-jdf-dialog-content">
+    <tree-root #jdfTree class="mat-typography ws-jdf-dialog-content"
+      [nodes]="nodes" [options]="options" (activate)="onActivate($event)"
+      (toggleExpanded)="onActivate($event)">
+      <ng-template #treeNodeTemplate let-node let-index="index">
+        <app-ws-node-image mat-list-icon
+          [imageData]="appState.nodeIcons[node.data.type].large" [imageWidth]="24"
+          [imageHeight]="24"></app-ws-node-image>
+        <span>{{ node.data.name }}</span>
+      </ng-template>
+    </tree-root>
+  </div>
+  <div class="mat-caption" style="text-align: center;">{{infoText}}</div>
+  <div md-dialog-actions fxLayout fxLayoutAlign="center">
+    <button mat-button [disabled]="selectedNode?.hasChildren"
+      (click)="createJob()"><i class="fa fa-check"></i> Send</button>
+    <button mat-button [mat-dialog-close]="null"><i class="fa fa-close"></i>
+      Close</button>
+  </div>
+</form>

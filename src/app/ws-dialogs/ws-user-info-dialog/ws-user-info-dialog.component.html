@@ -1,0 +1,41 @@
+<h3 mat-dialog-title>
+  <i class="fa fa-info"></i> Info</h3>
+<div mat-dialog-content fxLayout="column" class="mat-typography">
+  <mat-form-field>
+    <input matInput readonly placeholder="Workspace Version" [value]="workspaceVersion">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="MAM Name" [value]="data.name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Cinegy MAM Service Version" [value]="data.mamVersion">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Cinegy MAM Service Endpoint" [value]="data.mamEndpoint">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Cinegy Archive Service Endpoint" [value]="data.casEndpoint">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Database Server" [value]="data.dbServer">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Database Name" [value]="data.dbName">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Cinegy Thumbnail Service Endpoint" [value]="data.thumbnailServer">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="User" [value]="data.username">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="User Login Domain" [value]="data.domain">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput readonly placeholder="Login Time" [value]="data.loginTime | date:'medium'">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions fxLayout fxLayoutAlign="center">
+  <button mat-button matDialogClose>
+    <i class="fa fa-close"></i> Close</button>
+</div>

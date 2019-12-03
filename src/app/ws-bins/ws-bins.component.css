@@ -1,0 +1,30 @@
+.ws-card-item {
+    min-width: 160px;
+    max-width: 160px;
+    min-height: 160px;
+    max-height: 160px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.ws-card-item-content {
+    text-align: center;
+    height: 100px;
+}
+.ws-card-item-name {
+    font-size: x-small;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word; 
+ overflow: hidden;
+    height: 40px;
+}
+.ws-bin-item-container .ws-card-item:hover,.ws-card-item-selected{
+  /* border: 1px solid #4C6494; */
+  border-color:#4C6494;
+  background: #4C6494;
+}
+.ws-tab {
+    
+    overflow-y: auto; 
+}

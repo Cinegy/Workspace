@@ -1,0 +1,89 @@
+<mat-card fxLayout fxFlex style="overflow: hidden; flex: 1 1 0px; box-sizing: border-box; flex-direction: row; display: flex;">
+  <mat-card-content fxFlex  style="overflow: hidden;"><!---->
+    <div  *ngIf="loading" style="text-align: center;">
+      <i class="fa fa-spinner fa-pulse fa-2x"></i>
+    </div>
+    <h3 *ngIf="selectedNode">
+      <app-ws-node-image mat-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
+        [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
+      </app-ws-node-image>
+      {{selectedNode.name}}
+    </h3>
+    <mat-divider></mat-divider>
+    <div>
+      <mat-tab-group>
+        <mat-tab *ngFor="let group of descriptorGroups" >
+          <ng-template mat-tab-label>
+            <section layout="row">
+              <span>{{group[0].group.name}}</span>
+            </section>
+          </ng-template>
+          <mat-list dense role=list style="overflow: hidden;" ><!---->
+            <mat-list-item *ngFor="let item of group">
+              <span class="ws-metadata-name" matTooltip="{{item.description}}" matTooltipPosition="below">{{item.name}}</span>
+              <span class="ws-metadata-value">
+                
+                <span [ngSwitch]="item.type">
+                  <mat-form-field *ngSwitchCase="'string'">
+                    <input matInput type="text" [readonly]="item.isReadOnly" value="{{item.value.value}}" [(ngModel)]="item.value.value" (focus)="inputFocused(item)"
+                      (change)="inputValueChanged(item)" (blur)="inputLostFocus(item)" (keydown)="inputKeyPressed(item, $event)">
+                  </mat-form-field>
+                  <mat-form-field *ngSwitchCase="'text'">
+                    <textarea matInput readonly [(ngModel)]="item.value.value" (click)="textClicked(item)" (focus)="inputFocused(item)" (change)="inputValueChanged(item)"
+                      (blur)="inputLostFocus(item)" style="cursor: pointer;  resize: none; overflow:hidden; ">
+                        {{item.value.value}}
+                      </textarea>
+                  </mat-form-field>
+                  <mat-form-field *ngSwitchCase="'date'">
+                    <input matInput readonly [matDatepicker]="picker" value="{{item.value.value}}" [(ngModel)]="item.value.value" (click)="dateClicked(picker, item)"
+                      (dateChange)="addDateEvent('change', $event, item)" style="cursor: pointer;">
+                    <mat-datepicker #picker [disabled]="item.isReadOnly"></mat-datepicker>
+                  </mat-form-field>
+                  <div *ngSwitchCase="'bool'" style="text-align: center;">
+                    <mat-checkbox [(ngModel)]="item.value.value" [disabled]="item.isReadOnly" (focusin)="inputFocused(item)" (change)="checkBoxValueChanged(item, $event)"
+                      (blur)="inputLostFocus(item)">
+                    </mat-checkbox>
+                  </div>
+
+                  <span *ngSwitchCase="'preset'">
+                    <mat-form-field *ngIf="!item.isReadOnly">
+                      <mat-select [(ngModel)]="item.value.value" (focus)="inputFocused(item)" (change)="inputValueChanged(item)" (selectionChange)="selectValueChanged(item, $event)">
+                        <mat-option *ngFor="let presetValue of item.possibleValues" [value]="presetValue.value">
+                          {{ presetValue.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="item.isReadOnly">
+                      <mat-form-field>
+                        <input matInput value="{{item.value.value}}" readonly>
+                      </mat-form-field>
+                    </span>
+                  </span>
+
+                  <mat-form-field *ngSwitchDefault>
+                    <input matInput value="{{item.value.name}}" [readonly]="item.isReadOnly" [(ngModel)]="item.value.value" (focus)="inputFocused(item)"
+                      (change)="inputValueChanged(item)" (blur)="inputLostFocus(item)" (keydown)="inputKeyPressed(item, $event)">
+                  </mat-form-field>
+
+                </span>
+              </span>
+              <div class="ws-metadata-indicator-button">
+                <button mat-icon-button *ngIf="item.isReadOnly" matTooltip="{{item.name}} is readonly">
+                  <i class="fa fa-lock"></i>
+                </button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- <div fxLayout fxFlex style="min-height: 0px; overflow: hidden;">
+  <div *ngFor="let group of descriptorGroups" style="overflow-y: auto;">
+    <div *ngFor="let item of group">
+      {{item.name}}
+    </div>
+  </div>
+</div> -->

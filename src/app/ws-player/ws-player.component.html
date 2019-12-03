@@ -1,0 +1,91 @@
+
+<mat-card fxFlex id="playerComponent" #playerComponent >
+  <mat-card-content id="playerPage" #playerPage>
+    <div *ngIf="loading" style="text-align: center;">
+      <i class="fa fa-spinner fa-pulse fa-2x"></i>
+    </div>
+    <div>
+      <span *ngIf="selectedClip">
+        {{selectedClip.name}}
+      </span>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+      <div fxLayout class="player-header">
+        <div fxFlex>
+          <i class="fa fa-play"></i> {{timmecodeHead}}</div>
+        <div fxFlex>I/O {{timmecodeDuration}}</div>
+        <div fxFlex>E {{timmecodeEnd}}</div>
+      </div>
+      <div style="text-align: center;">
+      <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (click)="playerClicked($event)"
+        (error)="playerError($event)">
+      </video>
+      </div>
+      <div fxLayout="column">
+        <p-slider fxFlex
+          id="markerSlider" name="markerSlider" #markerSlider
+          [(ngModel)]="markers"
+          (onChange) ="markerSliderChanged($event)"
+          (onSlideEnd)="markerSliderEnded($event)"
+          [min]="sliderStart * 10" [max]="sliderEnd * 10" [step]="0.1"
+          [range]="true">
+        </p-slider>
+        <mat-slider
+          style="margin-top: -8px;"
+          id="videoSlider" name="videoSlider" #videoSlider
+          fxFlex
+          (change)="videoSliderChanged()"
+          (input)="videoSliderMoved(videoSlider.value)"
+          [min]="sliderStart" [max]="sliderEnd"
+          [(value)]="sliderHead"
+          [step]="0.1"
+          [disabled]="player == null || player.src == null">
+        </mat-slider>
+      </div>
+       <div> <!--fxLayout fxLayoutAlign="center  center" style="margin-top: 10px;" -->
+        <button mat-icon-button (click)="previousEvent()" matTooltip="Previous Event (Press a)">
+        
+          <i class="fa fa-long-arrow-left"></i>
+        </button>
+        <button mat-icon-button  (click)="nextEvent()" matTooltip="Next Event (Press s)">
+          <i class="fa fa-long-arrow-right"></i>
+        </button>
+        <button mat-icon-button (click)="clearMarkIn()" matTooltip="Clear Mark In (Press d)">
+          <i class="fa fa-map-marker fa-border"></i>
+        </button>
+        <button mat-icon-button (click)="setMarkIn()" matTooltip="Set Mark In (Press i)">
+          <i class="fa fa-map-marker"></i>
+        </button>
+        <button mat-icon-button *ngIf="player?.paused" (click)="play()" matTooltip="Toggle play/pause (Press space)">
+          <i class="fa fa-play"></i>
+        </button>
+        <button mat-icon-button *ngIf="!player?.paused" (click)="pause()" matTooltip="Toggle play/pause (Press space)">
+          <i class="fa fa-pause"></i>
+        </button>
+        <button mat-icon-button (click)="setMarkOut()" matTooltip="Set Mark Out (Press o)">
+          <i class="fa fa-map-marker"></i>
+        </button>
+        <button mat-icon-button (click)="clearMarkOut()" matTooltip="Clear Mark Out (Press f)">
+          <i class="fa fa-map-marker fa-border"></i>
+        </button>
+        <button mat-icon-button (click)="createSubClip()" *ngIf="canCreateSubclip"  matTooltip="Create Subclip (Press c)"><!--createSubClip-->
+          <i class="fa fa-photo"></i></button>
+        <button mat-icon-button *ngIf="player?.muted" (click)="toggleMute()"  matTooltip="Toggle Mute">
+          <i class="fa fa-volume-off"></i>
+        </button>
+        <button mat-icon-button *ngIf="!player?.muted" (click)="toggleMute()" matTooltip="Toggle Mute">
+          <i class="fa fa-volume-up"></i>
+        </button>
+        <span *ngIf="selectedClip">
+          <button mat-icon-button (click)="toggleFullscreen()" *ngIf="!fullscreen.isFullscreen" matTooltip="Toggle Fullscreen">
+            <i class="fa fa-expand"></i>
+          </button>
+          <button mat-icon-button (click)="toggleFullscreen()" *ngIf="fullscreen.isFullscreen" matTooltip="Toggle Fullscreen">
+            <i class="fa fa-compress"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

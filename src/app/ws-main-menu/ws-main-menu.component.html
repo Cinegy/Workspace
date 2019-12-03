@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+  <div (click)="goHome()" class="ws-cursor-pointer" >Cinegy Workspace</div>&nbsp;<!---->
+  <div><li class="fa fa-{{timerIconName}}"></li>&nbsp;</div><!---->
+  <span class="ws-main-menu-fill-remaining-space"></span>
+  <div layout="row" flex>
+    <form>
+    
+        <mat-form-field flex class="mat-icon-float mat-block mat-title ws-font-smaller">
+        <input matInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords" [disabled]="!appState.connected">
+  
+    </mat-form-field >
+      <button mat-icon-button [disabled]="!appState.connected" (click)="search()">
+      <i class="fa fa-search "></i>
+    </button>
+    </form>
+  </div>
+  <button mat-button [matMenuTriggerFor]="menu">
+    <span *ngIf="!appState.connected">Not connected</span>
+    <span *ngIf="appState.connected">{{appState.selectedMam.username}}</span>
+    &nbsp; <i class="fa fa-user-circle-o"></i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()">
+      <mat-icon fontSet="fa" fontIcon="fa-info"></mat-icon>
+      <span>Info</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
