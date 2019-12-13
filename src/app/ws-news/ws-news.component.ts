@@ -5,6 +5,7 @@ import { WsAppStateService } from '../ws-app-state.service';
 import { WsNewsService } from './ws-news.service';
 import { MatDatepickerInputEvent } from '@angular/material';
 import { Moment } from 'moment';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-ws-news',
@@ -16,7 +17,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   public lastOpenedNode: any;
   public loading = false;
   public dates: any[] = [];
-  public dictionary: [any, any] [] = [];
+  public dayBulletinPair: [any, any] [] = [];
+  datevaluepicker=new FormControl(new Date());
+ 
   // public dict : Dictionary<[any,any]>;
   public stories: any[] =[]
   
@@ -59,7 +62,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   }
   
   ngOnInit() {
-    
+   
   }
 
   ngOnDestroy(): void {
@@ -118,7 +121,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       }else if(element.type == 'month'){
         this.newsService.getChildren(element.id,element.type);
       }else if(element.type =='dayFolder'){
-        this.writeDictionaryKeys(element);
+        this.addDayBulletinPair(element);
         this.newsService.getChildren(element.id,element.type);
       }else if(element.type == 'bulletin'){        
         this.writeDictionaryValues(element);
@@ -129,26 +132,27 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
         this.pushRundownSubject.next(element);
       }
       else{
+
         console.log(element);
       }
     });
   }
 
   /*Utilities*/
-  private writeDictionaryKeys(date):void{
-    let keyPair = this.dictionary.find(pair=>{
+  private addDayBulletinPair(date):void{
+    let keyPair = this.dayBulletinPair.find(pair=>{
       return pair[0].id == date.id;
     })
     
     if(!keyPair){
-      this.dictionary.push([date,null]);
+      this.dayBulletinPair.push([date,null]);
     }else{
       console.log("Key exists");
     }
   }
 
   private writeDictionaryValues(bulletin):void  {
-    let pair = this.dictionary.find(element=>{
+    let pair = this.dayBulletinPair.find(element=>{
       return element[0].id==bulletin.parent;
     })
 
@@ -159,7 +163,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   }
 
   private resetModule(){
-      this.dictionary.splice(0);
+      this.dayBulletinPair.splice(0);
       this.resetComponents();
   }
 
@@ -171,10 +175,11 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   /* Page events*/
   public pickDateEvent(type:string, event:MatDatepickerInputEvent<Moment>){
     let mom:Moment = event.value;
+   
     let currentDate:string =`${mom.date()}.${mom.month()+1}.${mom.year()}`; 
     console.log(`${mom.date()}.${mom.month()+1}.${mom.year()}`);
     
-    let pair = this.dictionary.find(element=>{
+    let pair = this.dayBulletinPair.find(element=>{
       return element[0].name==currentDate
     })
     

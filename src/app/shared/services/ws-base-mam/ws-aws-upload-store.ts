@@ -185,10 +185,12 @@ export class WsAWSUploadStore extends WsGenericUploadStore implements IWsUploadS
     if (err) {
       console.log(`Upload error`, err);
       this.uploadErrorSubject.next(err);
+     
       return;
     }
 
     this.uploadCompletedSubject.next(this.uploader);
+   
   }
 
   public abort(): void {

@@ -134,7 +134,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedClip = response;
 
 
-    //alert(response.id);
     // tslint:disable-next-line:max-line-length
     this.thumbnailUrl = this.videoHelper.getThumbnailUrl(this.selectedClip, this.appState.selectedMam, this.selectedClip.videoFormat);
 
