@@ -147,7 +147,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.selectedChildNode.isSelected = null;
     }
 
-     //EKLEME//
+    
      if(node.type=='newsProgram'){
       this.appState.showMode = 'news';
     }else if(node.type=='roll'||node.type=='clipBin'||node.type=='documentBin'){
@@ -156,7 +156,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     else if(node.type=='story'){
       this.appState.showMode = 'story';
     }
-    //EKLEME//
+ 
 
     this.selectedChildNode = node;
     this.selectedChildNode.isSelected = true;
@@ -207,7 +207,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     // else{
      
     // }
-     //EKLEME//
+  
      if (node.type in this.openable) {
       if (node.type === 'jobDropTarget') {
         this.appState.openJdfNode(node);
@@ -220,7 +220,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       else {
         this.appState.openBinNode(node);
       }
-      //EKLEME//
+      
       return;
     }
   

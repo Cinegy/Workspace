@@ -52,6 +52,7 @@ export class WsStoryPoolComponent implements OnInit , OnDestroy {
       console.log("Error on this cond");
       return;
     }
+    alert("getpoolcontent");
     response.items.forEach(element => {
       if(element.type=='story'){
         this.stories.push(element);

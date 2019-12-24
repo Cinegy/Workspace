@@ -87,6 +87,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     
     this.loading = true;
     this.newsService.getNews(response.id, response.type);
+    alert(response.type);
   }
 
   private getParentResponse(response:any){
@@ -101,6 +102,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     this.loading = true;
     console.log(this.lastOpenedNode);
     this.newsService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
+    alert("getParentResponse");
   }
 
   private getChildrenResponse(response:any){
@@ -115,21 +117,34 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     
     this.loading = true;
 
-    response.items.forEach(element => {
+    response.items.forEach(element =>
+     {
       if(element.type=='year'){
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'month'){
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type =='dayFolder'){
         this.addDayBulletinPair(element);
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'bulletin'){        
         this.writeDictionaryValues(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'pool'){
         this.pushStoriesSubject.next(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }
       else if(element.type =='rundownFolder'){
         this.pushRundownSubject.next(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }
       else{
 
@@ -186,6 +201,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     if(pair){
       this.resetComponents()
       this.newsService.getChildren(pair[1].id,pair[1].type);
+      alert(pair)
     }else{
       this.resetComponents();
       console.log("Pair empty");

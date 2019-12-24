@@ -8,24 +8,31 @@
 	"domains": ["workgroup"],
 	"itemsPerPage": 10,
 	"mams": [{
-		"casEndpoint": "http://orsatekdemo01:8082/ICinegyDataAccessService",
-		"dbName": "mam12",
-		"dbServer": "orsatekdemo01",
-		"mamEndpoint": "http://orsatekdemo01:7601/mams/1.0/api/mam/",
-		"name": "MAM 12",
-		"thumbnailServer": "http://orsatekdemo01:8000/image_service/1.0/api/thumbnail/",
+		"casEndpoint": "http://<address-of-cas-server-here-relative-to-mams-service>:8082/ICinegyDataAccessService",
+		"dbName": "CinegyDatabaseNameHere",
+		"dbServer": "NameOfDatabaseServerHere",
+		"mamEndpoint": "https://<address-of-mams-hosting-or-routing-server-here>/mams/1.0/api/mam/",
+		"name": "CustomLabelForDatabaseNameHere",
+		"thumbnailServer": "https://<address-of-images-hosting-or-routing-server-here>/image_service/1.0/api/thumbnail/",
 		"uploadStores": [
 			{
 				"name": "Video Upload",
 				"type":"Simple",
-				"url":"http://orsatekdemo01:4000/"
+				"url":"http://localhost/upload/"
+			},
+			{
+			"name": "Store 1",
+			"region": "eu-central-1",
+			"roleArn": "arn:aws:iam::12345:role/workspace_user_s3_upload_access",
+			"type": "AWS",
+			"url": "some-bucket-name-here/subfolder-name-here"
 			}
-		
 		]
 	}
 	
 ],
-	"remoteConfigHost": "https://workspace-configs.s3.amazonaws.com/workspace",
+	"remoteConfigHost":"https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
+
 	"useRemoteConfig": false
 }
 
