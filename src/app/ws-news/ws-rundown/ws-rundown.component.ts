@@ -53,6 +53,7 @@ export class WsRundownComponent implements OnInit,  OnDestroy{
     this.tabs.push(tab);
 
     this.newsService.getRundownContent(response.id,response.type);
+    alert("getRundownContent")
   }
 
   private getRundownContentResponse(response:any){

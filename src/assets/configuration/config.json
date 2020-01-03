@@ -14,19 +14,26 @@
 		"mamEndpoint": "https://<address-of-mams-hosting-or-routing-server-here>/mams/1.0/api/mam/",
 		"name": "CustomLabelForDatabaseNameHere",
 		"thumbnailServer": "https://<address-of-images-hosting-or-routing-server-here>/image_service/1.0/api/thumbnail/",
-		"uploadStores": [{
-			"name": "Local Video Upload",
-			"type":"Simple",
-			"url":"http://localhost/upload/"
-		},
-		{
+		"uploadStores": [
+			{
+				"name": "Video Upload",
+				"type":"Simple",
+				"url":"http://localhost/upload/"
+			},
+			{
 			"name": "Store 1",
 			"region": "eu-central-1",
 			"roleArn": "arn:aws:iam::12345:role/workspace_user_s3_upload_access",
 			"type": "AWS",
 			"url": "some-bucket-name-here/subfolder-name-here"
-		}]
-	}],
-	"remoteConfigHost": "https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
+			}
+		]
+	}
+	
+],
+	"remoteConfigHost":"https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
+
 	"useRemoteConfig": true
 }
+
+

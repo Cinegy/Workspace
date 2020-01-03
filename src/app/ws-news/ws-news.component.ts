@@ -5,6 +5,7 @@ import { WsAppStateService } from '../ws-app-state.service';
 import { WsNewsService } from './ws-news.service';
 import { MatDatepickerInputEvent } from '@angular/material';
 import { Moment } from 'moment';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-ws-news',
@@ -16,7 +17,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   public lastOpenedNode: any;
   public loading = false;
   public dates: any[] = [];
-  public dictionary: [any, any] [] = [];
+  public dayBulletinPair: [any, any] [] = [];
+  datevaluepicker=new FormControl(new Date());
+ 
   // public dict : Dictionary<[any,any]>;
   public stories: any[] =[]
   
@@ -59,7 +62,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   }
   
   ngOnInit() {
-    
+   
   }
 
   ngOnDestroy(): void {
@@ -84,6 +87,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     
     this.loading = true;
     this.newsService.getNews(response.id, response.type);
+    alert(response.type);
   }
 
   private getParentResponse(response:any){
@@ -98,6 +102,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     this.loading = true;
     console.log(this.lastOpenedNode);
     this.newsService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
+    alert("getParentResponse");
   }
 
   private getChildrenResponse(response:any){
@@ -112,43 +117,57 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     
     this.loading = true;
 
-    response.items.forEach(element => {
+    response.items.forEach(element =>
+     {
       if(element.type=='year'){
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'month'){
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type =='dayFolder'){
-        this.writeDictionaryKeys(element);
+        this.addDayBulletinPair(element);
         this.newsService.getChildren(element.id,element.type);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'bulletin'){        
         this.writeDictionaryValues(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }else if(element.type == 'pool'){
         this.pushStoriesSubject.next(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }
       else if(element.type =='rundownFolder'){
         this.pushRundownSubject.next(element);
+        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
+
       }
       else{
+
         console.log(element);
       }
     });
   }
 
   /*Utilities*/
-  private writeDictionaryKeys(date):void{
-    let keyPair = this.dictionary.find(pair=>{
+  private addDayBulletinPair(date):void{
+    let keyPair = this.dayBulletinPair.find(pair=>{
       return pair[0].id == date.id;
     })
     
     if(!keyPair){
-      this.dictionary.push([date,null]);
+      this.dayBulletinPair.push([date,null]);
     }else{
       console.log("Key exists");
     }
   }
 
   private writeDictionaryValues(bulletin):void  {
-    let pair = this.dictionary.find(element=>{
+    let pair = this.dayBulletinPair.find(element=>{
       return element[0].id==bulletin.parent;
     })
 
@@ -159,7 +178,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   }
 
   private resetModule(){
-      this.dictionary.splice(0);
+      this.dayBulletinPair.splice(0);
       this.resetComponents();
   }
 
@@ -171,16 +190,18 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   /* Page events*/
   public pickDateEvent(type:string, event:MatDatepickerInputEvent<Moment>){
     let mom:Moment = event.value;
+   
     let currentDate:string =`${mom.date()}.${mom.month()+1}.${mom.year()}`; 
     console.log(`${mom.date()}.${mom.month()+1}.${mom.year()}`);
     
-    let pair = this.dictionary.find(element=>{
+    let pair = this.dayBulletinPair.find(element=>{
       return element[0].name==currentDate
     })
     
     if(pair){
       this.resetComponents()
       this.newsService.getChildren(pair[1].id,pair[1].type);
+      alert(pair)
     }else{
       this.resetComponents();
       console.log("Pair empty");

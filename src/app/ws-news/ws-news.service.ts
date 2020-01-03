@@ -26,7 +26,7 @@ export class WsNewsService extends WsBaseMamService {
     let fragment :string;
     switch(type){
       case 'newsProgram' :
-        fragment = `node?id=${id}&linksScope=children&linksScope=metadata`
+        fragment = `node?id=${id}&linksScope=children&linksScope=metadata` 
         break;
     }
     

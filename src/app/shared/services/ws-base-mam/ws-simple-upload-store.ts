@@ -2,13 +2,20 @@ import { WsGenericUploadStore, IWsUploadStore, StoreState, WsUploadStoreType } f
 import { HttpClient } from '@angular/common/http';
 import { FileUploader } from 'ng2-file-upload';
 import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
+import { OnInit } from '@angular/core';
 
-export class  WsSimpleUploadStore extends WsGenericUploadStore implements IWsUploadStore, IDisposable {
+export class  WsSimpleUploadStore extends WsGenericUploadStore implements IWsUploadStore, IDisposable, OnInit {
 
     constructor(public name: string, public url: string, public uploader: FileUploader, public http: HttpClient) {
       super();
       this.type =  WsUploadStoreType.Simple;
       this.state = StoreState.Undefined;
+    }
+
+    ngOnInit(){
+      // this.uploader.onBeforeUploadItem = (item) =>{
+      //   item.withCredentials =false;
+      // }
     }
   
     dispose() {
@@ -31,7 +38,9 @@ export class  WsSimpleUploadStore extends WsGenericUploadStore implements IWsUpl
       return new Promise((resolve, reject) => {
         this.uploader.queue[0].url = `${this.url}api/upload`;
         this.uploader.onCompleteAll = () => {
+         
           resolve();
+       
         };
         this.uploader.uploadAll();
       });
@@ -45,6 +54,7 @@ export class  WsSimpleUploadStore extends WsGenericUploadStore implements IWsUpl
       const model = new  WsUploadStoreModel();
       const request = await this.http.get(`${this.url}api/upload`).forEach((data: any) => {
         data.forEach(item => {
+        
           const contentItem = new  WsUploadStoreContentItem();
           contentItem.name = item.name;
           contentItem.size = item.length;

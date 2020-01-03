@@ -85,7 +85,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   public saveMetadata(item, undo: boolean) {
    
     const metadata = new SaveMetadataRequest();
-    // alert("savemetadata "+ item.id);
+    
 
     metadata.descriptorId = item.id;
 
@@ -124,7 +124,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     this.selectedNode = response;
     this.descriptorGroups = [];
     this.descriptors = this.appState.descriptors[this.selectedNode.type];
-    //alert("selectedNodeResponse");
+
     if (this.descriptors === undefined) {
       this.loading = true;
       this.metadataService.getDescriptors(this.selectedNode.type);
@@ -142,7 +142,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     }
 
     this.descriptors = response;
-    //alert("getDescriptorsResponse");
+
 
     this.appState.descriptors[this.selectedNode.type] = response;
     this.metadataService.getMetadata(this.selectedNode);
@@ -272,7 +272,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       }
 
       tmpGroups[descriptor.group.id].push(descriptor);
-     // alert(descriptor.group.name);
+   
     }
 
     // tslint:disable-next-line:forin
@@ -320,13 +320,13 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public inputLostFocus(item) {
-//alert( "inputLostFocus "+item.name+"   "+item.backup.value);
+
 
     console.log(`Metadata lost focus: ${item.name}`);
   }
 
   public textClicked(item) {
-    //alert("item "+item);
+
     this.openEditTextDialog(item);
   }
 
@@ -342,7 +342,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
           item.value.value = null;
           return;
         }
-//alert("openEditTextDialog "+ item.value.name+"   "+item.backup.value);
+
 
         item.value.name = item.backup.name;
         item.value.value = item.backup.value;
@@ -353,7 +353,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public dateClicked(picker, item) {
-    //alert("dateClicked "+item);
+
     if (item.isReadOnly) {
       return;
     }
@@ -362,18 +362,18 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public addDateEvent(type: string, event: MatDatepickerInputEvent<Date>, item) {
-   // alert("addDateEvent");
+   
     item.value.value = moment(event.value);
     this.saveMetadata(item, false);
   }
 
   public selectValueChanged(item, event) {
-//alert("selectValueChanged");
+
    this.saveMetadata(item, false);
   }
 
   public checkBoxValueChanged(item, event) {
-  //  alert("checkBoxValueChanged");
+
     this.saveMetadata(item, false);
   }
 
@@ -382,7 +382,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       this.snackBar.open('Nothing to undo - there are no changes', null, { duration: 2000 });
       return;
     }
-//alert("undoMetadata "+ item.value.name+"   "+item.backup.value);
+
     item.value.name = item.backup.name;
     item.value.value = item.backup.value;
     this.saveMetadata(item, true);

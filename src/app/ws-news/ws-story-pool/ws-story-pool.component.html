@@ -1,5 +1,5 @@
 <mat-list >
-  <mat-list-item [dragula]='"explorer-bag"' [dragulaModel]='childNodes' *ngFor="let story of stories" style="font-size: 15px">
+  <mat-list-item  *ngFor="let story of stories" style="font-size: 15px"> <!--[dragula]='"explorer-bag"'[dragulaModel]='childNodes'  -->
       <span *ngIf="story.name.length > 15">{{story.name.substring(0,15)}}...</span>
       <span *ngIf="story.name.length <= 15">{{story.name}}</span>
   </mat-list-item>

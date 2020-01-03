@@ -117,6 +117,7 @@ export class WsExplorerService  extends WsBaseMamService{
 
     subject.next(response);
     this.binParams.bin = response;
+    alert("hi");
     this.post(
       `${this.appState.selectedMam.mamEndpoint}metadata?id=${this.binParams.bin.id}`,
       [{

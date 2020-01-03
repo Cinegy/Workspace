@@ -12,5 +12,6 @@ export class UploadModel {
   
     constructor() {
       this.id = UUID.UUID();
+    
     }
   }
