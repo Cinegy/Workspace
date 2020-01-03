@@ -33,7 +33,7 @@
 ],
 	"remoteConfigHost":"https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
 
-	"useRemoteConfig": false
+	"useRemoteConfig": true
 }
 
 
