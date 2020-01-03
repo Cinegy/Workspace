@@ -12,6 +12,6 @@ export class UploadModel {
   
     constructor() {
       this.id = UUID.UUID();
-      console.log("upload model uuid bilgisi = "+ this.id );
+    
     }
   }
