@@ -103,7 +103,7 @@ export class WsVideoTools{
        
         for (const file of clip.fileSet.files) {
 
-          if (file.auxFileType && file.auxFileType === 'AW1') {
+          if (file.auxFileType && file.auxFileType === 'aw1') {
             return `${file.url}${encodeURI(file.fileName)}`;
           }
         }
