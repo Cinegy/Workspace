@@ -1,2 +1,2 @@
-#define VERSION_MAJOR 19
-#define VERSION_MINOR 10
+#define VERSION_MAJOR 20
+#define VERSION_MINOR 2
