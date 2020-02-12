@@ -62,7 +62,7 @@ export class WsAppManagementService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}management/version`, this.mamVersionSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
    // this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
-    this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?scope.type=png&scope=large`, this.getIconsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
    
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
     // tslint:disable-next-line:max-line-length
