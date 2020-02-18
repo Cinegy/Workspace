@@ -133,7 +133,6 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
 
   private timerCallback() {
     this.management.heartbeat();
-    console.log(new Date(Date.now()));
 
     // if (navigator.onLine) {
     //   this.isOnline = 'Online';

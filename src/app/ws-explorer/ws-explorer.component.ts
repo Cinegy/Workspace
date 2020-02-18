@@ -252,7 +252,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     }
 
     this.selectedNode = response;
-    console.log(`Get Node: ${this.selectedNode.name}`);
     this.loading = true;
     this.explorerService.getChildren(this.selectedNode.id);
   }
@@ -277,7 +276,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
         }
       }
     }
-    console.log(`getChildrenResponse Get Children: ${this.childNodes.length}`);
   }
 
   private createNodeResponse(response: any) {
@@ -293,7 +291,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     }
 
     this.snackBar.open(`${response.name} created`, null, { duration: 1000 });
-    console.log(`createNodeResponse Get createNodeResponse: `);
 
   }
 
@@ -477,7 +474,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   /* *** Conetxt Menu *** */
 
   private contextMenuOpen(selectedNode: any, isChild: boolean) {
-    console.log("contextt menüü canımsss");
     let menuItem: any;
     let menuChildItems: any;
     let menuChildItem: any;

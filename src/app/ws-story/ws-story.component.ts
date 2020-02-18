@@ -133,7 +133,6 @@ export class WsStoryComponent implements OnInit , OnDestroy {
       return;
     }
 
-    console.log(response);
   }
 
   private getMetadataResponse(response:any){
@@ -143,6 +142,5 @@ export class WsStoryComponent implements OnInit , OnDestroy {
       return;
     }
 
-    console.log(response);
   }
 }

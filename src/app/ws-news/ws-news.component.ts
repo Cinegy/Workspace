@@ -81,9 +81,6 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       this.lastOpenedNode = null;
       return;
     }
-
-    console.log('openNodeResponse');
-    
     
     this.loading = true;
     this.newsService.getNews(response.id, response.type);
@@ -97,10 +94,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       this.lastOpenedNode = null;
       return;
     }
-    console.log('getParentResponse');
+
     this.lastOpenedNode = response;
     this.loading = true;
-    console.log(this.lastOpenedNode);
     this.newsService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
     alert("getParentResponse");
   }
