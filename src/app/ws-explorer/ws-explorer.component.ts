@@ -492,7 +492,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (!this.mainNodeTypes.includes(selectedNodeType.typeGroup)) {
       menuItem = {
         label: 'Open',
-        icon: 'fa-window-restore',
+        icon: 'fa-window-restore fa',
         command: (event) => {
           this.openNode(selectedNode);
         }
@@ -533,7 +533,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       if (menuChildItems.length > 0) {
         menuItem = {
           label: 'New',
-          icon: 'fa-plus',
+          icon: 'fa-plus fa',
           items: menuChildItems
         };
         this.contextMenuItems.push(menuItem);
@@ -544,7 +544,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (isChild && !(selectedNode.type in this.notCutable)) {
       menuItem = {
         label: 'Cut',
-        icon: 'fa-scissors',
+        icon: 'fa-scissors fa',
         command: (event) => {
           this.clipboard.cancel();
           this.clipboard.action = ClipboardAction.Cut;
@@ -557,7 +557,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (selectedNode.type in this.copyable) {
       menuItem = {
         label: 'Copy',
-        icon: 'fa-files-o',
+        icon: 'fa-files-o fa',
         command: (event) => {
           this.clipboard.cancel();
           this.clipboard.action = ClipboardAction.Copy;
@@ -570,7 +570,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable) {
       menuItem = {
         label: 'Paste',
-        icon: 'fa-clipboard',
+        icon: 'fa-clipboard fa',
         command: (event) => {
           if (this.clipboard.action === ClipboardAction.Copy) {
             this.explorerService.copyNode(this.clipboard.items[0].id, selectedNode.id);
@@ -585,7 +585,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (this.childOpenedMenu && selectedNodeType.canDelete) {
       menuItem = {
         label: 'Rename',
-        icon: 'fa-pencil',
+        icon: 'fa-pencil fa',
         command: (event) => {
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.renameNodeDialog();
@@ -598,7 +598,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (this.childOpenedMenu && selectedNodeType.canDelete) {
       menuItem = {
         label: 'Delete',
-        icon: 'fa-minus',
+        icon: 'fa-minus fa',
         command: (event) => {
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.openDeleteNodeDialog();
@@ -610,7 +610,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (!this.childOpenedMenu) {
       menuItem = {
         label: 'Refresh',
-        icon: 'fa-refresh',
+        icon: 'fa-refresh fa',
         command: (event) => {
           this.refreshParent();
         }
@@ -622,7 +622,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     if (this.childOpenedMenu && selectedNode.type in this.exportable) {
       menuItem = {
         label: 'Send to job drop folder',
-        icon: 'fa-indent',
+        icon: 'fa-indent fa',
         command: (event) => {
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.openJDFDialog();
