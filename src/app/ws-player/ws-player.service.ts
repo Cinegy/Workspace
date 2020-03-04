@@ -65,8 +65,10 @@ export class WsPlayerService extends WsBaseMamService {
     this.selectedClip = clip;
 
     //alert(clip.id +" in  "+clip.in+" out  "+clip.out);
-    let in_ = 222400000;
-    let out_ = 300000000;
+//    let in_ = 222400000;
+//    let out_ = 300000000;
+    let in_ = this.selectedClip.in;
+    let out_ = this.selectedClip.out;
     // tslint:disable-next-line:max-line-length
     this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/createsubclip?masterclipId=${clip.id}&in=${in_}&out=${out_}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
   
