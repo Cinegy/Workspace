@@ -26,7 +26,7 @@ import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule, 
-    TreeModule,
+    TreeModule.forRoot(),
    MatFormFieldModule
   ],
   declarations: [
