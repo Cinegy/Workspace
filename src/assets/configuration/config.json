@@ -1,10 +1,5 @@
 
 {
-	"cis": {
-		"cisEndpoint": "http://orsatekdemo01:7602/",
-		"clientId": "360c5e0c9ed44cae8263b6b90e7087c5ed1b2812f55a4b0e89049e336681c1aa",
-		"useCis": false
-	},
 	"domains": ["workgroup"],
 	"itemsPerPage": 10,
 	"mams": [{
@@ -13,26 +8,9 @@
 		"dbServer": "NameOfDatabaseServerHere",
 		"mamEndpoint": "https://<address-of-mams-hosting-or-routing-server-here>/mams/1.0/api/mam/",
 		"name": "CustomLabelForDatabaseNameHere",
-		"thumbnailServer": "https://<address-of-images-hosting-or-routing-server-here>/image_service/1.0/api/thumbnail/",
-		"uploadStores": [
-			{
-				"name": "Video Upload",
-				"type":"Simple",
-				"url":"http://localhost/upload/"
-			},
-			{
-			"name": "Store 1",
-			"region": "eu-central-1",
-			"roleArn": "arn:aws:iam::12345:role/workspace_user_s3_upload_access",
-			"type": "AWS",
-			"url": "some-bucket-name-here/subfolder-name-here"
-			}
-		]
-	}
-	
-],
+		"thumbnailServer": "https://<address-of-images-hosting-or-routing-server-here>/image_service/1.0/api/thumbnail/"
+	}],
 	"remoteConfigHost":"https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
-
 	"useRemoteConfig": true
 }
 
