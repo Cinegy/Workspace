@@ -83,7 +83,7 @@ object Build : BuildType({
             scriptContent = """
                 #!/bin/bash
                 ng version    
-                ng build > log.txt
+                ng build --prod > log.txt
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
             dockerPull = true
