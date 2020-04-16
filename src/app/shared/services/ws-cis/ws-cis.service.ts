@@ -14,7 +14,7 @@ export class WsCisService {
 
   constructor(private config: WsConfigurationService, private router: Router) {
     Log.logger = console;
-    this.init(this.config.configuration.cis);
+//    this.init(this.config.configuration.cis);
    
   }
 

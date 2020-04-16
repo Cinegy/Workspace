@@ -85,11 +85,7 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
   public logout() {
     this.logoutService.logout();
 
-    if (this.configService.configuration.cis.useCis) {
-      this.router.navigate(['/cislogin']);
-    } else {
-      this.router.navigate(['/login']);
-    }
+    this.router.navigate(['/login']);
 
   }
 

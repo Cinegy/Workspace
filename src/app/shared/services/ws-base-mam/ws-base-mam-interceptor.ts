@@ -12,7 +12,7 @@ export class WsBaseMamInterceptor implements HttpInterceptor {
     let newHeaders: HttpHeaders;
     let newReq = req.clone();
 
-    if (!req.headers.has('CIS-Request') && this.appState.authHeader) {
+    if (this.appState.authHeader) {
       newHeaders = new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': `application/json`,

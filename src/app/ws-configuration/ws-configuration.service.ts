@@ -70,7 +70,6 @@ export class WsConfigurationService {
     this.configuration.itemsPerPage = response.itemsPerPage;
     this.configuration.useRemoteConfig = response.useRemoteConfig;
     this.configuration.remoteConfigHost = response.remoteConfigHost;
-    this.configuration.cis = response.cis;
   }
 
   private errorRemoteConfig(error: any) {

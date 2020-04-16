@@ -1,8 +1,7 @@
-import { WsMamConnection, WsCisConfiguration } from '../shared/services/ws-base-mam/ws-mam-connection';
+import { WsMamConnection} from '../shared/services/ws-base-mam/ws-mam-connection';
 
 export class WsConfiguration {
     public mams: WsMamConnection[];
-    public cis: WsCisConfiguration;
     public domains: string[];
     public itemsPerPage: number;
     public useRemoteConfig: boolean;
