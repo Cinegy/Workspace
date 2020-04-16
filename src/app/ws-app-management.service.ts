@@ -33,7 +33,8 @@ export class WsAppManagementService extends WsBaseMamService {
   public getDescriptorsSubject: Subject<any> = new Subject<any>();
   public mamVersionSubject: Subject<any> = new Subject<any>();
   public heartbeatSubject: Subject<any> = new Subject<any>();
-
+  public getMediaGroupsSubject: Subject<any> = new Subject<any>();
+  
   constructor(
     protected httpClient: HttpClient,
     protected appState: WsAppStateService) {
@@ -59,8 +60,12 @@ export class WsAppManagementService extends WsBaseMamService {
     this.getDescriptorsSubject
       .subscribe(response => this.getDescriptorsResponse(response));
 
+    this.getMediaGroupsSubject
+      .subscribe(response => this.getMediaGroupsResponse(response));
+
     this.get(`${this.appState.selectedMam.mamEndpoint}management/version`, this.mamVersionSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/videoformat/list`, this.getTvFormatsSubject);
+    this.get(`${this.appState.selectedMam.mamEndpoint}management/mediagroup/list`, this.getMediaGroupsSubject);
    // this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
    
@@ -98,6 +103,16 @@ export class WsAppManagementService extends WsBaseMamService {
 
     response.forEach(tvFormat => {
       this.appState.tvFormats[tvFormat.id] = tvFormat;
+    });
+  }
+
+  private getMediaGroupsResponse(response: any) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+
+    response.forEach(mediaGroup => {
+      console.log(mediaGroup);
     });
   }
 

@@ -5,7 +5,6 @@ import { FileUploader } from 'ng2-file-upload';
 import { WsUploadStoreType, IWsUploadStore } from '../shared/services/ws-base-mam/ws-upload-store';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WsAppStateService } from '../ws-app-state.service';
 import { WsUploadStoreModel } from '../shared/services/ws-base-mam/ws-upload-store-model';
@@ -32,7 +31,6 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
     private appState: WsAppStateService,
     public snackBar: MatSnackBar,
     private http: HttpClient,
-    private cis: WsCisService,
     public dialog: MatDialog,
     private timer: SimpleTimer) {
     this.uploadModels = [];

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsLogoutComponent } from './ws-logout.component';
 import { WsLogoutService } from './ws-logout.service';
-import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
 import { WsAuthGuardService } from '../ws-login/ws-auth-guard.service';
 import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';
 import { MatSelectModule, MatCardModule, MatInputModule, MatButtonModule } from '@angular/material';
@@ -25,7 +24,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   providers: [
     WsLogoutService,
-    WsCisService,
     WsAuthGuardService,
     WsConfigurationService
   ],

@@ -7,7 +7,6 @@ import { WsConfigurationService } from '../ws-configuration/ws-configuration.ser
 
 import { LocalStorageService } from 'angular-2-local-storage';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { WsCisService } from '../shared/services/ws-cis/ws-cis.service';
 import { WsAppStateService } from '../ws-app-state.service';
 
 @Component({
@@ -29,7 +28,6 @@ export class WsLoginComponent implements OnInit, OnDestroy {
   constructor(private appState: WsAppStateService,
     private configService: WsConfigurationService,
     private loginService: WsLoginService,
-    private cisService: WsCisService,
     //private storageService: LocalStorageService,
     private router: Router) {
     this.subscribers = [];
@@ -42,20 +40,7 @@ export class WsLoginComponent implements OnInit, OnDestroy {
     this.subscribers.push(subscriber);
 
     this.init(this.configService.configuration);
-    
-if(this.configService.configuration.cis.useCis && !this.cisService.isLoggedIn()){
-  const success:Promise<boolean>=this.cisService.completeAuthentication();
-  success.then(result=>{
-    if(!result){
-
-      this.router.navigate(['/cisLogin']);
-    }
-  });
-
-
-}
-
-
+   
   }
   ngOnDestroy() {
     this.subscribers.forEach(element => {
@@ -70,7 +55,6 @@ if(this.configService.configuration.cis.useCis && !this.cisService.isLoggedIn())
     this.selectedMam.username = this.username;
     this.selectedMam.password = this.password;
     this.selectedMam.domain = this.selectedDomain;
-    this.selectedMam.cis = this.configuration.cis;
     this.loginService.login(this.selectedMam, false);
 
   }
