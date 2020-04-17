@@ -8,7 +8,7 @@
           <mat-tab label="Explorer">
             <app-ws-explorer fxflex style="flex: 1 1 0px; box-sizing: border-box;"></app-ws-explorer>
           </mat-tab>
-          <mat-tab label="Media Import">
+          <mat-tab *ngIf="isImport" label="Media Import">
             <app-ws-upload></app-ws-upload>
           </mat-tab>
         </mat-tab-group>
