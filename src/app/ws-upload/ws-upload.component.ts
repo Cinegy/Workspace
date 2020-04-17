@@ -47,40 +47,41 @@ export class WsUploadComponent implements  OnInit, OnDestroy {
     //   return;
     // }
     
+    if(stores != undefined) {
+      stores.forEach(async item => {
+        let store: IWsUploadStore;
 
-    stores.forEach(async item => {
-      let store: IWsUploadStore;
+        const uploadModel = new UploadModel();
+        uploadModel.name = item.name;
+        uploadModel.uploader = new FileUploader({ removeAfterUpload: true });
 
-      const uploadModel = new UploadModel();
-      uploadModel.name = item.name;
-      uploadModel.uploader = new FileUploader({ removeAfterUpload: true });
+        switch (item.type) {
+          case WsUploadStoreType.Simple:
+            store = new WsSimpleUploadStore(item.name, item.url, uploadModel.uploader, this.http);
+            store.init()
+              .then(data=> {
+                uploadModel.store = store;
 
-      switch (item.type) {
-        case WsUploadStoreType.Simple:
-          store = new WsSimpleUploadStore(item.name, item.url, uploadModel.uploader, this.http);
-          store.init()
-            .then(data=> {
-              uploadModel.store = store;
+                const subscriber = store.uploadCompletedSubject
+                .subscribe(response => this.onUploadCompletedSubject(response));
+                this.subscribers.push(subscriber);
 
-              const subscriber = store.uploadCompletedSubject
-              .subscribe(response => this.onUploadCompletedSubject(response));
-              this.subscribers.push(subscriber);
-
-              store.check()
-                .then(
-                  resolve => {
-                    this.uploadModels.push(uploadModel);
-                  },
-                  reject => {
-                    this.openErrorDialog(`Error reading simple store: ${store.name}: ${reject.message}`);
-                  });
-            }).catch(err => {
-              this.openErrorDialog(`Error getting simple store: ${store.name}: ${err.message}`);
-            })
-          console.log("Simple store here");
-          break;
-      }
-    });
+                store.check()
+                  .then(
+                    resolve => {
+                      this.uploadModels.push(uploadModel);
+                    },
+                    reject => {
+                      this.openErrorDialog(`Error reading simple store: ${store.name}: ${reject.message}`);
+                    });
+              }).catch(err => {
+                this.openErrorDialog(`Error getting simple store: ${store.name}: ${err.message}`);
+              })
+            console.log("Simple store here");
+            break;
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
