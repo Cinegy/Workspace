@@ -9,12 +9,14 @@ import { WsAppStateService } from '../ws-app-state.service';
 })
 export class WsMainComponent implements OnInit {
   public showMode:string;
+  public isImport:boolean;
 
   constructor(
     public breadcrumbService:WsMainBreadcrumbsService,
     public appState: WsAppStateService
     ) { 
       this.showMode = appState.showMode;
+      this.isImport = (this.appState.selectedMam.uploadStores != undefined);
     }
 
   ngOnInit() {
