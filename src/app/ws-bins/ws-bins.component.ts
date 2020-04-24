@@ -496,7 +496,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (selectedNode.type in this.playable) {
         menuItem = {
           label: 'Play',
-          icon: 'fa-play-circle-o',
+          icon: 'fa fa-play-circle-o',
           command: (event) => {
             this.playClip(selectedNode);
           }
@@ -508,7 +508,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNode.type in this.cutable) {
         menuItem = {
           label: 'Cut',
-          icon: 'fa-scissors',
+          icon: 'fa fa-scissors',
           command: (event) => {
             this.menuSelectedTabIndex = this.selectedIndex;
             this.clipboard.cancel();
@@ -522,7 +522,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (selectedNode.type in this.copyable) {
         menuItem = {
           label: 'Copy',
-          icon: 'fa-files-o',
+          icon: 'fa fa-files-o',
           command: (event) => {
             this.menuSelectedTabIndex = this.selectedIndex;
             this.clipboard.cancel();
@@ -536,7 +536,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNodeType.canDelete) {
         menuItem = {
           label: 'Delete',
-          icon: 'fa-trash-o',
+          icon: 'fa fa-trash-o',
           command: (event) => {
             this.openDeleteNodeDialog(selectedNode);
           }
@@ -547,7 +547,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (this.childOpenedMenu && selectedNode.type in this.exportable) {
         menuItem = {
           label: 'Send to job drop folder',
-          icon: 'fa-indent',
+          icon: 'fa fa-indent',
           command: (event) => {
             this.openJDFDialog();
           }
@@ -571,7 +571,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           (selectedNode.type === 'documentBin' && this.clipboard.items[0].type in this.pasteTypesAllowedInDocumentBin)) {
           menuItem = {
             label: 'Paste to end',
-            icon: 'fa-clipboard',
+            icon: 'fa fa-clipboard',
             command: (event) => {
               switch (this.clipboard.items[0].type) {
                 case 'masterClip':
@@ -595,7 +595,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (this.tabs.length > 1) {
         menuItem = {
           label: 'Close Tabs to the right',
-          icon: 'fa-times-circle',
+          icon: 'fa fa-times-circle',
           command: (event) => {
             if ((this.tabs.length - 1) > this.selectedIndex) {
               for (let i = this.tabs.length - 1; i > this.selectedIndex; i--) {
@@ -607,7 +607,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           this.contextMenuItems.push(menuItem);
         menuItem = {
           label: 'Close other Tabs',
-          icon: 'fa-times-circle',
+          icon: 'fa fa-times-circle',
           command: (event) => {
             for (let i = this.tabs.length - 1; i >= 0; i--) {
               if (this.selectedIndex !== i) {
@@ -623,7 +623,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       if (selectedNode.type !== 'searchBin') {
         menuItem = {
           label: 'Refresh',
-          icon: 'fa-refresh',
+          icon: 'fa fa-refresh',
           command: (event) => {
             this.loading = true;
             const tab = this.tabs[this.selectedIndex];
