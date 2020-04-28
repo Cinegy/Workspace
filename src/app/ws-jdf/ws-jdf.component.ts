@@ -66,7 +66,9 @@ export class WsJdfComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getJdfResponse(jobs: any): void {
-    this.jobs = jobs.items;
+    this.jobs = jobs.items.sort(function(a,b){
+      return (new Date(b.created)).getTime() - (new Date(a.created)).getTime();
+    });
     this.dataSource.data = this.jobs;
   }
 
