@@ -29,7 +29,7 @@ export class WsExplorerService  extends WsBaseMamService{
     protected appState:WsAppStateService
   ) {
     super(httpClient,appState);
-    this.createClipBinInternalSubject
+    this.createDocumentBinInternalSubject
     .subscribe(response => this.createBinResponse(response, this.createDocumentBinSubject));
     this.createClipBinInternalSubject
       .subscribe(response => this.createBinResponse(response, this.createClipBinSubject));
@@ -117,7 +117,6 @@ export class WsExplorerService  extends WsBaseMamService{
 
     subject.next(response);
     this.binParams.bin = response;
-    alert("hi");
     this.post(
       `${this.appState.selectedMam.mamEndpoint}metadata?id=${this.binParams.bin.id}`,
       [{
