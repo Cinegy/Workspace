@@ -182,13 +182,16 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
     //alert("typeGroup "+typeGroup);
     if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
-    
       this.loading = true;
       this.selectedNode = node;
       this.breadcrumbService.add(node);
       this.childNodes = [];
       this.explorerService.getNode(this.selectedNode.id);
       this.appState.selectNode(node);
+      return;
+    }
+    //Temporary solution for Release 1
+    if(node.type == 'newsProgram') {
       return;
     }
 
