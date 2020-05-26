@@ -72,7 +72,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.openable['documentBin'] = true;
     this.openable['roll'] = true;
     this.openable['jobDropTarget'] = true;
-    this.openable['newsProgram'] = true;
+    this.openable['newsProgram'] = false;
     this.openable['story'] = true;
 
     this.exportable['clipBin'] = true;
@@ -149,7 +149,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
 
     
      if(node.type=='newsProgram'){
-      this.appState.showMode = 'news';
+//      this.appState.showMode = 'news'; 
     }else if(node.type=='roll'||node.type=='clipBin'||node.type=='documentBin'){
       this.appState.showMode = 'bins';
     }
@@ -191,9 +191,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       return;
     }
     //Temporary solution for Release 1
-    if(node.type == 'newsProgram') {
-      return;
-    }
 
     // if (node.type in this.openable) {
     //  // alert("node.type "+node.type)
@@ -211,7 +208,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
      
     // }
   
-     if (node.type in this.openable) {
+     if (node.type in this.openable && this.openable[node.type] ) {
       if (node.type === 'jobDropTarget') {
         this.appState.openJdfNode(node);
       }
