@@ -537,8 +537,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public saveMarkers() {
-    const markerIn: number = this.markerIn * 10000000;
-    const markerOut: number = this.markerOut * 10000000;
+    const markerIn: number = Math.round(this.markerIn * 10000000);
+    const markerOut: number = Math.round(this.markerOut * 10000000);
     this.selectedClip.in = markerIn;
     this.selectedClip.out = markerOut;
     this.playerService.setMarker(this.selectedClip.id, markerIn, markerOut, this.markerClipDescriptors[0], this.markerClipDescriptors[1]);
