@@ -10,7 +10,7 @@
 		"name": "CustomLabelForDatabaseNameHere",
 		"thumbnailServer": "https://<address-of-images-hosting-or-routing-server-here>/image_service/1.0/api/thumbnail/"
 	}],
-	"remoteConfigHost":"https://cblzme81s2.execute-api.eu-west-1.amazonaws.com/prod/v1/config",
+	"remoteConfigHost":"./serviceconfig",
 	"useRemoteConfig": true
 }
 
