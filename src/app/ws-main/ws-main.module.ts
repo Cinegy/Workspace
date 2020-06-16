@@ -15,6 +15,7 @@ import { WsPlayerModule } from '../ws-player/ws-player.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { WsNewsModule } from '../ws-news/ws-news.module';
 import { WsStoryModule } from '../ws-story/ws-story.module';
+import { AngularSplitModule } from 'angular-split';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { WsStoryModule } from '../ws-story/ws-story.module';
     WsJdfModule,
     MatTabsModule,
     WsNewsModule,
-    WsStoryModule
+    WsStoryModule,
+    AngularSplitModule.forRoot()
   ],
   declarations: [WsMainComponent],
   providers: [WsMainBreadcrumbsService]
