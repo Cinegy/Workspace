@@ -1,7 +1,7 @@
 <div fxLayout="column" fxFlexFill class="ws-main-container vh-100 " style="overflow: hidden !important; ">
   <p-breadcrumb [model]="breadcrumbService.breadcrumbs"> </p-breadcrumb>
   <div fxFlexFill class="ws-main-container" style="overflow: hidden !important;">
-  <as-split direction="horizontal" gutterSize="3" restrictMove="true">
+  <as-split class="as-split" direction="horizontal" gutterSize="3" restrictMove="true">
     <as-split-area size="30">
     <mat-card fxFlex="100">
       <mat-card-content fxFlex class="ws-card-content">
@@ -25,7 +25,7 @@
     </ng-container>
   </as-split-area>
   <as-split-area size="30">
-      <as-split direction="vertical" restrictMove="true" gutterSize="3">
+      <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3">
       <as-split-area>  
       <app-ws-player fxFlex="100" fxLayout
         style="flex-direction: row; box-sizing: border-box; display: flex; flex: 1 1 100%;">
