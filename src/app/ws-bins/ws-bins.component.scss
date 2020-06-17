@@ -28,3 +28,9 @@
     
     overflow-y: auto; 
 }
+mat-card{
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;      
+    }
+}

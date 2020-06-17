@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { WsMainBreadcrumbsService } from './ws-main-breadcrumbs.service';
 import { WsAppStateService } from '../ws-app-state.service';
+import { SplitComponent, SplitAreaDirective } from 'angular-split';
 
 @Component({
   selector: 'app-ws-main',
   templateUrl: './ws-main.component.html',
-  styleUrls: ['./ws-main.component.css']
+  styleUrls: ['./ws-main.component.scss']
 })
 export class WsMainComponent implements OnInit {
   public showMode:string;

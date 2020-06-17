@@ -19,7 +19,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-ws-bins',
   templateUrl: './ws-bins.component.html',
-  styleUrls: ['./ws-bins.component.css']
+  styleUrls: ['./ws-bins.component.scss']
 })
 export class WsBinsComponent implements OnInit, OnDestroy {
 
