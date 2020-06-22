@@ -1,6 +1,6 @@
 
 <mat-card fxFlex id="playerComponent" #playerComponent >
-  <mat-card-content id="playerPage" #playerPage>
+  <mat-card-content fxLayout="column" fxFlexFill id="playerPage" #playerPage>
     <div *ngIf="loading" style="text-align: center;">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
@@ -10,7 +10,7 @@
       </span>
     </div>
     <mat-divider></mat-divider>
-    <div>
+    <div fxFlexFill fxLayout="column">
       <div fxLayout class="player-header">
         <div fxFlex>
           <i class="fa fa-play"></i> {{timmecodeHead}}</div>

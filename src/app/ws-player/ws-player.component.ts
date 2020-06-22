@@ -29,6 +29,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscribers: any[];
   public selectedClip: any;
   public masterClip: any;
+  public selectedBin: any;
   public container: any;
   public player;
   public tvFormat: any;
@@ -86,6 +87,11 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     subscriber = this.playerService.setMarkerSubject
       .subscribe(response => this.setMarkerResponse(response));
     this.subscribers.push(subscriber);
+
+    subscriber = this.appState.selectBinNodeSubject
+      .subscribe(response => this.selectBinNodeResponse(response));
+    this.subscribers.push(subscriber);
+
 
     this.playerService.getClipDescriptors();
   }
@@ -179,6 +185,38 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   private setMarkerResponse(response) {
     if (response instanceof WsMamError) {
       return;
+    }
+  }
+  private selectBinNodeResponse(response) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+    this.selectedBin = response;
+    if(this.selectedClip == undefined) {
+      return;
+    }
+    switch (this.selectedClip.type) {
+        case 'clip':
+          if(this.selectedBin.parent.type =='clipBin') {
+            this.canCreateSubclip = true;
+          } else {
+            this.canCreateSubclip = false;
+          }
+          break;
+        case 'masterClip':
+          if(this.selectedBin.parent.type =='clipBin') {
+            this.canCreateSubclip = true;
+          } else if(this.selectedBin.parent.type =='roll' && 
+            this.selectedClip.isEntire &&
+            this.selectedClip.parent ==  this.selectedBin.parent.id) {
+            this.canCreateSubclip = true;
+          } else {
+            this.canCreateSubclip = false;
+          }
+          break;
+        default:
+          this.canCreateSubclip = false;
+          break;
     }
   }
 
@@ -547,15 +585,19 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   public createSubClip() {
    // alert(this.selectedClip.type);
 
-    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
+/*    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
       this.openErrorDialog('Markers not set');
       return;
-    }
+    }*/
     //alert(this.selectedClip.type);
 
     switch (this.selectedClip.type) {
       case 'masterClip':
-        this.playerService.createSubclipFromMasterclip(this.selectedClip);
+        if(this.selectedBin.parent.type =='clipBin') {
+          this.playerService.linkMasterclip(this.selectedClip, this.selectedBin.parent);
+        } else {
+          this.playerService.createSubclipFromMasterclip(this.selectedClip);
+        }
         break;
       default:
         this.playerService.createSubclipFromClip(this.selectedClip);

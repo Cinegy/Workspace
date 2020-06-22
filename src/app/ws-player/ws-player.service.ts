@@ -12,6 +12,7 @@ export class WsPlayerService extends WsBaseMamService {
   public getMasterclipDescriptorSubject: Subject<any> = new Subject<any>();
   public setMarkerSubject: Subject<any> = new Subject<any>();
   public createSubclipSubject: Subject<any> = new Subject<any>();
+  public linkMasterclipSubject: Subject<any> = new Subject<any>();
 
   private internalCreateSubclipFromClipSubject: Subject<any> = new Subject<any>();
   private selectedClip: any;
@@ -26,6 +27,8 @@ export class WsPlayerService extends WsBaseMamService {
       .subscribe(response => this.getClipDescriptorsResponse(response));
 
     this.internalCreateSubclipFromClipSubject
+      .subscribe(response => this.createSubclipResponse(response));
+    this.linkMasterclipSubject
       .subscribe(response => this.createSubclipResponse(response));
   }
 
@@ -73,16 +76,25 @@ export class WsPlayerService extends WsBaseMamService {
     this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/createsubclip?masterclipId=${clip.id}&in=${in_}&out=${out_}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
   
   }
+  public linkMasterclip(masterClip: any, clipBin: any) {
+    // tslint:disable-next-line:max-line-length
+    this.selectedClip = masterClip;
+    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterClip.id}&clipBinId=${clipBin.id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileset&clipScope=general&clipScope=thumbnail`, null, this.linkMasterclipSubject);
+  }
 
   private createSubclipResponse(response) {
     if (response instanceof WsMamError) {
       return;
     }
-
+    if(this.selectedClip.in == null || this.selectedClip.out==null) {
+      this.createSubclipSubject.next(response);
+      return;
+    }
     response.tapeIn = this.selectedClip.in + this.selectedClip.tapeIn;
     response.tapeOut = this.selectedClip.out + this.selectedClip.tapeIn;
     response.in = 0;
     response.out = response.tapeOut - response.tapeIn;
+
 
     this.post(`${this.appState.selectedMam.mamEndpoint}metadata?id=${response.id}`,
       [
