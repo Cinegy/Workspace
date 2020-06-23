@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { BinNode } from './bin-node';
 import { MenuItem } from 'primeng/primeng';
 import { WsAppStateService } from '../ws-app-state.service';
@@ -33,7 +33,18 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   public deletedNode = null;
   public tabs: BinNode[];
   public contextMenuItems: MenuItem[];
-  public selectedIndex = 0;
+  private _selectedIndex = 0;
+  public get selectedIndex(): number {
+    return this._selectedIndex;
+  }
+  public set selectedIndex(index : number ) {
+    this._selectedIndex = index;
+    if(this.selectedIndex == -1){
+      this.appState.selectBinNode(null);
+    } else {
+      this.appState.selectBinNode(this.tabs[this.selectedIndex]);
+    }
+  }
   public loading = false;
   public pageSize: number;
   public pageSizeOptions = [5, 10, 25, 50];
@@ -184,8 +195,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (this.selectedIndex === -1) {
       return;
     }
-
     this.lastOpenedNode = this.tabs[this.selectedIndex].parent;
+    console.log(this.lastOpenedNode);
   }
 
   private selectItem(item: any, event) {
@@ -193,7 +204,6 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (this.selectedNode != null) {
       this.selectedNode.isSelected = null;
     }
-
     this.selectedNode = item;
     // this.binService.getMetadata(this.selectedNode);
     this.selectedNode.isSelected = true;
@@ -414,7 +424,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (response instanceof WsMamError) {
       return;
     }
-
+    console.log(this.tabs[this.selectedIndex]);
     for (let i = 0; i < this.tabs.length; i++) {
       const tab = this.tabs[i];
 

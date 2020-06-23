@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { WsMamConnection } from './shared/services/ws-base-mam/ws-mam-connection';
 import { Subject } from 'rxjs/Subject';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +21,7 @@ export class WsAppStateService {
   public openNewsNodeSubject: Subject<any> = new Subject<any>();
   public openStoryNodeSubject: Subject<any> = new Subject<any>();
   public resetModuleSubject: Subject<any> = new Subject<any>();
+  public selectBinNodeSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
   public itemsPerPage: number;
@@ -98,5 +100,8 @@ export class WsAppStateService {
   public openStoryNode(node:any): void{
     this.resetModuleSubject.next();
     this.openStoryNodeSubject.next(node);
+  }
+  public selectBinNode(node: any): void {
+    this.selectBinNodeSubject.next(node);
   }
 }
