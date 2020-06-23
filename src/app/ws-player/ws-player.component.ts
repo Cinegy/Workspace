@@ -191,6 +191,11 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (response instanceof WsMamError) {
       return;
     }
+    if (response == null) {
+      this.selectedBin = null;
+      this.canCreateSubclip = false;
+      return;
+    }
     this.selectedBin = response;
     if(this.selectedClip == undefined) {
       return;
@@ -590,6 +595,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }*/
     //alert(this.selectedClip.type);
+    if(this.selectedBin == null) {
+      return;
+    }
 
     switch (this.selectedClip.type) {
       case 'masterClip':

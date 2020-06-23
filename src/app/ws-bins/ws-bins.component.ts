@@ -39,7 +39,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   }
   public set selectedIndex(index : number ) {
     this._selectedIndex = index;
-    this.appState.selectBinNode(this.tabs[this.selectedIndex]);
+    if(this.selectedIndex == -1){
+      this.appState.selectBinNode(null);
+    } else {
+      this.appState.selectBinNode(this.tabs[this.selectedIndex]);
+    }
   }
   public loading = false;
   public pageSize: number;
