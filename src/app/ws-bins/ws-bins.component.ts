@@ -312,7 +312,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
         tab.children = response.items;
         tab.childCount = response.totalCount;
-      
+
         if (this.selectedIndex !== i) {
           this.selectedIndex = i;
         }
@@ -637,6 +637,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           command: (event) => {
             this.loading = true;
             const tab = this.tabs[this.selectedIndex];
+            this.selectTab()
             if (tab.pageEvent) {
               const skip = tab.pageEvent.pageIndex * tab.pageEvent.pageSize;
               // tslint:disable-next-line:max-line-length
@@ -653,5 +654,5 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
 
 
- 
+
 }
