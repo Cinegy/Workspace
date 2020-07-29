@@ -93,6 +93,7 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
     }
 
     this.infoText = 'Success';
+    this.appState.openJdfNode(this.selectedNode);
     this.dialogRef.close();
   }
 
@@ -100,9 +101,9 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
     this.selectedNode = event.node.data;
 
     if (this.selectedNode.hasChildren) {
-     
+
       this.jdfService.getChildren(this.selectedNode.id);
-  
+
     }
   }
 
