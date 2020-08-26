@@ -32,9 +32,7 @@
           [range]="true">
         </p-slider>
         <mat-slider
-          style="margin-top: -8px;"
           id="videoSlider" name="videoSlider" #videoSlider
-          fxFlex
           (change)="videoSliderChanged()"
           (input)="videoSliderMoved(videoSlider.value)"
           [min]="sliderStart" [max]="sliderEnd"
@@ -45,7 +43,7 @@
       </div>
        <div> <!--fxLayout fxLayoutAlign="center  center" style="margin-top: 10px;" -->
         <button mat-icon-button (click)="previousEvent()" matTooltip="Previous Event (Press a)">
-        
+
           <i class="fa fa-long-arrow-left"></i>
         </button>
         <button mat-icon-button  (click)="nextEvent()" matTooltip="Next Event (Press s)">
