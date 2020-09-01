@@ -18,8 +18,8 @@
         <div fxFlex>E {{timmecodeEnd}}</div>
       </div>
       <div style="text-align: center;">
-      <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (click)="playerClicked($event)"
-        (error)="playerError($event)">
+      <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (keyup)="playerKeyPressed($event)" (click)="playerClicked($event)"
+        (error)="playerError($event)" (canplay)="canPlay($event)">
       </video>
       </div>
       <div fxLayout="column">

@@ -1,29 +1,32 @@
-import { Component, OnInit, Renderer2, OnDestroy, AfterViewInit } from '@angular/core';
-import { WsErrorDialogComponent } from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
-import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { MatDialog, MatSlider } from '@angular/material';
-import { WsPlayerService } from './ws-player.service';
-import { WsAppStateService } from '../ws-app-state.service';
-import { SimpleTimer } from 'ng2-simple-timer';
-import { WsVideoTools } from './ws-video-tools';
-import { Slider } from 'primeng/primeng';
+import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {WsErrorDialogComponent} from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
+import {WsMamError} from '../shared/services/ws-base-mam/ws-mam-error';
+import {MatDialog, MatSlider} from '@angular/material';
+import {WsPlayerService} from './ws-player.service';
+import {WsAppStateService} from '../ws-app-state.service';
+import {SimpleTimer} from 'ng2-simple-timer';
+import {WsVideoTools} from './ws-video-tools';
+import {Slider} from 'primeng/primeng';
 import * as screenfull from 'screenfull'
-import {Screenfull} from "screenfull";
-import {ViewChild} from  '@angular/core'
+import {Screenfull} from 'screenfull'
+
 const DescriptorTypeIn = 1;
 const FieldNumberIn = 5;
 const DescriptorTypeOut = 1;
 const FieldNumberOut = 6;
 const LastFramSkew = 0.4;
+const PlayBackRates = [0.25, 1, 2, 3, 5, 8, 12, 16];
+const DefaultPlayBackRate = 1;
+
 @Component({
   selector: 'app-ws-player',
   templateUrl: './ws-player.component.html',
   styleUrls: ['./ws-player.component.css']
 })
 export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('mediaPlayer',{static:true}) mediaPlayer:any;
-  @ViewChild('markerSlider',{static:true}) markerSlider: Slider;
-  @ViewChild('videoSlider',{static:true}) videoSlider: MatSlider;
+  @ViewChild('mediaPlayer', {static: true}) mediaPlayer: any;
+  @ViewChild('markerSlider', {static: true}) markerSlider: Slider;
+  @ViewChild('videoSlider', {static: true}) videoSlider: MatSlider;
 
   public loading = false;
   private subscribers: any[];
@@ -53,6 +56,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   public markerOut: number;
   private timerId: string;
   private timerName = 'videoTimer';
+  private revTimerId: string;
+  private revTimerName = 'revVideoTimer';
   public canCreateSubclip: boolean;
   public thumbnailUrl = '';
   public fullscreen = screenfull;
@@ -61,6 +66,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   public markers: number[] = [0, 0];
   private markerClipDescriptors = [];
   private isSelectedClipMasterclip: boolean;
+  private currentPlayBackIndexRate = DefaultPlayBackRate;
+  private keyActionMap = [];
+  private isPlayRev = false;
 
   constructor(
     private timer: SimpleTimer,
@@ -106,9 +114,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sliderHead = 0;
     this.sliderStart = 0;
     this.sliderEnd = 10;
-    this.sliderMarkers = [{ start: 0, end: 0 }];
+    this.sliderMarkers = [{start: 0, end: 0}];
     this.sliderStep = 0.05;
-
 
 
     this.player = this.mediaPlayer.nativeElement;
@@ -117,7 +124,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.pause();
       }
     };
-    
+
   }
 
   ngOnDestroy() {
@@ -187,6 +194,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
   }
+
   private selectBinNodeResponse(response) {
     if (response instanceof WsMamError) {
       return;
@@ -197,31 +205,31 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     this.selectedBin = response;
-    if(this.selectedClip == undefined) {
+    if (this.selectedClip == undefined) {
       return;
     }
     switch (this.selectedClip.type) {
-        case 'clip':
-          if(this.selectedBin.parent.type =='clipBin') {
-            this.canCreateSubclip = true;
-          } else {
-            this.canCreateSubclip = false;
-          }
-          break;
-        case 'masterClip':
-          if(this.selectedBin.parent.type =='clipBin') {
-            this.canCreateSubclip = true;
-          } else if(this.selectedBin.parent.type =='roll' && 
-            this.selectedClip.isEntire &&
-            this.selectedClip.parent ==  this.selectedBin.parent.id) {
-            this.canCreateSubclip = true;
-          } else {
-            this.canCreateSubclip = false;
-          }
-          break;
-        default:
+      case 'clip':
+        if (this.selectedBin.parent.type == 'clipBin') {
+          this.canCreateSubclip = true;
+        } else {
           this.canCreateSubclip = false;
-          break;
+        }
+        break;
+      case 'masterClip':
+        if (this.selectedBin.parent.type == 'clipBin') {
+          this.canCreateSubclip = true;
+        } else if (this.selectedBin.parent.type == 'roll' &&
+          this.selectedClip.isEntire &&
+          this.selectedClip.parent == this.selectedBin.parent.id) {
+          this.canCreateSubclip = true;
+        } else {
+          this.canCreateSubclip = false;
+        }
+        break;
+      default:
+        this.canCreateSubclip = false;
+        break;
     }
   }
 
@@ -239,6 +247,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.timerId != null && this.timerId.length > 0) {
         this.timer.unsubscribe(this.timerId);
         this.timer.delTimer(this.timerName);
+      }
+      if (this.revTimerId != null && this.revTimerId.length > 0) {
+        this.timer.unsubscribe(this.revTimerId);
+        this.timer.delTimer(this.revTimerName);
       }
 
       let mediaUrl: string;
@@ -285,9 +297,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.player.src = null;
       } else {
         this.player.src = mediaUrl + this.setMediaFragment();
-       
+
         this.player.load();
-        
+
       }
 
       this.sliderHead = 0;
@@ -393,59 +405,135 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public playerKeyPressed(event: any) {
+//    console.log(event);
     if (!this.player.src) {
       return;
     }
 
-    switch (event.keyCode) {
-      case 32: // space
-        if (this.player.paused === true) {
-          this.play();
-        } else {
+    this.keyActionMap[event.keyCode] = event.type == 'keydown';
+    if (this.keyActionMap[75] && this.keyActionMap[76]) {
+      this.currentPlayBackIndexRate = 0;
+      this.playWithPlayBackRate();
+    } else if (event.type == 'keydown') {
+      switch (event.keyCode) {
+        case 32: // space
+          if (this.player.paused === true) {
+            this.play();
+          } else {
+            this.pause();
+          }
+          break;
+        case 37: // left arrow
+        case 51: // 3
           this.pause();
-        }
-        break;
-      case 37: // left arrow
-        this.pause();
-        if (this.player.currentTime <= this.clipStart) {
-          return;
-        }
-
-        this.player.currentTime -= 0.04;
-        this.tick();
-        break;
-      case 39: // right arrow
-        this.pause();
-        if (this.player.currentTime >= this.clipEnd) {
-          return;
-        }
-        this.player.currentTime += 0.04;
-        this.tick();
-        break;
-      case 73: // i
-        this.setMarkIn();
-        break;
-      case 79: // o
-        this.setMarkOut();
-        break;
-      case 68: // d
-        this.clearMarkIn();
-        break;
-      case 70: // f
-        this.clearMarkOut();
-        break;
-      case 67: // c
-        this.createSubClip();
-        break;
-      case 90: // z
-        this.toggleFullscreen();
-        break;
-      case 65: // a
-        this.previousEvent();
-        break;
-      case 83: // s
-        this.nextEvent();
-        break;
+          if (this.player.currentTime <= this.clipStart) {
+            return;
+          }
+          if (event.altKey) {
+            this.player.currentTime -= (10 * 0.04);
+          } else {
+            this.player.currentTime -= 0.04;
+          }
+          if (this.player.currentTime <= this.clipStart) {
+            this.player.currentTime = this.clipStart;
+          }
+          this.tick();
+          break;
+        case 49: // 1
+          this.pause();
+          if (this.player.currentTime <= this.clipStart) {
+            return;
+          }
+          this.player.currentTime -= (10 * 0.04);
+          if (this.player.currentTime <= this.clipStart) {
+            this.player.currentTime = this.clipStart;
+          }
+          this.tick();
+          break;
+        case 35: // End
+          this.toClipEnd();
+          break;
+        case 36: // Home
+          this.toClipStart();
+          break;
+        case 39: // right arrow
+        case 52: // 4
+          this.pause();
+          if (this.player.currentTime >= this.clipEnd) {
+            return;
+          }
+          if (event.altKey) {
+            this.player.currentTime += (10 * 0.04);
+          } else {
+            this.player.currentTime += 0.04;
+          }
+          if (this.player.currentTime > this.clipEnd) {
+            this.player.currentTime = this.clipEnd;
+          }
+          this.tick();
+          break;
+        case 50: // 2
+          this.pause();
+          if (this.player.currentTime >= this.clipEnd) {
+            return;
+          }
+          this.player.currentTime += (10 * 0.04);
+          if (this.player.currentTime > this.clipEnd) {
+            this.player.currentTime = this.clipEnd;
+          }
+          this.tick();
+          break;
+        case 71: // g
+          this.clearMarkInOut();
+          break;
+        case 73: // i
+          this.setMarkIn();
+          break;
+        case 79: // o
+          this.setMarkOut();
+          break;
+        case 68: // d
+          this.clearMarkIn();
+          break;
+        case 70: // f
+          this.clearMarkOut();
+          break;
+        case 74: // j
+          if(!this.isPlayRev) {
+            this.pause();
+          }
+          this.isPlayRev = true;
+          this.playRevWithPlayBackRate();
+          if (this.currentPlayBackIndexRate < PlayBackRates.length - 1) {
+            this.currentPlayBackIndexRate++;
+          }
+          break;
+        case 75: // k
+          this.pause();
+          break;
+        case 76: // l
+          if(this.isPlayRev) {
+            this.pause();
+          }
+          this.playWithPlayBackRate();
+          if (this.currentPlayBackIndexRate < PlayBackRates.length - 1) {
+            this.currentPlayBackIndexRate++;
+          }
+          break;
+        case 67: // c
+          this.createSubClip();
+          break;
+        case 90: // z
+        case 123: // F12
+          this.toggleFullscreen();
+          break;
+        case 65: // a
+          this.previousEvent();
+          break;
+        case 83: // s
+          this.nextEvent();
+          break;
+      }
     }
   }
 
@@ -464,11 +552,15 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // Player: Play and pause
-  public play() {
+  public play(playbackRate: number = PlayBackRates[DefaultPlayBackRate]) {
     try {
-
       if (!this.player.src) {
         return;
+      }
+
+      this.stopPlayRev()
+      if (playbackRate == PlayBackRates[DefaultPlayBackRate]) {
+        this.currentPlayBackIndexRate = DefaultPlayBackRate;
       }
 
       if (this.player.currentTime >= this.clipEnd) {
@@ -477,14 +569,39 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       this.timer.newTimer(this.timerName, 0.1);
       this.timerId = this.timer.subscribe(this.timerName, () => this.timerCallback());
+      if (this.player.playbackRate != playbackRate) {
+        this.player.playbackRate = playbackRate
+      }
       this.player.play();
       this.player.focus();
     } catch (e) {
       throw new Error(e.message);
     }
   }
-  public create_subclick(){
-    
+
+  public playWithPlayBackRate() {
+    this.play(PlayBackRates[this.currentPlayBackIndexRate]);
+  }
+
+  public playRev(playbackRate: number = PlayBackRates[DefaultPlayBackRate]) {
+    if (!this.player.src) {
+      return;
+    }
+    this.player.pause();
+    this.timer.newTimer(this.revTimerName, playbackRate * 0.04);
+    this.revTimerId = this.timer.subscribe(this.revTimerName, () => {
+      this.player.currentTime += (-0.04*playbackRate);
+      this.tick();
+    });
+  }
+  public playRevWithPlayBackRate() {
+    this.playRev(PlayBackRates[this.currentPlayBackIndexRate]);
+  }
+  public stopPlayRev()
+  {
+    this.isPlayRev = false;
+    this.timer.unsubscribe(this.revTimerId);
+    this.timer.delTimer(this.revTimerName);
   }
 
   public pause() {
@@ -492,6 +609,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
+    this.stopPlayRev()
+    this.currentPlayBackIndexRate = DefaultPlayBackRate;
     this.player.pause();
     this.timer.unsubscribe(this.timerId);
     this.timer.delTimer(this.timerName);
@@ -579,6 +698,21 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.saveMarkers();
   }
 
+  public clearMarkInOut() {
+    if (!this.player.src) {
+      return;
+    }
+
+    this.markerIn = 0;
+    this.markerOut = this.sliderEnd;
+    this.showMarkerIn = false;
+    this.showMarkerOut = false;
+    this.markers = [this.markerIn * 10, this.markerOut * 10];
+    this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
+    this.player.focus();
+    this.saveMarkers();
+  }
+
   public saveMarkers() {
     const markerIn: number = Math.round(this.markerIn * 10000000);
     const markerOut: number = Math.round(this.markerOut * 10000000);
@@ -588,20 +722,20 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public createSubClip() {
-   // alert(this.selectedClip.type);
+    // alert(this.selectedClip.type);
 
-/*    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
-      this.openErrorDialog('Markers not set');
-      return;
-    }*/
+    /*    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
+          this.openErrorDialog('Markers not set');
+          return;
+        }*/
     //alert(this.selectedClip.type);
-    if(this.selectedBin == null) {
+    if (this.selectedBin == null) {
       return;
     }
 
     switch (this.selectedClip.type) {
       case 'masterClip':
-        if(this.selectedBin.parent.type =='clipBin') {
+        if (this.selectedBin.parent.type == 'clipBin') {
           this.playerService.linkMasterclip(this.selectedClip, this.selectedBin.parent);
         } else {
           this.playerService.createSubclipFromMasterclip(this.selectedClip);
@@ -612,7 +746,26 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
     }
   }
-  
+
+  public toClipStart() {
+    if (!this.player.src) {
+      return;
+    }
+    this.pause();
+    this.player.currentTime = this.clipStart;
+    this.tick();
+    this.player.focus();
+  }
+
+  public toClipEnd() {
+    if (!this.player.src) {
+      return;
+    }
+    this.pause();
+    this.player.currentTime = this.clipEnd;
+    this.tick();
+    this.player.focus();
+  }
 
   public previousEvent() {
     if (!this.player.src) {
@@ -654,12 +807,19 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.player.focus();
   }
 
-   /* *** Dialogs *** */
+  /* *** Dialogs *** */
 
-   private openErrorDialog(msg: string) {
+  private openErrorDialog(msg: string) {
     const dialogRef = this.dialog.open(WsErrorDialogComponent, {
       width: '300px',
       data: msg
     });
+  }
+
+  canPlay(event: Event) {
+    if (this.isPlayRev) {
+      this.tick();
+//      this.playRev();
+    }
   }
 }
