@@ -214,7 +214,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     if (node === null) {
       return;
     }
-
+    if (this.selectedNode != null) {
+      this.selectedNode.isSelected = null;
+    }
+    this.selectedNode = node;
+    this.selectedNode.isSelected = true;
     this.appState.playClip(node);
   }
 
@@ -305,6 +309,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       this.lastOpenedNode = null;
       return;
     }
+    let currentBin = null;
+    let currentIndex = -1;
     for (let i = 0; i < this.tabs.length; i++) {
       const tab = this.tabs[i];
       if (
@@ -318,15 +324,30 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         }
         return;
       }
+      if(this.lastOpenedNode.type == tab.DefaultBinType) {
+        currentBin = tab;
+        currentIndex = i;
+      }
     }
+    if(currentBin == null) {
+      currentBin = new BinNode();
+      currentBin.DefaultBinType = this.lastOpenedNode.type;
+      this.tabs.push(currentBin);
+    }
+    currentBin.parent = this.lastOpenedNode;
+    currentBin.children = response.items;
+    currentBin.childCount = response.totalCount;
+//    const bin = new BinNode();
+//    bin.parent = this.lastOpenedNode;
+//    bin.children = response.items;
+//    bin.childCount = response.totalCount;
 
-    const bin = new BinNode();
-    bin.parent = this.lastOpenedNode;
-    bin.children = response.items;
-    bin.childCount = response.totalCount;
-
-    this.tabs.push(bin);
-    this.selectedIndex = this.tabs.length - 1;
+//    this.tabs.push(bin);
+    if(currentIndex!=-1) {
+      this.selectedIndex = currentIndex;
+    } else {
+      this.selectedIndex = this.tabs.length - 1;
+    }
   }
 
   private startSearchResponse(keywords: string) {

@@ -1,6 +1,6 @@
 
-<mat-card fxFlex id="playerComponent" #playerComponent >
-  <mat-card-content fxLayout="column" fxFlexFill id="playerPage" #playerPage>
+<mat-card id="playerComponent"  #playerComponent>
+  <mat-card-content fxLayout="column" id="playerPage" #playerPage>
     <div *ngIf="loading" style="text-align: center;">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
@@ -10,16 +10,16 @@
       </span>
     </div>
     <mat-divider></mat-divider>
-    <div fxFlexFill fxLayout="column">
-      <div fxLayout class="player-header">
+    <div fxLayout="column">
+      <div fxLayout class="player-header" #playerHeader>
         <div fxFlex>
           <i class="fa fa-play"></i> {{timmecodeHead}}</div>
         <div fxFlex>I/O {{timmecodeDuration}}</div>
         <div fxFlex>E {{timmecodeEnd}}</div>
       </div>
-      <div style="text-align: center;">
+      <div style="text-align: center;" >
       <video #mediaPlayer id="mediaPlayer" name="mediaPlayer" autobuffer tabindex="1" (keydown)="playerKeyPressed($event)" (keyup)="playerKeyPressed($event)" (click)="playerClicked($event)"
-        (error)="playerError($event)" (canplay)="canPlay($event)">
+        (error)="playerError($event)" (canplay)="canPlay($event)" style="height: 100%">
       </video>
       </div>
       <div fxLayout="column">
@@ -41,7 +41,7 @@
           [disabled]="player == null || player.src == null">
         </mat-slider>
       </div>
-       <div> <!--fxLayout fxLayoutAlign="center  center" style="margin-top: 10px;" -->
+       <div #playerControl> <!--fxLayout fxLayoutAlign="center  center" style="margin-top: 10px;" -->
         <button mat-icon-button (click)="previousEvent()" matTooltip="Previous Event (Press a)">
 
           <i class="fa fa-long-arrow-left"></i>

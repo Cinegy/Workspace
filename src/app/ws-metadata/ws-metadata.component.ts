@@ -69,11 +69,11 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     subscriber = this.metadataService.undoSetMetadataSubject
     .subscribe(response => this.undoSetMetadataResponse(response));
   this.subscribers.push(subscriber);
- 
+
   }
 
   ngOnInit() {
-    
+
   }
 
   ngOnDestroy() {
@@ -83,9 +83,9 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public saveMetadata(item, undo: boolean) {
-   
+
     const metadata = new SaveMetadataRequest();
-    
+
 
     metadata.descriptorId = item.id;
 
@@ -94,7 +94,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
         metadata.value = item.value.value.format();
         break;
       default:
-       
+
         metadata.value = item.value.value;
         break;
     }
@@ -104,7 +104,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (undo) {
       this.metadataService.undoSetMetadata(this.selectedNode.id, metadata);
     } else {
-   
+
       this.metadataService.setMetadata(this.selectedNode.id, metadata);
     }
   }
@@ -135,22 +135,22 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   private getDescriptorsResponse(response) {
-   
+
     this.loading = false;
     if (response instanceof WsMamError) {
       return;
     }
 
+    console.log(response);
     this.descriptors = response;
-
 
     this.appState.descriptors[this.selectedNode.type] = response;
     this.metadataService.getMetadata(this.selectedNode);
   }
 
   private getMetadataResponse(response) {
-   
-    
+
+
     this.loading = false;
     if (response instanceof WsMamError) {
       return;
@@ -209,9 +209,9 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
 
     for (const descriptor of descriptors) {
       descriptor.value = { name: null, value: null };
-     
+
       const group = tmpGroups[descriptor.group.id];
-    
+
 
       // tslint:disable-next-line:max-line-length
       if (!durationDescriptorCreated && group && group[0] && group[0].group.name.toLowerCase() === 'clip' && this.selectedNode.videoFormat) {
@@ -272,14 +272,14 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       }
 
       tmpGroups[descriptor.group.id].push(descriptor);
-   
+
     }
 
     // tslint:disable-next-line:forin
     for (const key in tmpGroups) {
-    
+
       const value = tmpGroups[key];
-  
+
       this.descriptorGroups.push(value);
     }
 
@@ -362,7 +362,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
   }
 
   public addDateEvent(type: string, event: MatDatepickerInputEvent<Date>, item) {
-   
+
     item.value.value = moment(event.value);
     this.saveMetadata(item, false);
   }

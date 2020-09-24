@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {WsErrorDialogComponent} from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import {WsMamError} from '../shared/services/ws-base-mam/ws-mam-error';
 import {MatDialog, MatSlider} from '@angular/material';
@@ -18,6 +18,10 @@ const LastFramSkew = 0.4;
 const PlayBackRates = [0.25, 1, 2, 3, 5, 8, 12, 16];
 const DefaultPlayBackRate = 1;
 
+let playerHeight;
+
+// @ts-ignore
+// @ts-ignore
 @Component({
   selector: 'app-ws-player',
   templateUrl: './ws-player.component.html',
@@ -25,9 +29,14 @@ const DefaultPlayBackRate = 1;
 })
 export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('mediaPlayer', {static: true}) mediaPlayer: any;
+  @ViewChild('playerHeader', {static: true}) playerHeader: any;
+  @ViewChild('playerControl', {static: true}) playerControl: any;
   @ViewChild('markerSlider', {static: true}) markerSlider: Slider;
   @ViewChild('videoSlider', {static: true}) videoSlider: MatSlider;
-
+  @Input() set playerHeight(value:number) {
+    this.playerContainerHeight = value;
+    this.calculateVideoPlayerHeight();
+  };
   public loading = false;
   private subscribers: any[];
   public selectedClip: any;
@@ -69,6 +78,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   private currentPlayBackIndexRate = DefaultPlayBackRate;
   private keyActionMap = [];
   private isPlayRev = false;
+  private playerContainerHeight: number;
 
   constructor(
     private timer: SimpleTimer,
@@ -100,6 +110,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(response => this.selectBinNodeResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.appState.selectNodeSubject
+      .subscribe(response => this.selectNodeResponse(response));
+    this.subscribers.push(subscriber);
+
 
     this.playerService.getClipDescriptors();
   }
@@ -117,14 +131,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sliderMarkers = [{start: 0, end: 0}];
     this.sliderStep = 0.05;
 
-
     this.player = this.mediaPlayer.nativeElement;
     this.player.ontimeupdate = () => {
       if (this.player.currentTime >= this.clipEnd) {
         this.pause();
       }
     };
-
   }
 
   ngOnDestroy() {
@@ -134,11 +146,18 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
   }
 
   /* *** Service Responses *** */
+  private calculateVideoPlayerHeight()
+  {
+    let heights = this.markerSlider.el.nativeElement.offsetHeight +
+      this.videoSlider._elementRef.nativeElement.offsetHeight +
+      this.playerHeader.nativeElement.offsetHeight +
+      this.playerControl.nativeElement.offsetHeight+80;
+    this.mediaPlayer.nativeElement.style.height = (this.playerContainerHeight - heights) +'px';
 
+  }
   private selectedClipResponse(response: any) {
     this.loading = false;
     if (response instanceof WsMamError) {
@@ -627,7 +646,14 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     const videoContainer: any = document.getElementById('playerComponent');
     let sf = <Screenfull>screenfull;
     if (sf.enabled) {
-      sf.toggle(videoContainer);
+      sf.toggle(videoContainer).then(()=> {
+          if (sf.isFullscreen) {
+            this.mediaPlayer.nativeElement.style.height = 'auto';
+          } else {
+            this.calculateVideoPlayerHeight();
+          }
+        }
+      );
     }
 
     this.player.focus();
@@ -820,6 +846,24 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.isPlayRev) {
       this.tick();
 //      this.playRev();
+    }
+  }
+
+  resizePlayer($event: UIEvent) {
+    console.log('resize player');
+  }
+
+  private selectNodeResponse(response: any) {
+    if (response instanceof WsMamError) {
+      return;
+    }
+    if(response == null) {
+      this.player.removeAttribute('src')
+      this.player.load();
+    }
+    if(response.type != 'masterClip' && response.type != 'clip') {
+      this.player.removeAttribute('src')
+      this.player.load();
     }
   }
 }
