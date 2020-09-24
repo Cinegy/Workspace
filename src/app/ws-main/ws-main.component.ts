@@ -13,7 +13,7 @@ export class WsMainComponent implements OnInit, AfterContentInit, AfterViewCheck
 
   public showMode:string;
   public isImport:boolean;
-  private playerAreaHeight: number;
+  public playerAreaHeight: number;
 
   constructor(
     public breadcrumbService:WsMainBreadcrumbsService,
