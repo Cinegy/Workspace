@@ -25,10 +25,10 @@
     </ng-container>
   </as-split-area>
   <as-split-area size="30">
-      <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3">
-      <as-split-area>  
-      <app-ws-player fxFlex="100" fxLayout
-        style="flex-direction: row; box-sizing: border-box; display: flex; flex: 1 1 100%;">
+      <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3" (dragEnd)="areaChanged($event)">
+      <as-split-area #playerSplitArea style="overflow-y:hidden">
+      <app-ws-player [playerHeight]="this.playerAreaHeight">
+
       </app-ws-player>
       </as-split-area>
       <as-split-area>

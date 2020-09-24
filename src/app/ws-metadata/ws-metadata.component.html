@@ -1,6 +1,6 @@
 <mat-card fxLayout fxFlex style="overflow: hidden; flex: 1 1 0px; box-sizing: border-box; flex-direction: row; display: flex;">
   <mat-card-content fxFlex  style="overflow: hidden;"><!---->
-    <div  *ngIf="loading" style="text-align: center;">
+    <div  *ngIf="loading" class="loader">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
     <h3 *ngIf="selectedNode">
@@ -22,7 +22,7 @@
             <mat-list-item *ngFor="let item of group">
               <span class="ws-metadata-name" matTooltip="{{item.description}}" matTooltipPosition="below">{{item.name}}</span>
               <span class="ws-metadata-value">
-                
+
                 <span [ngSwitch]="item.type">
                   <mat-form-field *ngSwitchCase="'string'">
                     <input matInput type="text" [readonly]="item.isReadOnly" value="{{item.value.value}}" [(ngModel)]="item.value.value" (focus)="inputFocused(item)"

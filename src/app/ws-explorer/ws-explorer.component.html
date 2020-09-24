@@ -6,13 +6,13 @@
       </app-ws-node-image>
       {{selectedNode.name}} <span *ngIf="childNodes">({{childNodes.length}})</span>
     </h5>
-    <div *ngIf="loading" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+    <div *ngIf="loading" class="loader"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
     <mat-list dense *ngIf="childNodes" [dragula]='"explorer-bag"' [dragulaModel]='childNodes' class="ws-explorer-item-container">
-      <mat-list-item 
+      <mat-list-item
         class="ws-explorer-item ws-card-item-selected"
         [class.ws-explorer-item-selected]="child.isSelected"
         *ngFor="let child of childNodes; let i = index"
-        (click)="selectNode(child)"
+        (click)="selectNode(child)||openNode(child)"
         (dblclick)="openNode(child)"
         (contextmenu)="contextMenuOpen(child, true)"
         [attr.data-id]="child.id"

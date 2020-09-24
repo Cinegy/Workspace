@@ -23,12 +23,12 @@ export class WsMetadataService extends WsBaseMamService {
   public getDescriptors(type: string) {
     // tslint:disable-next-line:max-line-length
     //this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=${type}&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
-    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?scope.type=${type}&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
-  
+    this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=${type}&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
+
   }
 
   public getMetadata(node: any) {
-  
+
     this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${node.id}`, this.getMetadataSubject);
 
   }
