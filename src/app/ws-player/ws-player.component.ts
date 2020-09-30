@@ -33,10 +33,12 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('playerControl', {static: true}) playerControl: any;
   @ViewChild('markerSlider', {static: true}) markerSlider: Slider;
   @ViewChild('videoSlider', {static: true}) videoSlider: MatSlider;
-  @Input() set playerHeight(value:number) {
+
+  @Input() set playerHeight(value: number) {
     this.playerContainerHeight = value;
     this.calculateVideoPlayerHeight();
   };
+
   public loading = false;
   private subscribers: any[];
   public selectedClip: any;
@@ -149,15 +151,15 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /* *** Service Responses *** */
-  private calculateVideoPlayerHeight()
-  {
+  private calculateVideoPlayerHeight() {
     let heights = this.markerSlider.el.nativeElement.offsetHeight +
       this.videoSlider._elementRef.nativeElement.offsetHeight +
       this.playerHeader.nativeElement.offsetHeight +
-      this.playerControl.nativeElement.offsetHeight+80;
-    this.mediaPlayer.nativeElement.style.height = (this.playerContainerHeight - heights) +'px';
+      this.playerControl.nativeElement.offsetHeight + 80;
+    this.mediaPlayer.nativeElement.style.height = (this.playerContainerHeight - heights) + 'px';
 
   }
+
   private selectedClipResponse(response: any) {
     this.loading = false;
     if (response instanceof WsMamError) {
@@ -518,7 +520,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
           this.clearMarkOut();
           break;
         case 74: // j
-          if(!this.isPlayRev) {
+          if (!this.isPlayRev) {
             this.pause();
           }
           this.isPlayRev = true;
@@ -531,7 +533,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
           this.pause();
           break;
         case 76: // l
-          if(this.isPlayRev) {
+          if (this.isPlayRev) {
             this.pause();
           }
           this.playWithPlayBackRate();
@@ -609,15 +611,16 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.player.pause();
     this.timer.newTimer(this.revTimerName, playbackRate * 0.04);
     this.revTimerId = this.timer.subscribe(this.revTimerName, () => {
-      this.player.currentTime += (-0.04*playbackRate);
+      this.player.currentTime += (-0.04 * playbackRate);
       this.tick();
     });
   }
+
   public playRevWithPlayBackRate() {
     this.playRev(PlayBackRates[this.currentPlayBackIndexRate]);
   }
-  public stopPlayRev()
-  {
+
+  public stopPlayRev() {
     this.isPlayRev = false;
     this.timer.unsubscribe(this.revTimerId);
     this.timer.delTimer(this.revTimerName);
@@ -646,7 +649,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     const videoContainer: any = document.getElementById('playerComponent');
     let sf = <Screenfull>screenfull;
     if (sf.enabled) {
-      sf.toggle(videoContainer).then(()=> {
+      sf.toggle(videoContainer).then(() => {
           if (sf.isFullscreen) {
             this.mediaPlayer.nativeElement.style.height = 'auto';
           } else {
@@ -857,13 +860,24 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (response instanceof WsMamError) {
       return;
     }
-    if(response == null) {
-      this.player.removeAttribute('src')
-      this.player.load();
-    }
-    if(response.type != 'masterClip' && response.type != 'clip') {
+    if (response == null || (response.type != 'masterClip' && response.type != 'clip')) {
+      this.clearPlayerData();
       this.player.removeAttribute('src')
       this.player.load();
     }
   }
+
+  private clearPlayerData() {
+    this.clearMarkInOut();
+    this.showMarkerIn = false;
+    this.showMarkerOut = false;
+    this.markers = [0, 0];
+    this.sliderHead = 0;
+    this.sliderStart = 0;
+    this.timmecodeHead = '--:--:--:--';
+    this.timmecodeStart = '--:--:--:--';
+    this.timmecodeEnd = '--:--:--:--';
+    this.timmecodeDuration = '--:--:--:--';
+  }
+
 }

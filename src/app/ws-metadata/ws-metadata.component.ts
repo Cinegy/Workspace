@@ -141,7 +141,6 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(response);
     this.descriptors = response;
 
     this.appState.descriptors[this.selectedNode.type] = response;
