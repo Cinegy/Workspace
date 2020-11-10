@@ -18,10 +18,10 @@ export class WsLoginService {
     protected httpClient:HttpClient,
     protected appState:WsAppStateService
     ) { }
-  
+
   public login(connectionInfo: WsMamConnection, reconnect: boolean){
     this.connectionInfo=connectionInfo;
-  
+
     const authRequest=new WsAuthRequest();
     authRequest.casEndpoint = connectionInfo.casEndpoint;
     authRequest.database = connectionInfo.dbName;
@@ -36,7 +36,7 @@ export class WsLoginService {
       .append('Authorization', `Basic ${authHeader}`);
 
     this.httpClient
-      .post(`${this.connectionInfo.mamEndpoint}/authentication`, authRequest, { headers: headers })
+      .post(`${this.connectionInfo.mamEndpoint}/authentication/main`, authRequest, { headers: headers })
       .subscribe(
       data => {
         if (reconnect) {
