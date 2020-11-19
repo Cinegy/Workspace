@@ -1,3 +1,4 @@
+import {Injectable} from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { WsAuthRequest } from './ws-auth-request';
