@@ -5,4 +5,5 @@ export class WsAuthRequest {
     public product: string;
     public productLicense: string;
     public productVersion: string;
+    public SessionUniqueId: number;
 }

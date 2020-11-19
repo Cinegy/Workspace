@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { WsAuthRequest } from './ws-auth-request';
@@ -29,6 +28,7 @@ export class WsLoginService {
     authRequest.product = 'CinegyWorkspace';
     authRequest.productLicense = '{6eecc5d8-df37-4ead-b79c-25874fd616a2}';
     authRequest.productVersion = '1.0';
+    authRequest.SessionUniqueId = sessionStorage.tabID ? sessionStorage.tabID : sessionStorage.tabID = Math.random();
 
     const authHeader = btoa(`${this.connectionInfo.domain}/${this.connectionInfo.username}:${this.connectionInfo.password}`);
     const headers = new HttpHeaders()
