@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { WsMamError } from './ws-mam-error';
 import { Subject } from 'rxjs/Subject';
-import { WsAppStateService } from 'src/app/ws-app-state.service';
+import { WsAppStateService } from '../../../ws-app-state.service';
 
 @Injectable({
   providedIn: 'root'
