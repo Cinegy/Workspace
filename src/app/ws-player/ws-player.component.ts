@@ -878,6 +878,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.timmecodeStart = '--:--:--:--';
     this.timmecodeEnd = '--:--:--:--';
     this.timmecodeDuration = '--:--:--:--';
+    this.selectedClip = null;
   }
 
 }
