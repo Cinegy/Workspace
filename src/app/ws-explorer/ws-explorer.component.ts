@@ -73,7 +73,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.openable['roll'] = true;
     this.openable['jobDropTarget'] = true;
     this.openable['newsProgram'] = false;
-    this.openable['story'] = true;
+    this.openable['story'] = false;
 
     this.exportable['clipBin'] = true;
     this.exportable['roll'] = true;
@@ -126,11 +126,11 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   }
 
   ngOnInit() {
-  
+
     this.loading = true;
-  
+
     this.explorerService.getRoot();
-   
+
   }
 
   ngOnDestroy() {
@@ -140,23 +140,23 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   }
 
   /* *** Public *** */
-  
+
 
   public selectNode(node: any) {
     if (this.selectedChildNode != null) {
       this.selectedChildNode.isSelected = null;
     }
 
-    
+
      if(node.type=='newsProgram'){
-//      this.appState.showMode = 'news'; 
+//      this.appState.showMode = 'news';
     }else if(node.type=='roll'||node.type=='clipBin'||node.type=='documentBin'){
       this.appState.showMode = 'bins';
     }
     else if(node.type=='story'){
       this.appState.showMode = 'story';
     }
- 
+
 
     this.selectedChildNode = node;
     this.selectedChildNode.isSelected = true;
@@ -164,7 +164,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   }
 
   public selectParent(): void {
-  
+
     this.appState.selectNode(this.selectedNode);
   }
 
@@ -205,9 +205,9 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     //   return;
     // }
     // else{
-     
+
     // }
-  
+
      if (node.type in this.openable && this.openable[node.type] ) {
       if (node.type === 'jobDropTarget') {
         this.appState.openJdfNode(node);
@@ -220,10 +220,10 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       else {
         this.appState.openBinNode(node);
       }
-      
+
       return;
     }
-  
+
   }
 
   /* *** Service responses *** */
