@@ -1,5 +1,5 @@
 import { HttpInterceptor, HttpHandler, HttpEvent, HttpRequest, HttpHeaders } from '@angular/common/http';
-import { WsAppStateService } from 'src/app/ws-app-state.service';
+import { WsAppStateService } from '../../../ws-app-state.service';
 import { Observable } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 

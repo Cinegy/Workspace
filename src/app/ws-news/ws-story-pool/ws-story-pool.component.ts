@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WsMamError } from 'src/app/shared/services/ws-base-mam/ws-mam-error';
+import { WsMamError } from '../../shared/services/ws-base-mam/ws-mam-error';
 import { WsNewsComponent } from '../ws-news.component';
 import { WsNewsService } from '../ws-news.service';
 
@@ -13,7 +13,7 @@ export class WsStoryPoolComponent implements OnInit , OnDestroy {
   public stories:any[];
   public loading = false;
 
-  constructor(private newsComponent:WsNewsComponent,private newsService:WsNewsService) { 
+  constructor(private newsComponent:WsNewsComponent,private newsService:WsNewsService) {
     this.stories = newsComponent.stories;
 
     let subscriber = this.newsComponent.pushStoriesSubject
@@ -35,7 +35,7 @@ export class WsStoryPoolComponent implements OnInit , OnDestroy {
       element.unsubscribe();
     });
   }
-  
+
   private pushStoriesResponse(response: any){
     if (response instanceof WsMamError) {
       console.log("Error on this cond");
