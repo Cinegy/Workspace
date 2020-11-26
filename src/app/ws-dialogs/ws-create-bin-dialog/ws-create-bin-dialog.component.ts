@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { NewBinParams } from './new-bin-params';
 import { WsAppStateService } from '../../ws-app-state.service';
 import { WsAppManagementService } from '../../ws-app-management.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ws-create-bin-dialog',

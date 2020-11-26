@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {WsErrorDialogComponent} from '../ws-dialogs/ws-error-dialog/ws-error-dialog.component';
 import {WsMamError} from '../shared/services/ws-base-mam/ws-mam-error';
-import {MatDialog, MatSlider} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSlider } from '@angular/material/slider';
 import {WsPlayerService} from './ws-player.service';
 import {WsAppStateService} from '../ws-app-state.service';
 import {SimpleTimer} from 'ng2-simple-timer';
 import {WsVideoTools} from './ws-video-tools';
-import {Slider} from 'primeng/primeng';
+import {Slider} from 'primeng/slider';
 import * as screenfull from 'screenfull'
 import {Screenfull} from 'screenfull'
 

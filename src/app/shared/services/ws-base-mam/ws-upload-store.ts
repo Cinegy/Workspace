@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
 import { FileUploader } from 'ng2-file-upload';
+import {IDisposable} from "../../interfaces/iDisposable";
 
 export interface IWsUploadStore {
   type: WsUploadStoreType;

@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, VERSION } from '@angular/core';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { MatIconRegistry, MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { WsAppManagementService } from '../ws-app-management.service';
 import { WsConfigurationService } from '../ws-configuration/ws-configuration.service';

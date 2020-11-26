@@ -18,7 +18,7 @@ Copyright (C) 2018  Cinegy GmbH
 */
 
 
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Injectable, ErrorHandler, Injector, NgZone } from '@angular/core';
 import { WsMamError } from './shared/services/ws-base-mam/ws-mam-error';
 import { WsErrorDialogComponent } from './ws-dialogs/ws-error-dialog/ws-error-dialog.component';

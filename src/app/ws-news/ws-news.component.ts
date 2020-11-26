@@ -3,7 +3,7 @@ import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 import { Subject } from 'rxjs/Rx';
 import { WsAppStateService } from '../ws-app-state.service';
 import { WsNewsService } from './ws-news.service';
-import { MatDatepickerInputEvent } from '@angular/material';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Moment } from 'moment';
 import { FormControl } from '@angular/forms';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { WsMamConnection } from '../../shared/services/ws-base-mam/ws-mam-connection';
 import { WsConfigurationService } from '../../ws-configuration/ws-configuration.service';
 
