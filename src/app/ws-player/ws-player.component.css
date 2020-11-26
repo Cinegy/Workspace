@@ -14,3 +14,11 @@ video {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+::ng-deep .ui-widget-content {
+  background-color: #b0bec5;
+}
+
+::ng-deep .ui-slider .ui-slider-handle.ui-state-default {
+  background-color: #b0bec5;
+}

@@ -523,8 +523,11 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     if (isChild) {
       this.selectItem(selectedNode, null);
-
       if (selectedNode.type in this.playable) {
+        this.playClip(selectedNode);
+      }
+
+/*      if (selectedNode.type in this.playable) {
         menuItem = {
           label: 'Play',
           icon: 'fa fa-play-circle-o',
@@ -534,7 +537,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         };
         this.contextMenuItems.push(menuItem);
         this.contextMenuItems.push({ separator: true });
-      }
+      }*/
 
       if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNode.type in this.cutable) {
         menuItem = {

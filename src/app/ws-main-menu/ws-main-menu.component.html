@@ -1,17 +1,18 @@
 <mat-toolbar color="primary">
-  <div (click)="goHome()" class="ws-cursor-pointer" >Cinegy Workspace</div>&nbsp;<!---->
-  <div><li class="fa fa-{{timerIconName}}"></li>&nbsp;</div><!---->
+  <div (click)="goHome()" class="ws-cursor-pointer">Cinegy Workspace</div>&nbsp;<!---->
+  <div>
+    <i class="fa fa-{{timerIconName}}"></i>&nbsp;
+  </div><!---->
   <span class="ws-main-menu-fill-remaining-space"></span>
   <div layout="row" flex>
     <form>
-    
-        <mat-form-field flex class="mat-icon-float mat-block mat-title ws-font-smaller">
-        <input matInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords" [disabled]="!appState.connected">
-  
-    </mat-form-field >
+      <mat-form-field flex class="mat-icon-float mat-block mat-title ws-font-smaller">
+        <input matInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords"
+               [disabled]="!appState.connected">
+      </mat-form-field>
       <button mat-icon-button [disabled]="!appState.connected" (click)="search()">
-      <i class="fa fa-search "></i>
-    </button>
+        <i class="fa fa-search "></i>
+      </button>
     </form>
   </div>
   <button mat-button [matMenuTriggerFor]="menu">

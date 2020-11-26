@@ -37,6 +37,8 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   public menuNode: any;
   public menuNodeType: any;
   private jdfFolderFound: boolean;
+  private canNotRename = {};
+  private canNotDelete = {};
 
   constructor(
     public appState: WsAppStateService,
@@ -52,12 +54,17 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.notCutable['usersRootFolder'] = true;
     this.notCutable['usersFolder'] = true;
     this.notCutable['jobDropfolderContainer'] = true;
+    this.notCutable['jobDropTarget'] = true;
     this.notCutable['jobServersInfoFolders'] = true;
     this.notCutable['newsFolder'] = true;
     this.notCutable['lib'] = true;
     this.notCutable['usersRootFolder'] = true;
     this.notCutable['usersFolder'] = true;
     this.notCutable['publicSearchQueryFolder'] = true;
+
+    this.canNotRename['jobDropTarget'] = true;
+
+    this.canNotDelete['jobDropTarget'] = true;
 
     this.copyable['clipBin'] = true;
 
@@ -582,7 +589,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.contextMenuItems.push(menuItem);
     }
 
-    if (this.childOpenedMenu && selectedNodeType.canDelete) {
+    if (this.childOpenedMenu && selectedNodeType.canDelete && !(selectedNode.type in this.canNotRename)) {
       menuItem = {
         label: 'Rename',
         icon: 'fa-pencil fa',
@@ -595,7 +602,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.contextMenuItems.push(menuItem);
     }
 
-    if (this.childOpenedMenu && selectedNodeType.canDelete) {
+    if (this.childOpenedMenu && selectedNodeType.canDelete && !(selectedNode.type in this.canNotDelete)) {
       menuItem = {
         label: 'Delete',
         icon: 'fa-minus fa',
