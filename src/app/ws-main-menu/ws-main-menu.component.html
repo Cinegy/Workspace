@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <div (click)="goHome()" class="ws-cursor-pointer">Cinegy Workspace</div>&nbsp;<!---->
   <div>
-    <i class="fa fa-{{timerIconName}}"></i>&nbsp; <!-- Compliant icon fonts usage -->
+    <i class="fa fa-{{timerIconName}}" aria-hidden="true"></i>&nbsp; <!-- Compliant icon fonts usage -->
   </div><!---->
   <span class="ws-main-menu-fill-remaining-space"></span>
   <div layout="row" flex>
@@ -11,14 +11,14 @@
                [disabled]="!appState.connected">
       </mat-form-field>
       <button mat-icon-button [disabled]="!appState.connected" (click)="search()">
-        <i class="fa fa-search "></i> <!-- Compliant icon fonts usage -->
+        <i class="fa fa-search " aria-hidden="true"></i> <!-- Compliant icon fonts usage -->
       </button>
     </form>
   </div>
   <button mat-button [matMenuTriggerFor]="menu">
     <span *ngIf="!appState.connected">Not connected</span>
     <span *ngIf="appState.connected">{{appState.selectedMam.username}}</span>
-    &nbsp; <i class="fa fa-user-circle-o"></i> <!-- Compliant icon fonts usage -->
+    &nbsp; <i class="fa fa-user-circle-o" aria-hidden="true"></i> <!-- Compliant icon fonts usage -->
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()">
