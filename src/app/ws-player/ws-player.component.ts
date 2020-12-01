@@ -752,13 +752,11 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public createSubClip() {
-    // alert(this.selectedClip.type);
 
     /*    if (this.selectedClip.in === 0 && this.selectedClip.out === (this.selectedClip.tapeOut - this.selectedClip.tapeIn)) {
           this.openErrorDialog('Markers not set');
           return;
         }*/
-    //alert(this.selectedClip.type);
     if (this.selectedBin == null) {
       return;
     }

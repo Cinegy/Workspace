@@ -188,7 +188,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     }
 
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
-    //alert("typeGroup "+typeGroup);
     if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
       this.loading = true;
       this.selectedNode = node;
@@ -198,23 +197,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.appState.selectNode(node);
       return;
     }
-    //Temporary solution for Release 1
-
-    // if (node.type in this.openable) {
-    //  // alert("node.type "+node.type)
-    //   if (node.type === 'jobDropTarget') {
-    //   //  alert("jobDropTarget "+this.appState)
-    //     this.appState.openJdfNode(node);
-    //   } else {
-    //   //  alert("openBinNode "+this.appState)
-
-    //     this.appState.openBinNode(node);
-    //   }
-    //   return;
-    // }
-    // else{
-
-    // }
 
      if (node.type in this.openable && this.openable[node.type] ) {
       if (node.type === 'jobDropTarget') {
@@ -643,7 +625,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
 
   /* *** Breadcrumbs *** */
   private breadcrumbClicked(node: any) {
-   // alert("breadclick");
     this.openNode(node);
   }
 }
