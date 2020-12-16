@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { WsBaseMamService } from 'src/app/shared/services/ws-base-mam/ws-base-mam.service';
+import { WsBaseMamService } from '../../shared/services/ws-base-mam/ws-base-mam.service';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { WsAppStateService } from 'src/app/ws-app-state.service';
+import { WsAppStateService } from '../../ws-app-state.service';
 
 @Injectable({
   providedIn: 'root'

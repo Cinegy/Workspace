@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WsMamError } from 'src/app/shared/services/ws-base-mam/ws-mam-error';
+import { WsMamError } from '../../shared/services/ws-base-mam/ws-mam-error';
 import { RundownNode } from '../RunDownNode';
 import { WsNewsComponent } from '../ws-news.component';
 import { WsNewsService } from '../ws-news.service';
@@ -10,14 +10,14 @@ import { WsNewsService } from '../ws-news.service';
   styleUrls: ['./ws-rundown.component.css']
 })
 export class WsRundownComponent implements OnInit,  OnDestroy{
-  
+
   public subscribers: any[]=[];
   public rundowns: any[];
   public currentRundownStories: any[];
   public lastOpenedNode: any;
   public loading = false;
   public tabs:RundownNode[];
-  
+
   constructor(private newsComponent:WsNewsComponent,private newsService:WsNewsService) {
     this.currentRundownStories=[];
     this.tabs = [];
@@ -34,7 +34,7 @@ export class WsRundownComponent implements OnInit,  OnDestroy{
     this.subscribers.push(subscriber);
   }
   ngOnInit(): void {
-   
+
   }
   ngOnDestroy(){
     this.subscribers.forEach(element => {
@@ -53,7 +53,6 @@ export class WsRundownComponent implements OnInit,  OnDestroy{
     this.tabs.push(tab);
 
     this.newsService.getRundownContent(response.id,response.type);
-    alert("getRundownContent")
   }
 
   private getRundownContentResponse(response:any){
@@ -64,7 +63,7 @@ export class WsRundownComponent implements OnInit,  OnDestroy{
     }
 
     response.items.forEach(story => {
-      
+
       this.tabs.forEach(node=>{
         if(node.parent.id==story.parent){
           node.children.push(story);

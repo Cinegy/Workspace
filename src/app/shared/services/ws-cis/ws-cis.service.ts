@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WsCisConfiguration } from '../ws-base-mam/ws-mam-connection';
 import { Router } from '@angular/router';
-import { WsConfigurationService } from 'src/app/ws-configuration/ws-configuration.service';
+import { WsConfigurationService } from '../../../ws-configuration/ws-configuration.service';
 import { UserManager, Log, MetadataService, User, OidcClient, UserManagerSettings, WebStorageStateStore } from 'oidc-client';
 
 @Injectable({
@@ -15,11 +15,11 @@ export class WsCisService {
   constructor(private config: WsConfigurationService, private router: Router) {
     Log.logger = console;
 //    this.init(this.config.configuration.cis);
-   
+
   }
 
   private init(cisConfig: WsCisConfiguration): void {
-  
+
     const location =window.location.origin.replace('/cislogin', '');
     this.settings = {
       authority: cisConfig.cisEndpoint,

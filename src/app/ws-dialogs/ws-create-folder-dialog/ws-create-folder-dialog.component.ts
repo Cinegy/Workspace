@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { WsAppStateService } from 'src/app/ws-app-state.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { WsAppStateService } from '../../ws-app-state.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ws-create-folder-dialog',

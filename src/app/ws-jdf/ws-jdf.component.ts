@@ -5,7 +5,7 @@ import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import * as DateFormat from 'dateformat';
-import { MatTabGroup } from '@angular/material';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-ws-jdf',
@@ -20,7 +20,7 @@ export class WsJdfComponent implements OnInit, AfterViewInit, OnDestroy {
   public dataSource: MatTableDataSource<JdfJob>;
 
   @Input() tabGroup: MatTabGroup;
-  @ViewChild( MatPaginator,{static:false}) paginator:MatPaginator;
+  @ViewChild(MatPaginator) paginator:MatPaginator;
 
   constructor(public appState: WsAppStateService, private jdfService: WsJdfService) {
     this.jobs = [];

@@ -3,7 +3,7 @@ import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 import { Subject } from 'rxjs/Rx';
 import { WsAppStateService } from '../ws-app-state.service';
 import { WsNewsService } from './ws-news.service';
-import { MatDatepickerInputEvent } from '@angular/material';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Moment } from 'moment';
 import { FormControl } from '@angular/forms';
 
@@ -19,35 +19,35 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   public dates: any[] = [];
   public dayBulletinPair: [any, any] [] = [];
   datevaluepicker=new FormControl(new Date());
- 
+
   // public dict : Dictionary<[any,any]>;
   public stories: any[] =[]
-  
+
   public pushRundownSubject: Subject<any> = new Subject<any>();
   public resetRundownSubject: Subject<any> = new Subject<any>();
-  
+
   public pushStoriesSubject: Subject<any> = new Subject<any>();
   public resetStoriesSubject: Subject<any> = new Subject<any>();
-  
+
   constructor(
     public appState: WsAppStateService,
     public newsService: WsNewsService
     ) {
-      console.log("Constructor call"); 
+      console.log("Constructor call");
       this.subscribers = [];
-      
+
       let subscriber = this.appState.selectNodeSubject
       .subscribe(response => this.selectNodeResponse(response));
       this.subscribers.push(subscriber);
-      
+
       subscriber = this.appState.openNewsNodeSubject
       .subscribe(response => this.openNodeResponse(response));
       this.subscribers.push(subscriber);
-      
+
       subscriber = this.newsService.getNewsSubject
       .subscribe(response => this.getParentResponse(response));
       this.subscribers.push(subscriber);
-      
+
       subscriber = this.newsService.getChildrenSubject
       .subscribe(response => this.getChildrenResponse(response));
       this.subscribers.push(subscriber);
@@ -60,9 +60,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
         ()=>this.resetModule()
       )
   }
-  
+
   ngOnInit() {
-   
+
   }
 
   ngOnDestroy(): void {
@@ -81,10 +81,9 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       this.lastOpenedNode = null;
       return;
     }
-    
+
     this.loading = true;
     this.newsService.getNews(response.id, response.type);
-    alert(response.type);
   }
 
   private getParentResponse(response:any){
@@ -98,7 +97,6 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     this.lastOpenedNode = response;
     this.loading = true;
     this.newsService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
-    alert("getParentResponse");
   }
 
   private getChildrenResponse(response:any){
@@ -110,40 +108,31 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
       return;
     }
 
-    
+
     this.loading = true;
 
     response.items.forEach(element =>
      {
       if(element.type=='year'){
         this.newsService.getChildren(element.id,element.type);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
 
       }else if(element.type == 'month'){
         this.newsService.getChildren(element.id,element.type);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
 
       }else if(element.type =='dayFolder'){
         this.addDayBulletinPair(element);
         this.newsService.getChildren(element.id,element.type);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
 
-      }else if(element.type == 'bulletin'){        
+      }else if(element.type == 'bulletin'){
         this.writeDictionaryValues(element);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
 
       }else if(element.type == 'pool'){
         this.pushStoriesSubject.next(element);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
-
       }
       else if(element.type =='rundownFolder'){
         this.pushRundownSubject.next(element);
-        alert("getChildrenResponse" +element.id+ " " +element.type+" "+element.value)
-
       }
       else{
-
         console.log(element);
       }
     });
@@ -154,7 +143,7 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
     let keyPair = this.dayBulletinPair.find(pair=>{
       return pair[0].id == date.id;
     })
-    
+
     if(!keyPair){
       this.dayBulletinPair.push([date,null]);
     }else{
@@ -186,18 +175,17 @@ export class WsNewsComponent implements OnInit ,OnDestroy{
   /* Page events*/
   public pickDateEvent(type:string, event:MatDatepickerInputEvent<Moment>){
     let mom:Moment = event.value;
-   
-    let currentDate:string =`${mom.date()}.${mom.month()+1}.${mom.year()}`; 
+
+    let currentDate:string =`${mom.date()}.${mom.month()+1}.${mom.year()}`;
     console.log(`${mom.date()}.${mom.month()+1}.${mom.year()}`);
-    
+
     let pair = this.dayBulletinPair.find(element=>{
       return element[0].name==currentDate
     })
-    
+
     if(pair){
       this.resetComponents()
       this.newsService.getChildren(pair[1].id,pair[1].type);
-      alert(pair)
     }else{
       this.resetComponents();
       console.log("Pair empty");

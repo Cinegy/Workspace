@@ -6,6 +6,7 @@ import { WsCisService } from '../ws-cis/ws-cis.service';
 import { UUID } from 'angular2-uuid';
 import * as AWS from 'aws-sdk';
 import { WsUploadStoreModel, WsUploadStoreContentItem } from './ws-upload-store-model';
+import {IDisposable} from "../../interfaces/iDisposable";
 
 
 export class WsAWSUploadStore extends WsGenericUploadStore implements IWsUploadStore, IDisposable {
@@ -185,12 +186,12 @@ export class WsAWSUploadStore extends WsGenericUploadStore implements IWsUploadS
     if (err) {
       console.log(`Upload error`, err);
       this.uploadErrorSubject.next(err);
-     
+
       return;
     }
 
     this.uploadCompletedSubject.next(this.uploader);
-   
+
   }
 
   public abort(): void {

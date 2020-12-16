@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClipboardAction, WsClipboardService } from '../ws-clipboard/ws-clipboard.service';
 import { WsCreateBinDialogComponent } from '../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { WsMainBreadcrumbsService } from '../ws-main/ws-main-breadcrumbs.service';
 import { WsAppStateService } from '../ws-app-state.service';
 import { WsExplorerService } from './ws-explorer.service';
-import { MenuItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/api';
 import { WsCreateFolderDialogComponent } from '../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
 import { WsInfoDialogComponent } from '../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
 import { WsRenameDialogComponent } from '../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
@@ -187,7 +188,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     }
 
     const typeGroup = this.appState.nodeTypes[node.type].typeGroup;
-    //alert("typeGroup "+typeGroup);
     if (this.mainNodeTypes.includes(typeGroup) && node.type !== 'newsProgram') {
       this.loading = true;
       this.selectedNode = node;
@@ -197,23 +197,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.appState.selectNode(node);
       return;
     }
-    //Temporary solution for Release 1
-
-    // if (node.type in this.openable) {
-    //  // alert("node.type "+node.type)
-    //   if (node.type === 'jobDropTarget') {
-    //   //  alert("jobDropTarget "+this.appState)
-    //     this.appState.openJdfNode(node);
-    //   } else {
-    //   //  alert("openBinNode "+this.appState)
-
-    //     this.appState.openBinNode(node);
-    //   }
-    //   return;
-    // }
-    // else{
-
-    // }
 
      if (node.type in this.openable && this.openable[node.type] ) {
       if (node.type === 'jobDropTarget') {
@@ -642,7 +625,6 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
 
   /* *** Breadcrumbs *** */
   private breadcrumbClicked(node: any) {
-   // alert("breadclick");
     this.openNode(node);
   }
 }

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WsNodeImageModule } from '../ws-node-image/ws-node-image.module';
-import { MatTableModule, MatPaginatorModule } from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { WsJdfComponent } from './ws-jdf.component';
 import { WsJdfService } from './ws-jdf.service';

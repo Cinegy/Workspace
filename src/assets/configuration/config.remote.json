@@ -1,0 +1,14 @@
+{
+  "domains": ["MUNICH"],
+  "itemsPerPage": 10,
+  "mams": [{
+    "casEndpoint": "http://localhost:8082/ICinegyDataAccessService",
+    "dbName": "BSWorkspace_v14",
+    "dbServer": "cinebsarc1",
+    "mamEndpoint": "https://workspacedemo.cinegy.com/mams/1.0/api/mam/",
+    "name": "Demo DB",
+    "thumbnailServer": "https://workspacedemo.cinegy.com/image_service/1.0/api/thumbnail/"
+  }],
+  "remoteConfigHost": "https://workspacedemo.cinegy.com/serviceconfig",
+  "useRemoteConfig": false
+}

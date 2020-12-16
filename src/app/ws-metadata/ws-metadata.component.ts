@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter, MatDatepickerInputEvent, MatSnackBar, MatDialog } from '@angular/material';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { WsMetadataTextEditorComponent } from './editors/ws-metadata-text-editor/ws-metadata-text-editor.component';
 import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 import { SaveMetadataRequest } from './save-metadata-request';

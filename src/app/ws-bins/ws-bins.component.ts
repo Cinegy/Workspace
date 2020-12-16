@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { BinNode } from './bin-node';
-import { MenuItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/api';
 import { WsAppStateService } from '../ws-app-state.service';
-import { MatDialog, MatSnackBar, PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { WsClipboardService, ClipboardAction } from '../ws-clipboard/ws-clipboard.service';
 import { WsBinsService } from './ws-bins.service';
 import { WsAppManagementService } from '../ws-app-management.service';
