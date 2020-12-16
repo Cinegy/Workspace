@@ -1,7 +1,7 @@
 /*
 Cinegy Workspace - An HTML5 Front-End to Cinegy Archive
 Copyright (C) 2018  Cinegy GmbH
- 
+
 	This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +14,7 @@ Copyright (C) 2018  Cinegy GmbH
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
+
 */
 
 
@@ -34,7 +34,7 @@ export class WsAppManagementService extends WsBaseMamService {
   public mamVersionSubject: Subject<any> = new Subject<any>();
   public heartbeatSubject: Subject<any> = new Subject<any>();
   public getMediaGroupsSubject: Subject<any> = new Subject<any>();
-  
+
   constructor(
     protected httpClient: HttpClient,
     protected appState: WsAppStateService) {
@@ -68,7 +68,7 @@ export class WsAppManagementService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}management/mediagroup/list`, this.getMediaGroupsSubject);
    // this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
     this.get(`${this.appState.selectedMam.mamEndpoint}management/icon/list?type=png&scope=large`, this.getIconsSubject);
-   
+
     this.get(`${this.appState.selectedMam.mamEndpoint}management/nodetype/list`, this.getNodeTypesSubject);
     // tslint:disable-next-line:max-line-length
    // this.get(`${this.appState.selectedMam.mamEndpoint}descriptor/list?type=clipBin&type=documentBin&category=predefined&category=system&category=metadata`, this.getDescriptorsSubject);
@@ -124,7 +124,7 @@ export class WsAppManagementService extends WsBaseMamService {
 
     nodeTypes.forEach(nodeType => {
       this.appState.nodeTypes[nodeType.type] = nodeType;
-    
+
     });
   }
 

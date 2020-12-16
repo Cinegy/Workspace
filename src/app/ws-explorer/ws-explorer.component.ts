@@ -1,25 +1,25 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ClipboardAction, WsClipboardService } from '../ws-clipboard/ws-clipboard.service';
-import { WsCreateBinDialogComponent } from '../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
-import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WsMainBreadcrumbsService } from '../ws-main/ws-main-breadcrumbs.service';
-import { WsAppStateService } from '../ws-app-state.service';
-import { WsExplorerService } from './ws-explorer.service';
-import { MenuItem } from 'primeng/api';
-import { WsCreateFolderDialogComponent } from '../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
-import { WsInfoDialogComponent } from '../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
-import { WsRenameDialogComponent } from '../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
-import { WsDeleteDialogComponent } from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { WsJdfDialogComponent } from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {ClipboardAction, WsClipboardService} from '../ws-clipboard/ws-clipboard.service';
+import {WsCreateBinDialogComponent} from '../ws-dialogs/ws-create-bin-dialog/ws-create-bin-dialog.component';
+import {WsMamError} from '../shared/services/ws-base-mam/ws-mam-error';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {WsMainBreadcrumbsService} from '../ws-main/ws-main-breadcrumbs.service';
+import {WsAppStateService} from '../ws-app-state.service';
+import {WsExplorerService} from './ws-explorer.service';
+import {MenuItem} from 'primeng/api';
+import {WsCreateFolderDialogComponent} from '../ws-dialogs/ws-create-folder-dialog/ws-create-folder-dialog.component';
+import {WsInfoDialogComponent} from '../ws-dialogs/ws-info-dialog/ws-info-dialog.component';
+import {WsRenameDialogComponent} from '../ws-dialogs/ws-rename-dialog/ws-rename-dialog.component';
+import {WsDeleteDialogComponent} from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
+import {WsJdfDialogComponent} from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
 
 @Component({
   selector: 'app-ws-explorer',
   templateUrl: './ws-explorer.component.html',
   styleUrls: ['./ws-explorer.component.css']
 })
-export class WsExplorerComponent implements OnInit , OnDestroy {
+export class WsExplorerComponent implements OnInit, OnDestroy {
   private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
   private notCutable = {};
   private copyable = {};
@@ -56,6 +56,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.notCutable['usersFolder'] = true;
     this.notCutable['jobDropfolderContainer'] = true;
     this.notCutable['jobDropTarget'] = true;
+    this.notCutable['jobFolder'] = true;
     this.notCutable['jobServersInfoFolders'] = true;
     this.notCutable['newsFolder'] = true;
     this.notCutable['lib'] = true;
@@ -64,8 +65,10 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.notCutable['publicSearchQueryFolder'] = true;
 
     this.canNotRename['jobDropTarget'] = true;
+    this.canNotRename['jobFolder'] = true;
 
     this.canNotDelete['jobDropTarget'] = true;
+    this.canNotDelete['jobFolder'] = true;
 
     this.copyable['clipBin'] = true;
 
@@ -156,12 +159,11 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     }
 
 
-     if(node.type=='newsProgram'){
+    if (node.type == 'newsProgram') {
 //      this.appState.showMode = 'news';
-    }else if(node.type=='roll'||node.type=='clipBin'||node.type=='documentBin'){
+    } else if (node.type == 'roll' || node.type == 'clipBin' || node.type == 'documentBin') {
       this.appState.showMode = 'bins';
-    }
-    else if(node.type=='story'){
+    } else if (node.type == 'story') {
       this.appState.showMode = 'story';
     }
 
@@ -198,16 +200,14 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       return;
     }
 
-     if (node.type in this.openable && this.openable[node.type] ) {
+    if (node.type in this.openable && this.openable[node.type]) {
       if (node.type === 'jobDropTarget') {
         this.appState.openJdfNode(node);
-      }
-      else if(node.type==='newsProgram'){
+      } else if (node.type === 'newsProgram') {
         this.appState.openNewsNode(node);
-      }else if(node.type==='story'){
+      } else if (node.type === 'story') {
         this.appState.openStoryNode(node);
-      }
-      else {
+      } else {
         this.appState.openBinNode(node);
       }
 
@@ -257,7 +257,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     this.childNodes = response.items;
 
     if (!this.jdfFolderFound) {
-     for (let i = 0; i < this.childNodes.length; i++) {
+      for (let i = 0; i < this.childNodes.length; i++) {
         const node = this.childNodes[i];
         if (node.type === 'jobDropfolderContainer') {
           this.appState.jdfRootNode = node;
@@ -280,7 +280,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.childNodes.push(response);
     }
 
-    this.snackBar.open(`${response.name} created`, null, { duration: 1000 });
+    this.snackBar.open(`${response.name} created`, null, {duration: 1000});
 
   }
 
@@ -293,7 +293,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
     const index = this.childNodes.indexOf(this.menuNode);
 
     if (index > -1) {
-      this.snackBar.open(`${this.menuNode.name} deleted`, null, { duration: 1000 });
+      this.snackBar.open(`${this.menuNode.name} deleted`, null, {duration: 1000});
       this.childNodes.splice(index, 1);
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.deleteNode(this.menuNode);
@@ -311,7 +311,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
 
     if (index > -1) {
       this.childNodes[index] = response;
-      this.snackBar.open(`${response.name} renamed`, null, { duration: 1000 });
+      this.snackBar.open(`${response.name} renamed`, null, {duration: 1000});
 
       if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.updateNode(response);
@@ -333,7 +333,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.childNodes.push(response);
     }
 
-    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+    this.snackBar.open(`${response.name} pasted`, null, {duration: 1000});
   }
 
   private cutNodeResponse(response: any) {
@@ -345,12 +345,10 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
 
     const cuttedClip = this.clipboard.items[0];
 
-    if (cuttedClip.parent === response.parent) {
-      const index = this.childNodes.indexOf(cuttedClip);
+    const index = this.childNodes.indexOf(cuttedClip);
 
-      if (index > -1) {
-        this.childNodes.splice(index, 1);
-      }
+    if (index > -1) {
+      this.childNodes.splice(index, 1);
     }
 
     this.clipboard.done();
@@ -361,7 +359,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.childNodes.push(response);
     }
 
-    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+    this.snackBar.open(`${response.name} pasted`, null, {duration: 1000});
   }
 
   /* *** Dialogs *** */
@@ -421,7 +419,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
   private renameNodeDialog() {
     const dialogRef = this.dialog.open(WsRenameDialogComponent, {
       width: '400px',
-      data: { name: this.menuNode.name, type: this.menuNodeType.type }
+      data: {name: this.menuNode.name, type: this.menuNodeType.type}
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == null) {
@@ -489,7 +487,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       };
 
       this.contextMenuItems.push(menuItem);
-      this.contextMenuItems.push({ separator: true });
+      this.contextMenuItems.push({separator: true});
     }
 
     if (this.mainNodeTypes.includes(selectedNodeType.typeGroup) && selectedNodeType.children) {
@@ -527,7 +525,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
           items: menuChildItems
         };
         this.contextMenuItems.push(menuItem);
-        this.contextMenuItems.push({ separator: true });
+        this.contextMenuItems.push({separator: true});
       }
     }
 
@@ -557,7 +555,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
       this.contextMenuItems.push(menuItem);
     }
 
-    if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable) {
+    if (this.clipboard.items.length > 0 && selectedNode.type in this.pasteable && this.canInsert(selectedNode, this.clipboard.items[0])) {
       menuItem = {
         label: 'Paste',
         icon: 'fa-clipboard fa',
@@ -581,7 +579,7 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
           this.renameNodeDialog();
         }
       };
-      this.contextMenuItems.push({ separator: true });
+      this.contextMenuItems.push({separator: true});
       this.contextMenuItems.push(menuItem);
     }
 
@@ -605,22 +603,33 @@ export class WsExplorerComponent implements OnInit , OnDestroy {
           this.refreshParent();
         }
       };
-      this.contextMenuItems.push({ separator: true });
+      this.contextMenuItems.push({separator: true});
       this.contextMenuItems.push(menuItem);
     }
 
     if (this.childOpenedMenu && selectedNode.type in this.exportable) {
       menuItem = {
-        label: 'Send to job drop folder',
+        label: 'Send to job drop target',
         icon: 'fa-indent fa',
         command: (event) => {
           this.menuNodeType = this.appState.nodeTypes[selectedNode.type];
           this.openJDFDialog();
         }
       };
-      this.contextMenuItems.push({ separator: true });
+      this.contextMenuItems.push({separator: true});
       this.contextMenuItems.push(menuItem);
     }
+  }
+
+  private canInsert(parent: any, child: any) {
+    if (!parent || !child) {
+      return false;
+    }
+    let selectedNodeType = this.appState.nodeTypes[parent.type];
+    if(!selectedNodeType) {
+      return false;
+    }
+    return selectedNodeType.children && selectedNodeType.children.includes(child.type);
   }
 
   /* *** Breadcrumbs *** */
