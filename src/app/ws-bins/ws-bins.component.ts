@@ -582,7 +582,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
       if (this.childOpenedMenu && selectedNode.type in this.exportable) {
         menuItem = {
-          label: 'Send to job drop folder',
+          label: 'Send to job drop target',
           icon: 'fa fa-indent',
           command: (event) => {
             this.openJDFDialog();
