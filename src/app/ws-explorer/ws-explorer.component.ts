@@ -20,8 +20,7 @@ import {WsJdfDialogComponent} from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.co
   styleUrls: ['./ws-explorer.component.css']
 })
 export class WsExplorerComponent implements OnInit, OnDestroy {
-//  private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
-  private readonly mainNodeTypes = ['dbRoot', 'lib'];
+  private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
   private notCutable = {};
   private copyable = {};
   private pasteable = {};
@@ -296,9 +295,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     if (index > -1) {
       this.snackBar.open(`${this.menuNode.name} deleted`, null, {duration: 1000});
       this.childNodes.splice(index, 1);
-      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+//      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.deleteNode(this.menuNode);
-      }
+//      }
     }
   }
 
@@ -314,9 +313,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.childNodes[index] = response;
       this.snackBar.open(`${response.name} renamed`, null, {duration: 1000});
 
-      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+//      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.updateNode(response);
-      }
+//      }
     }
   }
 
