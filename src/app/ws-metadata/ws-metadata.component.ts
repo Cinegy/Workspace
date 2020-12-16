@@ -131,7 +131,7 @@ export class WsMetadataComponent implements OnInit, OnDestroy {
     if (this.descriptors === undefined) {
       this.loading = true;
       this.metadataService.getDescriptors(this.selectedNode.type);
-    } else {
+    } else if(this.descriptors.length>0){
       this.loading = true;
       this.metadataService.getMetadata(this.selectedNode);
     }

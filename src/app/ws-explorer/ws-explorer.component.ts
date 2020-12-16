@@ -20,7 +20,8 @@ import {WsJdfDialogComponent} from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.co
   styleUrls: ['./ws-explorer.component.css']
 })
 export class WsExplorerComponent implements OnInit, OnDestroy {
-  private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
+//  private readonly mainNodeTypes = ['dbRoot', 'folderGeneric', 'lib'];
+  private readonly mainNodeTypes = ['dbRoot', 'lib'];
   private notCutable = {};
   private copyable = {};
   private pasteable = {};
