@@ -87,7 +87,7 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
   public logout() {
     this.logoutService.logout();
 
-    this.router.navigate(['/login']);
+//    this.router.navigate(['/login']);
 
   }
 
@@ -120,6 +120,8 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
 
   private logoutResponse(response: any) {
     this.stopTimer();
+    this.router.navigate(['/login']);
+
   }
 
   private heartbeatResponse(response: any) {
@@ -145,14 +147,14 @@ export class WsMainMenuComponent implements OnInit, OnDestroy {
     }
 
     this.timerIconName = this.timerIconNames[this.timerIconIndex];
-   
+
   }
 
   private stopTimer() {
     this.timer.unsubscribe(this.timerId);
     this.timer.delTimer(this.timerName);
     this.timerIconName = this.timerIconNames[0];
-  
+
   }
 
 }

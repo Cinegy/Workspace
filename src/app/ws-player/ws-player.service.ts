@@ -8,6 +8,7 @@ import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
 @Injectable()
 export class WsPlayerService extends WsBaseMamService {
   public getMasterClipSubject: Subject<any> = new Subject<any>();
+  public getUserClipSubject: Subject<any> = new Subject<any>();
   public getClipDescriptorSubject: Subject<any> = new Subject<any>();
   public getMasterclipDescriptorSubject: Subject<any> = new Subject<any>();
   public setMarkerSubject: Subject<any> = new Subject<any>();
@@ -42,6 +43,11 @@ export class WsPlayerService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}masterclip?id=${id}&masterClipScope=videoFormat&masterClipScope=offsets&masterClipScope=fileSet&masterClipScope=thumbnail&masterClipScope=general`, this.getMasterClipSubject);
   }
 
+  public getUserClip(id: string) {
+    // tslint:disable-next-line:max-line-length
+    this.get(`${this.appState.selectedMam.mamEndpoint}userclip?id=${id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileSet&clipScope=thumbnail&clipScope=general`, this.getUserClipSubject);
+  }
+
   public setMarker(id: string, markIn: number, markOut: number, markInDesc: string, markOutDesc: string) {
     const markerMetadata = [
       {
@@ -61,7 +67,7 @@ export class WsPlayerService extends WsBaseMamService {
 
 
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}node/copy?id=${clip.id}&parentId=${clip.parent}&dataScope=fullInfo&linksScope=metadata`, null, this.internalCreateSubclipFromClipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}userclip/createsubclip?userClipId=${clip.id}&clipBinId=${clip.parent}&TapeIn=${this.selectedClip.in}&TapeOut=${this.selectedClip.out}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
   }
 
   public createSubclipFromMasterclip(clip: any) {
@@ -76,7 +82,7 @@ export class WsPlayerService extends WsBaseMamService {
   public linkMasterclip(masterClip: any, clipBin: any) {
     // tslint:disable-next-line:max-line-length
     this.selectedClip = masterClip;
-    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterClip.id}&clipBinId=${clipBin.id}&clipScope=videoFormat&clipScope=offsets&clipScope=fileset&clipScope=general&clipScope=thumbnail`, null, this.linkMasterclipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}masterclip/link?masterclipId=${masterClip.id}&clipBinId=${clipBin.id}&TapeIn=${this.selectedClip.in}&TapeOut=${this.selectedClip.out}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=fileset&clipScope=general&clipScope=thumbnail`, null, this.createSubclipSubject);
   }
 
   private createSubclipResponse(response) {

@@ -295,9 +295,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     if (index > -1) {
       this.snackBar.open(`${this.menuNode.name} deleted`, null, {duration: 1000});
       this.childNodes.splice(index, 1);
-      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+//      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.deleteNode(this.menuNode);
-      }
+//      }
     }
   }
 
@@ -313,9 +313,9 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
       this.childNodes[index] = response;
       this.snackBar.open(`${response.name} renamed`, null, {duration: 1000});
 
-      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
+//      if (!this.mainNodeTypes.includes(this.menuNodeType.typeGroup)) {
         this.appState.updateNode(response);
-      }
+//      }
     }
   }
 
