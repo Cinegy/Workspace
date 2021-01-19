@@ -164,7 +164,7 @@ export class WsExplorerComponent implements OnInit, OnDestroy {
     } else if (node.type == 'roll' || node.type == 'clipBin' || node.type == 'documentBin') {
       this.appState.showMode = 'bins';
     } else if (node.type == 'story') {
-      this.appState.showMode = 'story';
+//      this.appState.showMode = 'story';
     }
 
 

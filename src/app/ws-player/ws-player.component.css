@@ -15,7 +15,7 @@ video {
   margin-bottom: 10px;
 }
 
-::ng-deep .ui-widget-content {
+::ng-deep .ui-slider.ui-widget-content {
   background-color: #b0bec5;
 }
 
