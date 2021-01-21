@@ -40,8 +40,8 @@ object Build : BuildType({
     name = "Build"
     
     // we are out of master branch - no check is required (this code may be removed later, if no 'OverrideMinorVersion' is needed)
-    val branchName = "21.1"
-    var isMasterBranch = false
+    // val branchName = "21.1"
+    // var isMasterBranch = false
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%build.number%.zip"
@@ -56,12 +56,7 @@ object Build : BuildType({
         exec {
             name = "(patch) Generate Version Number"
             path = "pwsh"
-            if (isMasterBranch) {
-                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
-            } 
-            else {
-                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion " + branchName
-            }   
+            arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
             dockerPull = true
         }
