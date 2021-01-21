@@ -39,12 +39,9 @@ project {
 object Build : BuildType({
     name = "Build"
     
-    // check if the build is from master (until integration builds are implemented)
-    val branchName = "%teamcity.build.branch%"
+    // we are out of master branch - no check is required (this code may be removed later, if no 'OverrideMinorVersion' is needed)
+    val branchName = "21.1"
     var isMasterBranch = false
-    if(branchName.compareTo("master") == 0){
-        isMasterBranch = true
-    }
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%build.number%.zip"
@@ -126,7 +123,7 @@ object Deploy : BuildType({
         exec {
             name = "S3 Upload"
             path = "aws"
-            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V21_1_Release_Build.teamcity.build.branch% --delete"
+            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V21_1_Release_Build.teamcity.build.number% --delete"
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/terraform0.12:latest"
         }
     }
