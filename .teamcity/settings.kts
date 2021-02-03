@@ -117,7 +117,7 @@ object Deploy : BuildType({
         exec {
             name = "S3 Upload"
             path = "aws"
-            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/21.1-%tag% --delete"
+            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/v21.1-%tag% --delete"
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/terraform0.12:latest"
         }
     }
