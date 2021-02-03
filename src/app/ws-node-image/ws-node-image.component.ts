@@ -11,6 +11,7 @@ export class WsNodeImageComponent implements OnInit {
   @Input() imageData: any;
   @Input() imageWidth = 16;
   @Input() imageHeight = 16;
+  @Input() responsive = false;
 
   constructor(public sanitizer: DomSanitizer) { }
 

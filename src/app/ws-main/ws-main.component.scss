@@ -1,17 +1,17 @@
 .ws-main-container {
    overflow: hidden !important;
-   text-overflow: ellipsis; 
-  
+   text-overflow: ellipsis;
+  height: calc(100vh - 44px);
  }
  .ws-card-content {
-      overflow-y: auto !important;  
+      overflow-y: auto !important;
       flex-direction: column;
        box-sizing: border-box;
         display: flex; flex: 1 1 0%;
-         max-height:90%; 
-     
+         max-height:90%;
+
  }
- 
+
 .as-split {
     ::ng-deep .as-split-gutter {
         background-color: rgba(255,255,255,.12) !important;
@@ -24,6 +24,14 @@
 mat-card-content{
 	-ms-overflow-style: none;
 	&::-webkit-scrollbar {
-		display: none;		
+		display: none;
 	}
+}
+.ws-breadcrumb {
+  height: 44px;
+}
+.ws-main-content {
+  height: calc(100% - 44px);
+  width: 100%;
+  min-width: 100%;
 }

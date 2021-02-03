@@ -30,6 +30,42 @@ export class WsAppStateService {
   public nodeIcons: {[subType: string]: any } = {};
   public descriptors: {[type: string]: any } = {};
   public showMode:string = 'bins';
+
+  public layoutSettings: any = {
+    panels: [
+      {
+        visible: true,
+        menuName: 'Explorer',
+        size: 30,
+        type: 'explorer'
+      },
+      {
+        visible: true,
+        menuName: 'Bins',
+        size: 40,
+        type: 'bin'
+      },
+      {
+        visible: true,
+        size: 30,
+        childrenPanels: [
+          {
+            visible: true,
+            menuName: 'Player',
+            size: 50,
+            type: 'player',
+          },
+          {
+            visible: true,
+            menuName: 'Metadata',
+            size: 50,
+            type: 'metadata'
+          },
+        ],
+      },
+    ]
+  }
+
   constructor() {
     this._connected = false;
   }
@@ -51,7 +87,7 @@ export class WsAppStateService {
   }
 
   public setConnectionState(connected: boolean, selectedMam: WsMamConnection): void {
-  
+
     this._connected = connected;
     this._selectedMam = selectedMam;
 

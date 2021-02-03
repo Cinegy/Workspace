@@ -1,17 +1,17 @@
-<mat-card fxLayout fxFlex style="overflow: hidden; flex: 1 1 0px; box-sizing: border-box; flex-direction: row; display: flex;">
+  <mat-card class="ws-panel" fxLayout fxFlex style="overflow: hidden; flex: 1 1 0px; box-sizing: border-box; flex-direction: row; display: flex;">
   <mat-card-content fxFlex  style="overflow: hidden;"><!---->
     <div  *ngIf="loading" class="loader">
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
-    <h3 *ngIf="selectedNode">
+    <h5 *ngIf="selectedNode">
       <app-ws-node-image mat-card-avatar *ngIf="selectedNode && appState.nodeIcons[selectedNode.type] && appState.nodeIcons[selectedNode.type].large"
-        [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="16" [imageHeight]="16">
+        [imageData]="appState.nodeIcons[selectedNode.type].large" [imageWidth]="32" [imageHeight]="32">
       </app-ws-node-image>
       {{selectedNode.name}}
-    </h3>
+    </h5>
     <mat-divider></mat-divider>
     <div>
-      <mat-tab-group>
+      <mat-tab-group class="ws-slim-tab">
         <mat-tab *ngFor="let group of descriptorGroups" >
           <ng-template mat-tab-label>
             <section layout="row">
