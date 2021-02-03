@@ -44,7 +44,7 @@ object Build : BuildType({
     // var isMasterBranch = false
 
     buildNumberPattern = "%build.revisions.short%"
-    artifactRules = "./dist/** => Cinegy_Workspace_%build.number%.zip"
+    artifactRules = "./dist/** => Cinegy_Workspace_%teamcity.build.branch%_%build.number%.zip"
 
     vcs {
         root(DslContext.settingsRoot)
