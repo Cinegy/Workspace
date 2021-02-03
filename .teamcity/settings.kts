@@ -38,10 +38,13 @@ project {
 
 object Build : BuildType({
     name = "Build"
-    
-    // we are out of master branch - no check is required (this code may be removed later, if no 'OverrideMinorVersion' is needed)
-    // val branchName = "21.1"
-    // var isMasterBranch = false
+
+    // check if the build is from master (until integration builds are implemented)
+    val branchName = "%teamcity.build.branch%"
+    var isMasterBranch = false
+    if(branchName.compareTo("master") == 0){
+            isMasterBranch = true
+    }
 
     buildNumberPattern = "%build.revisions.short%"
     artifactRules = "./dist/** => Cinegy_Workspace_%teamcity.build.branch%_%build.number%.zip"
@@ -56,7 +59,12 @@ object Build : BuildType({
         exec {
             name = "(patch) Generate Version Number"
             path = "pwsh"
-            arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
+            if (isMasterBranch) {
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision%"
+            }
+            else {
+                arguments = "./patch-version.ps1 -BuildCounter %build.counter% -SourceRevisionValue %build.revisions.revision% -OverrideMinorVersion " + branchName
+            }
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/devbase:latest"
             dockerPull = true
         }
@@ -74,7 +82,7 @@ object Build : BuildType({
             name = "(build) Workspace Build"
             scriptContent = """
                 #!/bin/bash
-                ng version    
+                ng version
                 ng build --prod > log.txt
             """.trimIndent()
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/node12angular8:latest"
@@ -118,11 +126,11 @@ object Deploy : BuildType({
         exec {
             name = "S3 Upload"
             path = "aws"
-            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V21_1_Release_Build.build.number% --delete"
+            arguments = "s3 sync publish/Workspace s3://%Static_Bucket_Name%/%dep.CinegyAsAService_CinegyWorkspace_V11x_Build.teamcity.build.branch% --delete"
             dockerImage = "registry.cinegy.com/docker/docker-builds/ubuntu1804/terraform0.12:latest"
         }
     }
-    
+
     triggers {
         finishBuildTrigger {
             buildType = "${Build.id}"
