@@ -1,4 +1,19 @@
 .ws-main-menu-fill-remaining-space {
     flex: 1 1 auto;
   }
-  
+.mat-toolbar-row, .mat-toolbar-single-row {
+  height: 44px;
+}
+.mat-toolbar {
+  font-size: 1rem;
+}
+::ng-deep .ws-main-menu-item.mat-menu-item {
+  display: flex;
+  align-items: center;
+}
+::ng-deep .ws-main-menu-item.mat-menu-item .mat-icon {
+  width: 16px;
+  margin-right: 5px;
+  height: initial;
+  vertical-align: initial;
+}

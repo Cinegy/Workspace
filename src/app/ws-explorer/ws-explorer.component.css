@@ -1,14 +1,30 @@
 mat-list-item {
     cursor: pointer;
-   
+
 }
 .ws-explorer-header {
     cursor: pointer;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 .ws-explorer-item-container .ws-explorer-item:hover, .ws-explorer-item-selected {
   border-color:#4C6494;
-  background: #4C6494; 
-  
+  background: #4C6494;
+ }
+.ws-explorer-item-container .ws-explorer-item.mat-list-item {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  height: initial;
 }
-
+::ng-deep .full-content-menu, ::ng-deep .full-content-menu .ui-submenu-list{
+  width: initial;
+  min-width: 12.5em;
+}
+::ng-deep .ws-small-avatar.mat-list-avatar,  ::ng-deep .ws-small-avatar.mat-card-avatar{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 24px !important;
+  height: 24px !important;
+}

@@ -11,19 +11,21 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { WsMainMenuComponent } from './ws-main-menu.component';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { WsUserInfoDialogComponent } from '../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatIconModule,
-    MatFormFieldModule
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatCheckboxModule
 
-  ],
+    ],
   exports: [
    WsMainMenuComponent
   ],

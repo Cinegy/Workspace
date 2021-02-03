@@ -48,4 +48,20 @@ app-ws-main {
   border-color: #4C6494;
   background: #4C6494;
 }
+.ws-panel.mat-card {
+  box-shadow: none;
+  border-radius: 0;
+}
+.ws-slim-tab .mat-tab-label {
+  height: initial;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.ws-hide-scrollbar {
+  -ms-overflow-style: none!important;
+  scrollbar-width: none!important;;
+}
+.ws-hide-scrollbar::-webkit-scrollbar {
+  display: none!important;
+}
 

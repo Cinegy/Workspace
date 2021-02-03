@@ -6,7 +6,7 @@
   <span class="ws-main-menu-fill-remaining-space"></span>
   <div layout="row" flex>
     <form>
-      <mat-form-field flex class="mat-icon-float mat-block mat-title ws-font-smaller">
+      <mat-form-field flex class="ws-font-smaller" appearance="legacy" [floatLabel]="'never'">
         <input matInput type="search" placeholder="Search" [(ngModel)]="keywords" name="keywords"
                [disabled]="!appState.connected">
       </mat-form-field>
@@ -21,13 +21,22 @@
     &nbsp; <i class="fa fa-user-circle-o" aria-hidden="true"></i> <!-- Compliant icon fonts usage -->
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()">
+    <button mat-menu-item [disabled]="!appState.connected" (click)="showInfo()" class="ws-main-menu-item">
       <mat-icon fontSet="fa" fontIcon="fa-info"></mat-icon>
       <span>Info</span>
     </button>
-    <button mat-menu-item (click)="logout()">
+    <button mat-menu-item (click)="logout()" class="ws-main-menu-item">
       <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
       <span>Logout</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="panelMenu">Layouts</button>
+  </mat-menu>
+  <mat-menu #panelMenu>
+    <ng-template ngFor let-panel of [ngForOf]="this.appState.layoutSettings.panels">
+      <mat-checkbox *ngIf="panel.menuName && !panel.childrenPanels; else childrenPanelBlock"  class="mat-menu-item" [(ngModel)]="panel.visible">{{panel.menuName}}</mat-checkbox>
+      <ng-template #childrenPanelBlock>
+        <mat-checkbox *ngFor="let subpanel of panel.childrenPanels"  class="mat-menu-item" [(ngModel)]="subpanel.visible">{{subpanel.menuName}}</mat-checkbox>
+      </ng-template>
+    </ng-template>
   </mat-menu>
 </mat-toolbar>

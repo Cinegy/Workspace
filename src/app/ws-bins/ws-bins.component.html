@@ -1,14 +1,14 @@
-<mat-card fxFlex style="overflow-y: auto;">
+<mat-card fxFlex style="overflow-y: auto;" class="ws-bins-container ws-panel">
     <mat-card-content #binNodes>
       <div *ngIf="loading" class="loader"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
-      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
+      <mat-tab-group class="ws-slim-tab" [(selectedIndex)]="selectedIndex" (selectChange)="selectTab()">
         <mat-tab *ngFor="let tab of tabs">
           <ng-template mat-tab-label>
             <section matTooltip="{{tab.parent.name}}" (contextmenu)="contextMenuOpen(tab.parent, false)">
               <app-ws-node-image *ngIf="tab.parent.type" mat-card-avatar [imageData]="appState.nodeIcons[tab.parent.type].large" [imageWidth]="16"
                 [imageHeight]="16"></app-ws-node-image>
-              <span *ngIf="tab.parent.name.length <= 5">{{tab.parent.name}}</span>
-              <span *ngIf="tab.parent.name.length > 5">{{tab.parent.name.substring(0, 5)}}...</span>&nbsp;({{tab.childCount}})
+              <span *ngIf="tab.parent.name.length <= 10">{{tab.parent.name}}</span>
+              <span *ngIf="tab.parent.name.length > 10">{{tab.parent.name.substring(0, 10)}}...</span>&nbsp;({{tab.childCount}})
               &nbsp; &nbsp;
               <i class="fa fa-times" (click)="closeTab(tab)"></i>
             </section>

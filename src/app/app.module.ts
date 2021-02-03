@@ -42,6 +42,7 @@ import { WsNewsComponent } from './ws-news/ws-news.component';
 import { WsRundownComponent } from './ws-news/ws-rundown/ws-rundown.component';
 import { WsStoryPoolComponent } from './ws-news/ws-story-pool/ws-story-pool.component';
 import { WsStoryComponent } from './ws-story/ws-story.component';
+import {MatGridListModule} from "@angular/material/grid-list";
 
 
 
@@ -70,29 +71,29 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
 
-   
- 
-  ],
-  imports: [
-    RouterModule.forRoot(
-      appRoutes,
-    { useHash: false },
-     
-    ),
-    LocalStorageModule.forRoot({
-      prefix: 'cinegy-workspace',
-      storageType: 'localStorage'
-    }),
-    BrowserModule,
-    BrowserAnimationsModule,
-    WsDialogsModule,
-    DragulaModule,
-    WsMainModule,
-    WsLogoutModule,
-    WsLoginModule,
-    WsMainMenuModule
+
 
   ],
+    imports: [
+        RouterModule.forRoot(
+            appRoutes,
+            {useHash: false},
+        ),
+        LocalStorageModule.forRoot({
+            prefix: 'cinegy-workspace',
+            storageType: 'localStorage'
+        }),
+        BrowserModule,
+        BrowserAnimationsModule,
+        WsDialogsModule,
+        DragulaModule,
+        WsMainModule,
+        WsLogoutModule,
+        WsLoginModule,
+        WsMainMenuModule,
+        MatGridListModule
+
+    ],
   exports: [RouterModule
   ],
   providers: [
