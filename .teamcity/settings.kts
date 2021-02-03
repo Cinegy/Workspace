@@ -13,7 +13,7 @@ version = "2019.1"
 
 project {
 
-    description = "V21.1 release branch of Cinegy Workspace"
+    description = "Branches of Cinegy Workspace from public GitHub"
 
     buildType(Build)
     buildType(Deploy)
