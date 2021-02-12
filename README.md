@@ -1,8 +1,13 @@
 # Cinegy Workspace
 
-```
-TODO: Write some stuff that is relevant to Workspace here
-```
+Cinegy Workspace empowers media production teams to collaborate on projects wherever they are – in the office, at home or on the road. Cinegy Workspace provides secure access to your Cinegy Archive database from anywhere at any time. All that is required is a standard computer or laptop, and a regular internet connection. Using the Cinegy Workspace browser-based interface, clips can be searched, browsed, selected and even subclipped. Users can participate in a collaborative workflow even when they are based in different locations.
+
+In contrast to previous versions Cinegy Workspace 21 does not require any browser plugins, it is a pure JavaScript and HTML5 based client.
+
+The recommended browsers for running Cinegy Workspace are Google Chrome and Mozilla Firefox, however it should also work in most available web browsers.
+
+     Please note - back-end packages are available only via the Cinegy Portal for customers 
+     with a valid SLA for Cinegy Archive & Workspace.
 
 ## Development server
 
