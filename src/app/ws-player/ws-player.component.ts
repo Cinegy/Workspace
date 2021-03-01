@@ -728,7 +728,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.saveMarkers();
   }
 
-  public clearMarkInOut() {
+  public clearMarkInOut(doSaveMarkers= true ) {
     if (!this.player.src) {
       return;
     }
@@ -740,7 +740,9 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.markers = [this.markerIn * 10, this.markerOut * 10];
     this.timmecodeDuration = this.videoHelper.getTimecodeString(this.tvFormat, this.markerOut - this.markerIn);
     this.player.focus();
-    this.saveMarkers();
+    if(doSaveMarkers) {
+      this.saveMarkers();
+    }
   }
 
   public saveMarkers() {
@@ -757,7 +759,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
           this.openErrorDialog('Markers not set');
           return;
         }*/
-    if (this.selectedBin == null) {
+    if (this.selectedBin == null || !this.canCreateSubclip) {
       return;
     }
 
@@ -867,7 +869,7 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private clearPlayerData() {
-    this.clearMarkInOut();
+    this.clearMarkInOut(false);
     this.showMarkerIn = false;
     this.showMarkerOut = false;
     this.markers = [0, 0];
