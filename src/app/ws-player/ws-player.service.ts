@@ -65,9 +65,10 @@ export class WsPlayerService extends WsBaseMamService {
   public createSubclipFromClip(clip: any) {
     this.selectedClip = clip;
 
-
+    let TapeIn = this.selectedClip.in + this.selectedClip.tapeIn;
+    let TapeOut = this.selectedClip.out + this.selectedClip.tapeIn;
     // tslint:disable-next-line:max-line-length
-    this.post(`${this.appState.selectedMam.mamEndpoint}userclip/createsubclip?userClipId=${clip.id}&clipBinId=${clip.parent}&TapeIn=${this.selectedClip.in}&TapeOut=${this.selectedClip.out}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
+    this.post(`${this.appState.selectedMam.mamEndpoint}userclip/createsubclip?userClipId=${clip.id}&clipBinId=${clip.parent}&TapeIn=${TapeIn}&TapeOut=${TapeOut}&thumbnailPosition=0&clipScope=videoFormat&clipScope=offsets&clipScope=thumbnail&clipScope=general&clipScope=fileset`, null, this.createSubclipSubject);
   }
 
   public createSubclipFromMasterclip(clip: any) {
