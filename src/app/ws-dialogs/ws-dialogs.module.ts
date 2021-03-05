@@ -29,7 +29,7 @@ import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
     MatSelectModule,
     MatDialogModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     TreeModule.forRoot(),
    MatFormFieldModule
   ],
@@ -47,7 +47,7 @@ import { WsJdfBrowseService } from './ws-jdf-dialog/ws-jdf-browse.service';
     WsRenameDialogComponent,
     WsUserInfoDialogComponent,
     WsCreateBinDialogComponent,
-    WsJdfDialogComponent
+    WsJdfDialogComponent,
   ],
   providers: [
     WsJdfBrowseService

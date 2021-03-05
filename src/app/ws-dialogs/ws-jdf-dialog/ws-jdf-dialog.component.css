@@ -7,4 +7,7 @@
   .ws-jdf-dialog-content {
     height: 430px !important;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
