@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { WsMamError } from '../../shared/services/ws-base-mam/ws-mam-error';
 import { WsJdfBrowseService } from './ws-jdf-browse.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { WsAppManagementService } from '../../ws-app-management.service';
 import { WsAppStateService } from '../../ws-app-state.service';
 import { TreeComponent, ITreeOptions, TREE_ACTIONS, KEYS } from 'angular-tree-component';
+import {CreateJobParams} from "./create-job-params";
 
 
 @Component({
@@ -21,14 +22,16 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
   @ViewChild(TreeComponent)
   private jdfTree: TreeComponent;
   public options: ITreeOptions = {};
-
+  public jobParams = new CreateJobParams()
 
   constructor(
     public appState: WsAppStateService,
     private management: WsAppManagementService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<WsJdfDialogComponent>,
-    private jdfService: WsJdfBrowseService) {
+    private jdfService: WsJdfBrowseService,
+  public dialog: MatDialog
+  ) {
     this.subscribers = [];
     this.nodes = [];
 
@@ -51,6 +54,7 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.jdfService.getJobStates();
+    this.jobParams.name = this.data.name;
   }
 
   ngOnDestroy() {
@@ -114,10 +118,9 @@ export class WsJdfDialogComponent implements OnInit, OnDestroy {
 
     if (jobStates && jobStates.length > 0) {
       this.infoText = 'Creating Job... ';
-      this.jdfService.createJob(this.selectedNode.id, this.data, jobStates[0]);
+      this.jdfService.createJob(this.selectedNode.id, this.data, jobStates[0], this.jobParams);
       return;
     }
-
   }
 
 }
