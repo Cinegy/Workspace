@@ -201,15 +201,18 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     console.log(this.lastOpenedNode);
   }
 
-  private selectItem(item: any, event) {
+  private selectItem(item: any, event, isPlay: boolean = false) {
 
     if (this.selectedNode != null) {
-      this.selectedNode.isSelected = null;
+      this.selectedNode.isSelected = false;
     }
     this.selectedNode = item;
     // this.binService.getMetadata(this.selectedNode);
     this.selectedNode.isSelected = true;
     this.appState.selectNode(item);
+    if(isPlay && item.type in this.playable) {
+      this.appState.playClip(item);
+    }
   }
 
   public playClip(node: any) {
@@ -217,7 +220,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.selectedNode != null) {
-      this.selectedNode.isSelected = null;
+      this.selectedNode.isSelected = false;
     }
     this.selectedNode = node;
     this.selectedNode.isSelected = true;

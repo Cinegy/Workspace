@@ -21,6 +21,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { WsNewsModule } from '../ws-news/ws-news.module';
 import { WsStoryModule } from '../ws-story/ws-story.module';
 import { AngularSplitModule } from 'angular-split';
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { AngularSplitModule } from 'angular-split';
     MatTabsModule,
     WsNewsModule,
     WsStoryModule,
-    AngularSplitModule.forRoot()
+    AngularSplitModule.forRoot(),
+    DragDropModule
   ],
   declarations: [WsMainComponent],
   providers: [WsMainBreadcrumbsService]
