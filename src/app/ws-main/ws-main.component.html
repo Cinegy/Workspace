@@ -1,8 +1,50 @@
 <div class="ws-main-container">
   <p-breadcrumb [model]="breadcrumbService.breadcrumbs" class="ws-breadcrumb"></p-breadcrumb>
   <div class="ws-main-content">
-    <as-split class="as-split" direction="horizontal" gutterSize="3" restrictMove="true">
-      <as-split-area size="30" [visible]="this.appState.layoutSettings.panels[0].visible" [order]="1" class="ws-hide-scrollbar">
+    <as-split class="as-split" direction="vertical" gutterSize="3" restrictMove="true" *ngIf="appState.layoutMode=='small'">
+      <as-split-area size="60" [order]="1" class="ws-hide-scrollbar">
+      <app-ws-explorer fxLayout="column" fxFlex="100" [hidden]="appState.isBinOpened"></app-ws-explorer>
+        <app-ws-bins fxLayout="column" fxFlex="100" [hidden]="!appState.isBinOpened"></app-ws-bins>
+      </as-split-area>
+      <as-split-area size="40" [order]="2" class="ws-hide-scrollbar"  [hidden]="!appState.isBinOpened">
+        <app-ws-player fxLayout="column" fxFlex="100"></app-ws-player>
+      </as-split-area>
+    </as-split>
+    <as-split class="as-split" direction="horizontal" gutterSize="3" restrictMove="true"
+              *ngIf="appState.layoutMode=='medium'">
+      <as-split-area size="40" [order]="1" class="ws-hide-scrollbar">
+        <app-ws-explorer fxLayout="column" fxFlex="100" [hidden]="appState.isBinOpened"></app-ws-explorer>
+        <app-ws-bins fxLayout="column" fxFlex="100" [hidden]="!appState.isBinOpened"></app-ws-bins>
+      </as-split-area>
+      <as-split-area size="60" [order]="2">
+        <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3"
+                  (dragEnd)="areaChanged($event)">
+          <as-split-area #playerSplitArea style="overflow-y:hidden" [order]="1">
+            <app-ws-player [playerHeight]="this.playerAreaHeight">
+
+            </app-ws-player>
+          </as-split-area>
+          <as-split-area [order]="2">
+            <mat-card fxLayout fxFlex="100">
+              <mat-card-content fxFlexFill class="ws-card-content">
+                <mat-tab-group class="ws-slim-tab" #lowerRightTabGroup>
+                  <mat-tab label="Metadata">
+                    <app-ws-metadata></app-ws-metadata>
+                  </mat-tab>
+                  <mat-tab label="Drop Folder">
+                    <app-ws-jdf [tabGroup]="lowerRightTabGroup"></app-ws-jdf>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-card-content>
+            </mat-card>
+          </as-split-area>
+        </as-split>
+      </as-split-area>
+    </as-split>
+    <as-split class="as-split" direction="horizontal" gutterSize="3" restrictMove="true"
+              *ngIf="appState.layoutMode=='large'">
+      <as-split-area size="30" [visible]="this.appState.layoutSettings.panels[0].visible" [order]="1"
+                     class="ws-hide-scrollbar">
         <app-ws-explorer fxLayout="column" fxFlex="100"></app-ws-explorer>
       </as-split-area>
       <as-split-area size="40" [visible]="this.appState.layoutSettings.panels[1].visible" [order]="2">
@@ -16,7 +58,8 @@
       <as-split-area size="30" [order]="3">
         <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3"
                   (dragEnd)="areaChanged($event)">
-          <as-split-area #playerSplitArea style="overflow-y:hidden" [visible]="this.appState.layoutSettings.panels[2].childrenPanels[0].visible" [order]="1">
+          <as-split-area #playerSplitArea style="overflow-y:hidden"
+                         [visible]="this.appState.layoutSettings.panels[2].childrenPanels[0].visible" [order]="1">
             <app-ws-player [playerHeight]="this.playerAreaHeight">
 
             </app-ws-player>

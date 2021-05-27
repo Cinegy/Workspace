@@ -11,6 +11,8 @@ export class WsAppStateService {
   private _selectedMam: WsMamConnection;
   private _jdfRootNode: any;
 
+  private readonly binPanelNodes=['roll', 'clipBin', 'clip', 'masterClip'];
+
   public loggedInSubject: Subject<any> = new Subject<any>();
   public selectNodeSubject: Subject<any> = new Subject<any>();
   public openBinNodeSubject: Subject<any> = new Subject<any>();
@@ -30,6 +32,8 @@ export class WsAppStateService {
   public nodeIcons: {[subType: string]: any } = {};
   public descriptors: {[type: string]: any } = {};
   public showMode:string = 'bins';
+  public layoutMode = 'large';
+  public isBinOpened = false;
 
   public layoutSettings: any = {
     panels: [
@@ -105,10 +109,16 @@ export class WsAppStateService {
   }
 
   public selectNode(node: any): void {
+    if(this.binPanelNodes.includes(node.type)) {
+      this.isBinOpened = true;
+    } else {
+      this.isBinOpened = false;
+    }
     this.selectNodeSubject.next(node);
   }
 
   public openBinNode(node: any): void {
+
     this.resetModuleSubject.next();
     this.openBinNodeSubject.next(node);
   }

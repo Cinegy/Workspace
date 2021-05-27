@@ -17,7 +17,7 @@
           </mat-paginator>
           <div class="ws-bin-item-container" fxFlex fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="10px">
             <ng-template [ngIf]="tab.children">
-              <mat-card class="ws-card-item ws-card-item-selected" [class.ws-card-item-selected]="child.isSelected" *ngFor="let child of tab.children" fxFlex fxFlexFill fxLayout="column" tabindex="0" (click)="selectItem(child, $event)"
+              <mat-card class="ws-card-item ws-card-item-selected" [class.ws-card-item-selected]="child.isSelected ? child.isSelected : false" *ngFor="let child of tab.children" fxFlex fxFlexFill fxLayout="column" tabindex="0" (click)="selectItem(child, $event, true)"
                 (contextmenu)="contextMenuOpen(child, true)">
                 <span [ngSwitch]="child.type">
                   <img *ngSwitchCase="'masterClip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (click)="playClip(child)" matTooltip="{{child.name}}">

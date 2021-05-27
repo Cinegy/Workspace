@@ -569,8 +569,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       msg = `Player Error`;
     }
-
-    throw new Error(msg);
+    this.player.poster = './assets/img/noMedia.png';
+    this.player.src = null;
+    console.log(msg);
+//    throw new Error(msg);
   }
 
   // Player: Play and pause
