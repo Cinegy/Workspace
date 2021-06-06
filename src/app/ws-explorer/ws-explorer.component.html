@@ -7,7 +7,7 @@
       <div class="mat-card-header-text">{{selectedNode.name}} <span *ngIf="childNodes">({{childNodes.length}})</span></div>
     </h5>
     <div *ngIf="loading" class="loader"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
-    <mat-list dense *ngIf="childNodes" [dragula]='"explorer-bag"' [dragulaModel]='childNodes' class="ws-explorer-item-container">
+    <mat-list dense *ngIf="childNodes" class="ws-explorer-item-container">
       <mat-list-item
         dense
         class="ws-explorer-item ws-card-item-selected"
