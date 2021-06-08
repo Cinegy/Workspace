@@ -19,7 +19,9 @@
         [attr.data-id]="child.id"
         [attr.data-index]="i"
         matTooltip="{{child.name}}"
-        matTooltipShowDelay="500">
+        matTooltipShowDelay="500"
+        matTooltipTouchGestures="off"
+      >
         <app-ws-node-image class="ws-small-avatar" *ngIf="appState.nodeIcons[child.type] && appState.nodeIcons[child.type].large" mat-list-avatar [imageData]="appState.nodeIcons[child.type].large"
           [imageWidth]="32" [imageHeight]="32" [responsive]="true"  >
         </app-ws-node-image>
