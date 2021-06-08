@@ -20,9 +20,9 @@
               <mat-card class="ws-card-item ws-card-item-selected" [class.ws-card-item-selected]="child.isSelected ? child.isSelected : false" *ngFor="let child of tab.children" fxFlex fxFlexFill fxLayout="column" tabindex="0" (click)="selectItem(child, $event, true)"
                 (contextmenu)="contextMenuOpen(child, true)">
                 <span [ngSwitch]="child.type">
-                  <img *ngSwitchCase="'masterClip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (click)="playClip(child)" matTooltip="{{child.name}}">
-                  <img *ngSwitchCase="'clip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (click)="playClip(child)" matTooltip="{{child.name}}">
-                  <img *ngSwitchCase="'image'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" matTooltip="{{child.name}}">
+                  <img *ngSwitchCase="'masterClip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (click)="playClip(child)" matTooltip="{{child.name}}" matTooltipTouchGestures="off">
+                  <img *ngSwitchCase="'clip'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" (click)="playClip(child)" matTooltip="{{child.name}}" matTooltipTouchGestures="off">
+                  <img *ngSwitchCase="'image'" fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image src="{{getThumbnail(child)}}" matTooltip="{{child.name}}" matTooltipTouchGestures="off">
                   <app-ws-node-image *ngSwitchDefault fxFlex fxFlexAlign="center" class="ws-card-item-content" mat-card-image [imageData]="appState.nodeIcons[child.type].large" [imageWidth]="64" [imageHeight]="64" (dblclick)="openBin(child)" matTooltip="{{child.name}}"></app-ws-node-image>
                 </span>
                 <mat-card-content>
