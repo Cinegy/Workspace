@@ -82,6 +82,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   private keyActionMap = [];
   private isPlayRev = false;
   private playerContainerHeight: number;
+  public isShowControls = false;
+  public isShowSliders = false;
 
   constructor(
     private timer: SimpleTimer,
@@ -317,11 +319,18 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       if (mediaUrl === null) {
         this.player.poster = './assets/img/noMedia.png';
         this.player.src = null;
+        this.isShowControls = false;
+        this.isShowSliders = false;
+        this.appState.layoutSettings.panels[2].childrenPanels[0].visible = false;
+        this.calculateVideoPlayerHeight();
       } else {
         this.player.src = mediaUrl + this.setMediaFragment();
 
         this.player.load();
-
+        this.isShowControls = true;
+        this.isShowSliders = true;
+        this.appState.layoutSettings.panels[2].childrenPanels[0].visible = true;
+        this.calculateVideoPlayerHeight();
       }
 
       this.sliderHead = 0;
@@ -350,6 +359,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     } catch (e) {
       this.loading = false;
+      this.isShowControls = false;
+      this.isShowSliders = false;
+      this.appState.layoutSettings.panels[2].childrenPanels[0].visible = false;
+      this.calculateVideoPlayerHeight();
     }
   }
 
@@ -867,6 +880,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       this.clearPlayerData();
       this.player.removeAttribute('src')
       this.player.load();
+      this.isShowControls = false;
+      this.isShowSliders = false;
+      this.appState.layoutSettings.panels[2].childrenPanels[0].visible = false;
+        this.calculateVideoPlayerHeight();
     }
   }
 

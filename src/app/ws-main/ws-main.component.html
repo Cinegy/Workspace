@@ -19,7 +19,7 @@
       <as-split-area size="60" [order]="2">
         <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3"
                   (dragEnd)="areaChanged($event)">
-          <as-split-area #playerSplitArea style="overflow-y:hidden" [order]="1">
+          <as-split-area #playerSplitArea style="overflow-y:hidden" [order]="1" [visible]="this.appState.layoutSettings.panels[2].childrenPanels[0].visible">
             <app-ws-player [playerHeight]="this.playerAreaHeight">
 
             </app-ws-player>
