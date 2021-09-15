@@ -52,7 +52,7 @@
     "rxjs": "^6.6.3",
     "rxjs-compat": "^6.6.3",
     "screenfull": "^4.2.0",
-    "set-value": "^2.0.1",
+    "set-value": "^4.0.1",
     "tns-core-modules": "^6.5.21",
     "tslib": "^1.14.1",
     "webcrypto": "^0.1.1",
