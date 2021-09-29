@@ -22,3 +22,8 @@ video {
 ::ng-deep .ui-slider .ui-slider-handle.ui-state-default {
   background-color: #b0bec5;
 }
+.mat-icon-button {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+}

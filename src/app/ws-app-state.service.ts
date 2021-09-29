@@ -11,7 +11,8 @@ export class WsAppStateService {
   private _selectedMam: WsMamConnection;
   private _jdfRootNode: any;
 
-  private readonly binPanelNodes=['roll', 'clipBin', 'clip', 'masterClip'];
+  private readonly binPanelNodes=['roll', 'clipBin'];
+  private readonly clipPlayerPanelNodes=['clip', 'masterClip'];
 
   public loggedInSubject: Subject<any> = new Subject<any>();
   public selectNodeSubject: Subject<any> = new Subject<any>();
@@ -24,6 +25,7 @@ export class WsAppStateService {
   public openStoryNodeSubject: Subject<any> = new Subject<any>();
   public resetModuleSubject: Subject<any> = new Subject<any>();
   public selectBinNodeSubject: Subject<any> = new Subject<any>();
+  public changeClipPlayerLayoutSubject: Subject<any> = new Subject<any>();
 
   public authHeader: string;
   public itemsPerPage: number;
@@ -34,6 +36,17 @@ export class WsAppStateService {
   public showMode:string = 'bins';
   public layoutMode = 'large';
   public isBinOpened = false;
+
+  private _isClipPlayerOpened = false;
+  public get isClipPlayerOpened(): boolean {
+    return this._isClipPlayerOpened;
+  }
+  public set isClipPlayerOpened(value: boolean) {
+    if(this._isClipPlayerOpened != value) {
+      this._isClipPlayerOpened = value;
+      this.changeClipPlayerLayoutSubject.next(this._isClipPlayerOpened);
+    }
+  }
 
   public layoutSettings: any = {
     panels: [
@@ -113,6 +126,11 @@ export class WsAppStateService {
       this.isBinOpened = true;
     } else {
       this.isBinOpened = false;
+    }
+    if(this.clipPlayerPanelNodes.includes(node.type)) {
+      this.isClipPlayerOpened = true;
+    } else {
+      this.isClipPlayerOpened = false;
     }
     this.selectNodeSubject.next(node);
   }

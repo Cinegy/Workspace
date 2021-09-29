@@ -1,13 +1,28 @@
 <div class="ws-main-container">
   <p-breadcrumb [model]="breadcrumbService.breadcrumbs" class="ws-breadcrumb"></p-breadcrumb>
   <div class="ws-main-content">
-    <as-split class="as-split" direction="vertical" gutterSize="3" restrictMove="true" *ngIf="appState.layoutMode=='small'">
-      <as-split-area size="60" [order]="1" class="ws-hide-scrollbar">
-      <app-ws-explorer fxLayout="column" fxFlex="100" [hidden]="appState.isBinOpened"></app-ws-explorer>
-        <app-ws-bins fxLayout="column" fxFlex="100" [hidden]="!appState.isBinOpened"></app-ws-bins>
+    <as-split class="as-split" [direction]="splitDirection" gutterSize="3" restrictMove="true"
+              *ngIf="appState.layoutMode=='small' || appState.layoutMode=='smallLandscape'" (dragEnd)="areaChanged($event)">
+      <as-split-area size="60" [order]="1" class="ws-hide-scrollbar" #playerSplitArea>
+        <app-ws-explorer
+          fxLayout="column"
+          fxFlex="100"
+          [hidden]="appState.isBinOpened || appState.isClipPlayerOpened">
+        </app-ws-explorer>
+        <app-ws-bins
+          fxLayout="column"
+          fxFlex="100"
+          [hidden]="!appState.isBinOpened">
+        </app-ws-bins>
+        <app-ws-player
+          fxLayout="column"
+          fxFlex="100"
+          [hidden]="!appState.isClipPlayerOpened"
+          [playerHeight]="this.playerAreaHeight">
+        </app-ws-player>
       </as-split-area>
-      <as-split-area size="40" [order]="2" class="ws-hide-scrollbar"  [hidden]="!appState.isBinOpened">
-        <app-ws-player fxLayout="column" fxFlex="100"></app-ws-player>
+      <as-split-area size="40" [order]="2" class="ws-hide-scrollbar" [visible]="appState.isClipPlayerOpened">
+        <app-ws-metadata></app-ws-metadata>
       </as-split-area>
     </as-split>
     <as-split class="as-split" direction="horizontal" gutterSize="3" restrictMove="true"
@@ -19,7 +34,8 @@
       <as-split-area size="60" [order]="2">
         <as-split direction="vertical" class="as-split" restrictMove="true" gutterSize="3"
                   (dragEnd)="areaChanged($event)">
-          <as-split-area #playerSplitArea style="overflow-y:hidden" [order]="1">
+          <as-split-area #playerSplitArea style="overflow-y:hidden" [order]="1"
+                         [visible]="this.appState.layoutSettings.panels[2].childrenPanels[0].visible">
             <app-ws-player [playerHeight]="this.playerAreaHeight">
 
             </app-ws-player>
