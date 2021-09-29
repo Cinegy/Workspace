@@ -119,7 +119,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(response => this.selectNodeResponse(response));
     this.subscribers.push(subscriber);
 
-
     this.playerService.getClipDescriptors();
   }
 
@@ -160,7 +159,6 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       this.playerHeader.nativeElement.offsetHeight +
       this.playerControl.nativeElement.offsetHeight + 80;
     this.mediaPlayer.nativeElement.style.height = (this.playerContainerHeight - heights) + 'px';
-
   }
 
   private selectedClipResponse(response: any) {
@@ -318,10 +316,10 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (mediaUrl === null) {
         this.player.poster = './assets/img/noMedia.png';
-        this.player.src = null;
+//        this.player.src = '';
         this.isShowControls = false;
         this.isShowSliders = false;
-        this.appState.layoutSettings.panels[2].childrenPanels[0].visible = false;
+//        this.appState.layoutSettings.panels[2].childrenPanels[0].visible = false;
         this.calculateVideoPlayerHeight();
       } else {
         this.player.src = mediaUrl + this.setMediaFragment();
@@ -583,9 +581,8 @@ export class WsPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       msg = `Player Error`;
     }
     this.player.poster = './assets/img/noMedia.png';
-    this.player.src = null;
-    console.log(msg);
-//    throw new Error(msg);
+//    this.player.src = '';
+    throw new Error(msg);
   }
 
   // Player: Play and pause
