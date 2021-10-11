@@ -4,3 +4,6 @@
 .ws-login-info-text {
     font-size: x-small;
 }
+.mat-card-content, .mat-card-actions {
+  margin-bottom: 0;
+}

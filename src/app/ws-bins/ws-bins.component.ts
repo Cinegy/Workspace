@@ -1,22 +1,22 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
-import { BinNode } from './bin-node';
-import { MenuItem } from 'primeng/api';
-import { WsAppStateService } from '../ws-app-state.service';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WsClipboardService, ClipboardAction } from '../ws-clipboard/ws-clipboard.service';
-import { WsBinsService } from './ws-bins.service';
-import { WsAppManagementService } from '../ws-app-management.service';
-import { WsMamError } from '../shared/services/ws-base-mam/ws-mam-error';
-import { WsVideoTools } from '../ws-player/ws-video-tools';
-import { WsPlayerService } from '../ws-player/ws-player.service';
-import { WsDeleteDialogComponent } from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
-import { WsJdfDialogComponent } from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
-import { SaveMetadataRequest } from '../ws-metadata/save-metadata-request';
-import { WsMetadataService } from '../ws-metadata/ws-metadata.service';
-import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {BinNode} from './bin-node';
+import {MenuItem} from 'primeng/api';
+import {WsAppStateService} from '../ws-app-state.service';
+import {MatDialog} from '@angular/material/dialog';
+import {PageEvent} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {WsClipboardService, ClipboardAction} from '../ws-clipboard/ws-clipboard.service';
+import {WsBinsService} from './ws-bins.service';
+import {WsAppManagementService} from '../ws-app-management.service';
+import {WsMamError} from '../shared/services/ws-base-mam/ws-mam-error';
+import {WsVideoTools} from '../ws-player/ws-video-tools';
+import {WsPlayerService} from '../ws-player/ws-player.service';
+import {WsDeleteDialogComponent} from '../ws-dialogs/ws-delete-dialog/ws-delete-dialog.component';
+import {WsJdfDialogComponent} from '../ws-dialogs/ws-jdf-dialog/ws-jdf-dialog.component';
+import {SaveMetadataRequest} from '../ws-metadata/save-metadata-request';
+import {WsMetadataService} from '../ws-metadata/ws-metadata.service';
+import {Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-ws-bins',
@@ -39,14 +39,16 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   public get selectedIndex(): number {
     return this._selectedIndex;
   }
-  public set selectedIndex(index : number ) {
+
+  public set selectedIndex(index: number) {
     this._selectedIndex = index;
-    if(this.selectedIndex == -1){
+    if (this.selectedIndex == -1) {
       this.appState.selectBinNode(null);
     } else {
       this.appState.selectBinNode(this.tabs[this.selectedIndex]);
     }
   }
+
   public loading = false;
   public pageSize: number;
   public pageSizeOptions = [5, 10, 25, 50];
@@ -62,6 +64,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   private pasteTypesAllowedInClipBin = {};
   private pasteTypesAllowedInDocumentBin = {};
   private speechtotext_descriptionID;
+
+  public loadChildrenSubject: Subject<any> = new Subject<any>();
 
   constructor(
     private httpClient: HttpClient,
@@ -170,6 +174,10 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       .subscribe(response => this.createSubclipResponse(response));
     this.subscribers.push(subscriber);
 
+    subscriber = this.loadChildrenSubject
+      .subscribe(response => this.loadChildrenResponse(response));
+    this.subscribers.push(subscriber);
+
     // subscriber = this.binService.getMetadataSubject
     //   .subscribe(response => this.getMetadataResponse(response));
     // this.subscribers.push(subscriber);
@@ -210,7 +218,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     // this.binService.getMetadata(this.selectedNode);
     this.selectedNode.isSelected = true;
     this.appState.selectNode(item);
-    if(isPlay && item.type in this.playable) {
+    if (isPlay && item.type in this.playable) {
       this.appState.playClip(item);
     }
   }
@@ -248,12 +256,18 @@ export class WsBinsComponent implements OnInit, OnDestroy {
   }
 
   private getThumbnail(node: any) {
+    let thumbnail = null;
     if (node.type === 'image') {
-      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam);
+      thumbnail = this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam);
     } else {
-      return this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam, node.videoFormat);
+      thumbnail = this.videoHelper.getThumbnailUrl(node, this.appState.selectedMam, node.videoFormat);
     }
+    if(!thumbnail) {
+      thumbnail = './assets/img/noMedia.png';
+    }
+    return thumbnail;
   }
+
   /* *** Page events *** */
   private onPageEvent(event: PageEvent) {
     const tab = this.tabs[this.selectedIndex];
@@ -266,6 +280,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       this.binService.getChildren(this.tabs[this.selectedIndex].parent.id, this.tabs[this.selectedIndex].parent.type, event.pageSize, skip);
     }
   }
+
   /* *** Service Response *** */
 
   private selectNodeResponse(response: any) {
@@ -304,7 +319,8 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 
     this.lastOpenedNode = response;
     this.loading = true;
-    this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
+//    this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type);
+    this.loadChildren(this.lastOpenedNode);
   }
 
   private getChildrenResponse(response: any) {
@@ -329,12 +345,12 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         }
         return;
       }
-      if(this.lastOpenedNode.type == tab.DefaultBinType) {
+      if (this.lastOpenedNode.type == tab.DefaultBinType) {
         currentBin = tab;
         currentIndex = i;
       }
     }
-    if(currentBin == null) {
+    if (currentBin == null) {
       currentBin = new BinNode();
       currentBin.DefaultBinType = this.lastOpenedNode.type;
       this.tabs.push(currentBin);
@@ -348,16 +364,80 @@ export class WsBinsComponent implements OnInit, OnDestroy {
 //    bin.childCount = response.totalCount;
 
 //    this.tabs.push(bin);
-    if(currentIndex!=-1) {
+    if (currentIndex != -1) {
       this.selectedIndex = currentIndex;
     } else {
       this.selectedIndex = this.tabs.length - 1;
     }
   }
 
+  private loadChildren(node: any) {
+    let currentBin = null;
+    let currentIndex = -1;
+    this.lastOpenedNode = node;
+    for (let i = 0; i < this.tabs.length; i++) {
+      const tab = this.tabs[i];
+      if (
+        (tab.parent.type === 'searchBin' && this.lastOpenedNode.type === 'searchBin' && tab.parent.name === this.lastOpenedNode.name) ||
+        (tab.parent.id && this.lastOpenedNode.id && tab.parent.id === this.lastOpenedNode.id)) {
+        tab.children = [];
+        tab.childCount = 0;
+
+        if (this.selectedIndex !== i) {
+          this.selectedIndex = i;
+        }
+        currentBin = tab;
+        currentIndex = i;
+        break;
+      }
+      if (this.lastOpenedNode.type == tab.DefaultBinType) {
+        currentBin = tab;
+        currentIndex = i;
+      }
+    }
+    if (currentBin == null) {
+      currentBin = new BinNode();
+      currentBin.DefaultBinType = this.lastOpenedNode.type;
+      this.tabs.push(currentBin);
+    }
+    currentBin.parent = this.lastOpenedNode;
+    currentBin.children = [];
+    currentBin.childCount = 0;
+
+    if (currentIndex != -1) {
+      this.selectedIndex = currentIndex;
+    } else {
+      this.selectedIndex = this.tabs.length - 1;
+    }
+    this.binService.getChildren(this.lastOpenedNode.id, this.lastOpenedNode.type, this.appState.loadedItemsChunk, 0, {
+      'callback': this.loadChildrenSubject,
+      'extraData': this.selectedIndex+1
+    });
+  }
+
+  private loadChildrenResponse(response: any) {
+    this.loading = false;
+    const tab = this.tabs[response.extra-1];
+    if(tab && tab.children) {
+      if(tab.children.length == 0) {
+        tab.children = response.payload.items;
+        tab.childCount = response.payload.totalCount;
+      } else {
+        tab.children.push(...response.payload.items);
+      }
+      if(tab.children.length < tab.childCount) {
+        let skip = tab.children.length / this.appState.loadedItemsChunk * this.appState.loadedItemsChunk;
+        this.binService.getChildren(tab.parent.id, tab.parent.type, this.appState.loadedItemsChunk, skip, {
+          'callback': this.loadChildrenSubject,
+          'extraData': response.extra
+        });
+      }
+    }
+  }
+
   private startSearchResponse(keywords: string) {
     this.loading = true;
-    this.lastOpenedNode = { name: keywords, type: 'searchBin' };
+    this.lastOpenedNode = {name: keywords, type: 'searchBin'};
   }
 
   private nodeDeletedResponse(response) {
@@ -396,7 +476,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const index = this.tabs[this.selectedIndex].children.indexOf(this.deletedNode);
 
     if (index > -1) {
-      this.snackBar.open(`${this.deletedNode.name} deleted`, null, { duration: 1000 });
+      this.snackBar.open(`${this.deletedNode.name} deleted`, null, {duration: 1000});
       this.tabs[this.selectedIndex].children.splice(index, 1);
       this.tabs[this.selectedIndex].childCount--;
       this.deletedNode = null;
@@ -414,7 +494,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const tab = this.tabs[this.selectedIndex];
     tab.childCount++;
     this.amIVisible(tab, response);
-    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+    this.snackBar.open(`${response.name} pasted`, null, {duration: 1000});
   }
 
   private cutNodeResponse(response) {
@@ -426,7 +506,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
     const tab = this.tabs[this.selectedIndex];
     tab.childCount++;
     this.amIVisible(tab, response);
-    this.snackBar.open(`${response.name} pasted`, null, { duration: 1000 });
+    this.snackBar.open(`${response.name} pasted`, null, {duration: 1000});
 
     const cuttedClip = this.clipboard.items[0];
 
@@ -463,7 +543,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.snackBar.open(`Clip ${response.name} created`, null, { duration: 1000 });
+    this.snackBar.open(`Clip ${response.name} created`, null, {duration: 1000});
   }
 
   private amIVisible(tab, response) {
@@ -532,17 +612,17 @@ export class WsBinsComponent implements OnInit, OnDestroy {
         this.playClip(selectedNode);
       }
 
-/*      if (selectedNode.type in this.playable) {
-        menuItem = {
-          label: 'Play',
-          icon: 'fa fa-play-circle-o',
-          command: (event) => {
-            this.playClip(selectedNode);
-          }
-        };
-        this.contextMenuItems.push(menuItem);
-        this.contextMenuItems.push({ separator: true });
-      }*/
+      /*      if (selectedNode.type in this.playable) {
+              menuItem = {
+                label: 'Play',
+                icon: 'fa fa-play-circle-o',
+                command: (event) => {
+                  this.playClip(selectedNode);
+                }
+              };
+              this.contextMenuItems.push(menuItem);
+              this.contextMenuItems.push({ separator: true });
+            }*/
 
       if (this.tabs[this.selectedIndex].parent.type !== 'searchBin' && selectedNode.type in this.cutable) {
         menuItem = {
@@ -591,7 +671,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             this.openJDFDialog();
           }
         };
-        this.contextMenuItems.push({ separator: true });
+        this.contextMenuItems.push({separator: true});
         this.contextMenuItems.push(menuItem);
       }
     }
@@ -627,7 +707,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
             }
           };
           this.contextMenuItems.push(menuItem);
-          this.contextMenuItems.push({ separator: true });
+          this.contextMenuItems.push({separator: true});
         }
       }
 
@@ -656,7 +736,7 @@ export class WsBinsComponent implements OnInit, OnDestroy {
           }
         },
           this.contextMenuItems.push(menuItem);
-        this.contextMenuItems.push({ separator: true });
+        this.contextMenuItems.push({separator: true});
       }
 
       if (selectedNode.type !== 'searchBin') {
@@ -680,8 +760,4 @@ export class WsBinsComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-
-
-
 }

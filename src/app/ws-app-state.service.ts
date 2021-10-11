@@ -11,7 +11,7 @@ export class WsAppStateService {
   private _selectedMam: WsMamConnection;
   private _jdfRootNode: any;
 
-  private readonly binPanelNodes=['roll', 'clipBin'];
+  private readonly binPanelNodes=['roll', 'clipBin', 'documentBin', 'searchBin', 'document'];
   private readonly clipPlayerPanelNodes=['clip', 'masterClip'];
 
   public loggedInSubject: Subject<any> = new Subject<any>();
@@ -29,6 +29,7 @@ export class WsAppStateService {
 
   public authHeader: string;
   public itemsPerPage: number;
+  public loadedItemsChunk: number = 50;
   public tvFormats: {[type: string]: any } = {};
   public nodeTypes: {[type: string]: any } = {};
   public nodeIcons: {[subType: string]: any } = {};

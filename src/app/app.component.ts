@@ -31,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const subscriber = this.appState.loggedInSubject
       .subscribe(response => this.loginResponse(response));
     this.appState.itemsPerPage = this.config.configuration.itemsPerPage;
+    this.appState.loadedItemsChunk = this.config.configuration.loadedItemsChunk;
   }
 
   ngOnDestroy() {

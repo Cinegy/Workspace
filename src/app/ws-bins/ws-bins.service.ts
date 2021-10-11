@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { WsBaseMamService } from '../shared/services/ws-base-mam/ws-base-mam.service';
-import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { WsAppStateService } from '../ws-app-state.service';
+import {Injectable} from '@angular/core';
+import {WsBaseMamService} from '../shared/services/ws-base-mam/ws-base-mam.service';
+import {Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {WsAppStateService} from '../ws-app-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +53,7 @@ export class WsBinsService extends WsBaseMamService {
     this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}`, subject);
   }
 
-  public getChildren(id: string, type: string, take?: number, skip?: number) {
+  public getChildren(id: string, type: string, take?: number, skip?: number, payload?: any) {
     if (take === undefined) {
       take = this.appState.itemsPerPage;
     }
@@ -63,6 +63,15 @@ export class WsBinsService extends WsBaseMamService {
     }
 
     let fragment: string;
+    let callback: Subject<any> = this.getChildrenSubject;
+    let extraData = null;
+
+    if (payload && payload.callback) {
+      callback = payload.callback;
+    }
+    if (payload && payload.extraData != undefined) {
+      extraData = payload.extraData;
+    }
 
     switch (type) {
       case 'roll':
@@ -82,8 +91,8 @@ export class WsBinsService extends WsBaseMamService {
     }
 
     // tslint:disable-next-line:max-line-length
-    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, this.getChildrenSubject);
- 
+    this.get(`${this.appState.selectedMam.mamEndpoint}${fragment}&linksScope=metadata&filter.requestType=notDeleted&take=${take}&skip=${skip}`, callback, extraData);
+
   }
 
   public search(keywords: string, take?: number, skip?: number) {
@@ -99,7 +108,7 @@ export class WsBinsService extends WsBaseMamService {
 
     // tslint:disable-next-line:max-line-length
     this.post(`${this.appState.selectedMam.mamEndpoint}search?linkScope=self&linkScope=self&linkScope=children&linksScope=metadata&searchScope=fullInfo&take=${take}&skip=${skip}`,
-      { Query: keywords },
+      {Query: keywords},
       this.searchSubject);
   }
 
@@ -128,8 +137,9 @@ export class WsBinsService extends WsBaseMamService {
       null,
       this.cutNodeSubject);
   }
+
   // public getMetadata(node: any) {
-  
+
   //   this.get(`${this.appState.selectedMam.mamEndpoint}metadata?id=${node.id}`, this.getMetadataSubject);
   // }
 }

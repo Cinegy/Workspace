@@ -1,14 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="ws-login-main-container">
-  <mat-card fxFlex="40">
+  <mat-card fxFlex.lt-sm="90" fxFlex.lt-md="70" fxFlex="40">
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-      <mat-card-header fxLayout fxLayoutAlign="center">
+      <mat-card-header fxLayout fxLayoutAlign="center" fxHide fxShow.gt-sm>
         <mat-card-title>
-          <h3><i class="fa fa-sign-in"></i> &nbsp; MAM Login</h3>
+          <span><i class="fa fa-sign-in"></i> &nbsp; MAM Login</span>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
         <div>
-         
             <mat-form-field fxFlex="100">
             <input matInput required placeholder="Username" [(ngModel)]="username" name="username" #localUsername="ngModel">
           </mat-form-field>
