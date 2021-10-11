@@ -12,6 +12,7 @@ import { WsMainMenuComponent } from './ws-main-menu.component';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { WsUserInfoDialogComponent } from '../ws-dialogs/ws-user-info-dialog/ws-user-info-dialog.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {FlexLayoutModule} from "@angular/flex-layout";
 @NgModule({
     imports: [
         CommonModule,
@@ -23,7 +24,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         MatSnackBarModule,
         MatIconModule,
         MatFormFieldModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        FlexLayoutModule
 
     ],
   exports: [

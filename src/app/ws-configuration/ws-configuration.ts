@@ -6,6 +6,7 @@ export class WsConfiguration {
     public itemsPerPage: number;
     public useRemoteConfig: boolean;
     public remoteConfigHost: string;
+    public loadedItemsChunk: number = 50;
     public readonly major = '19';
     public readonly minor = '9';
     public readonly commit = '65535';

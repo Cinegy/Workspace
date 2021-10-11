@@ -5,7 +5,12 @@
   max-height: 160px;
   overflow: hidden;
   cursor: pointer;
-  margin-bottom: 5px;
+  margin: 5px!important;
+  padding: 2px!important;
+  @media (max-width: 575.98px){
+    min-width: 145px;
+    max-width: 145px;
+  }
 }
 
 .ws-card-item-content {
@@ -28,6 +33,10 @@
   background: #4C6494;
 }
 
+.ws-bin-item-container {
+  padding: 15px;
+
+}
 .ws-tab {
 
   overflow-y: auto;

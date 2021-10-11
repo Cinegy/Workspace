@@ -3,6 +3,7 @@ import { WsConfiguration } from './ws-configuration';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Rx';
 import { HttpClient } from '@angular/common/http';
+import {isNumeric} from "rxjs/internal-compatibility";
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class WsConfigurationService {
   constructor(private httpClient: HttpClient) {
     this.configuration = new WsConfiguration();
   }
-  
+
 
   public getVersion() {
     return `${this.configuration.major}.${this.configuration.minor}.${this.configuration.commit}`;
@@ -40,7 +41,7 @@ export class WsConfigurationService {
     return new Promise((resolve, reject) => {
       if (response.useRemoteConfig) {
         this.setConfig(response);
-        
+
         const url = this.configuration.remoteConfigHost;
         console.log(`Using remote configuration: ${url}`);
         this.httpClient.get(url)
@@ -70,6 +71,9 @@ export class WsConfigurationService {
     this.configuration.itemsPerPage = response.itemsPerPage;
     this.configuration.useRemoteConfig = response.useRemoteConfig;
     this.configuration.remoteConfigHost = response.remoteConfigHost;
+    if(response.loadedItemsChunk && isNumeric(response.loadedItemsChunk) && response.loadedItemsChunk>0) {
+      this.configuration.loadedItemsChunk = response.loadedItemsChunk;
+    }
   }
 
   private errorRemoteConfig(error: any) {

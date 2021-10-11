@@ -5,7 +5,7 @@
       <i class="fa fa-spinner fa-pulse fa-2x"></i>
     </div>
     <div>
-      <span *ngIf="selectedClip">
+      <span *ngIf="selectedClip" fxHide fxShow.gt-sm>
         {{selectedClip.name}}
       </span>
     </div>
